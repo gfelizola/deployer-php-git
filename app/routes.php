@@ -11,7 +11,11 @@
 |
 */
 
-Route::get('/', function()
-{
+Route::get('/', function(){
 	return View::make('hello');
 });
+
+Route::get('login', "Usuariocontroller@loginForm");
+Route::any('login-request', "Usuariocontroller@loginWithBitBucket");
+
+Route::resource('projeto', 'ProjetoController');
