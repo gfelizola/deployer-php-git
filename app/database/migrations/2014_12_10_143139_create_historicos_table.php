@@ -16,6 +16,7 @@ class CreateHistoricosTable extends Migration {
     	{
 	        $table->increments('id');
 	        $table->integer('tipo');
+	        $table->string('descricao');
 	        $table->integer('projeto_id');
 	        $table->integer('user_id');
 	        $table->timestamps();

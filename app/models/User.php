@@ -2,12 +2,15 @@
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
-use Illuminate\Auth\Reminders\RemindableTrait;
-use Illuminate\Auth\Reminders\RemindableInterface;
+// use Illuminate\Auth\Reminders\RemindableTrait;
+// use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+use LaravelBook\Ardent\Ardent;
 
-	use UserTrait, RemindableTrait;
+class User extends Eloquent implements UserInterface {
+
+	use UserTrait, SoftDeletingTrait;
 
 	/**
 	 * The database table used by the model.
@@ -16,11 +19,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $table = 'users';
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $fillable = array('username', 'nome', 'avatar');
 
+	public static $rules = array(
+		'username' => 'required'
+	);
 }

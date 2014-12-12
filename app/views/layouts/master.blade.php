@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-    @include('head')
+    @include('layouts.head')
 
     <body class="skin-blue">
-        @include('header')
+        @include('layouts.header')
         <div class="wrapper row-offcanvas row-offcanvas-left">
-            @include('sidebar')
+            @include('layouts.sidebar')
 
             <!-- Right side column. Contains the navbar and content of the page -->
             <aside class="right-side">
@@ -25,7 +25,7 @@
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 
-    @include('footer')        
+    @include('layouts.footer')        
 
     </body>
 </html>

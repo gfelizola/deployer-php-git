@@ -13,6 +13,8 @@ return array(
 	|
 	*/
 
-	'debug' => true,
+	"debug"      => true,
+	"proxy"      => "http://oesp0527.grpoesp.com.br:8080",
+	"proxy_port" => 8080
 
 );

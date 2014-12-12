@@ -11,11 +11,17 @@
 |
 */
 
-Route::get('/', function(){
-	return View::make('hello');
+Route::get("login", "UsuarioController@loginForm");
+Route::get("login/bitbucket", "UsuarioController@loginWithBitBucket");
+
+
+Route::group(array("before" => "auth"), function()
+{
+	Route::get("/", 			"HomeController@showWelcome");
+	Route::get("home", 			"HomeController@showWelcome");
+	Route::get("logout", 		"UsuarioController@logout");
+
+    Route::resource("deploy",  	"DeployController" );
+    Route::resource("projeto",  "ProjetoController" );
+    Route::resource("usuario",  "UsuarioController" );
 });
-
-Route::get('login', "Usuariocontroller@loginForm");
-Route::any('login-request', "Usuariocontroller@loginWithBitBucket");
-
-Route::resource('projeto', 'ProjetoController');
