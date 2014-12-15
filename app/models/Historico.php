@@ -9,22 +9,33 @@ class Historico extends Ardent {
     const TipoProjeto  = 3;
 
 	protected $fillable = array(
-		'tipo', 
-		'descricao',
-		'user_id',
+		"tipo", 
+		"descricao",
+		"user_id",
+		"projeto_id",
 	);
 
 	public function user() {
-		return $this->belongsTo('User');
+		return $this->belongsTo("User");
 	}
 
 	public function projeto() {
-		return $this->belongsTo('Projeto');
+		return $this->belongsTo("Projeto");
 	}
 
 	public static $rules = array(
-		'tipo'      => 'required',
-		'descricao' => 'required',
+		"tipo"      => "required",
+		"descricao" => "required",
 	);
+
+	public function scopeRollbacks($query)
+    {
+        return $query->where("tipo", "=", Historico::TipoRollBack);
+    }
+
+    public function scopeDeploys($query)
+    {
+        return $query->where("tipo", "=", Historico::TipoDeploy);
+    }
 
 }

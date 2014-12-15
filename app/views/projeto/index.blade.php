@@ -35,12 +35,14 @@
                         @foreach ($projetos as $projeto)
                         <tr>
                             <td width="70">
-                                <a href="{{{ URL::to('projeto', array($projeto->id, 'edit')) }}}" class="btn btn-success btn-xs">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="{{{ URL::to('projeto', array($projeto->id)) }}}" data-remote="" class="btn btn-danger btn-xs btn-deletar-item" data-toggle="modal" data-target="#deleteModal">
-                                    <i class="fa fa-ban"></i>
-                                </a>
+                                <div class="btn-group">
+                                    <a href="{{{ URL::to('projeto', array($projeto->id, 'edit')) }}}" class="btn btn-success btn-xs">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{{{ URL::to('projeto', array($projeto->id)) }}}" data-remote="" class="btn btn-danger btn-xs btn-deletar-item" data-toggle="modal" data-target="#deleteModal">
+                                        <i class="fa fa-ban"></i>
+                                    </a>
+                                </div>
                             </td>
                             
                             <td>{{ $projeto->nome }}</td>

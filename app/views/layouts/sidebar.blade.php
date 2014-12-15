@@ -28,7 +28,7 @@
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{{ URL::to('deploy') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
+                    <!-- <li><a href="{{{ URL::to('deploy') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li> -->
                     <li><a href="{{{ URL::to('deploy/create') }}}"><i class="fa fa-angle-double-right"></i> Realizar deploy</a></li>
                     <li><a href="{{{ URL::to('deploy/rollback') }}}"><i class="fa fa-angle-double-right"></i> Realizar rollback</a></li>
                 </ul>
@@ -41,7 +41,7 @@
                 <ul class="treeview-menu">
                     <li><a href="{{{ URL::to('usuario') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
                     <li><a href="{{{ URL::to('usuario/create') }}}"><i class="fa fa-angle-double-right"></i> Adicionar novo</a></li>
-                    <li><a href="{{{ URL::to('usuario/roles') }}}"><i class="fa fa-angle-double-right"></i> Gerenciar acessos</a></li>
+                    <!-- <li><a href="{{{ URL::to('usuario/roles') }}}"><i class="fa fa-angle-double-right"></i> Gerenciar acessos</a></li> -->
                 </ul>
             </li>
         </ul>

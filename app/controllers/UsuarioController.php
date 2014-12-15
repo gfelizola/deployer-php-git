@@ -12,9 +12,7 @@ class UsuarioController extends \BaseController {
 	 */
 	public function index()
 	{
-		$usuarios = User::paginate(20);
-		// $usuarios = $usuarios->sortBy('nome');
-
+		$usuarios = User::orderBy('nome', 'ASC')->paginate(20);
 		return View::make("usuario.index", array('usuarios' => $usuarios));
 	}
 
@@ -126,7 +124,8 @@ class UsuarioController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		User::destroy($id);
+		return Response::json( array('sucesso' => true ) );
 	}
 
 	

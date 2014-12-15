@@ -1,4 +1,5 @@
 <?php
+use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder {
 
@@ -14,6 +15,7 @@ class DatabaseSeeder extends Seeder {
 
 		$this->call('UserTableSeeder');
 		$this->call('ProjetoTableSeeder');
+		$this->call('HistoricoTableSeeder');
 	}
 }
 
@@ -27,9 +29,20 @@ class UserTableSeeder extends Seeder {
         	"username" => "gfelizola",
         	"nome"     => "Gustavo Felizola",
         	"avatar"   => "https://secure.gravatar.com/avatar/50fda58027e786277d6e06ce77aa5d86?d=https%3A%2F%2Fd3oaxc4q5k2d6q.cloudfront.net%2Fm%2F902c81e8bd81%2Fimg%2Fdefault_avatar%2F32%2Fuser_blue.png&s=120",
-        	"skin"     => User::SKIN_BLUE,
+        	"skin"     => User::SKIN_BLACK,
         	"layout"   => User::LAYOUT_FIXED,
-        ));
+        ));    	
+
+        for ($i=0; $i < 5; $i++) { 
+        	User::create( array(
+        		"nome"     => "Teste $i", 
+        		"username" => "teste$i",
+        		"skin"     => User::SKIN_BLUE,
+        		"layout"   => User::LAYOUT_FIXED,
+        	));
+        }
+
+        $this->command->info('Tabela de usuários preenchida');
     }
 }
 
@@ -38,7 +51,7 @@ class ProjetoTableSeeder extends Seeder {
     {
 		DB::table('projetos')->delete();    	
 
-        for ($i=0; $i < 30; $i++) { 
+        for ($i=0; $i < 5; $i++) { 
         	Projeto::create( array(
         		"nome"         => "Teste $i", 
         		"repo"         => "http://repo/$i",
@@ -48,6 +61,53 @@ class ProjetoTableSeeder extends Seeder {
         		"repo_branch"  => "master",
         	));
         }
+
+        $this->command->info('Tabela de projetos preenchida');
+        
+    }
+}
+
+class HistoricoTableSeeder extends Seeder {
+
+	public function run()
+    {
+    	$usuario = User::all()->first();
+    	$projeto = Projeto::all()->first();
+
+		DB::table('historicos')->delete();    	
+
+        for ($i=0; $i < 30; $i++) { 
+        	Historico::create( array(
+        		"tipo"       => Historico::TipoUsuario, 
+        		"descricao"  => "Usuário novo $i",
+        		"user_id"    => $usuario->id
+        	));
+
+        	Historico::create( array(
+        		"tipo"       => Historico::TipoProjeto, 
+        		"descricao"  => "Novo projeto $i",
+        		"user_id"    => $usuario->id,
+        		"projeto_id" => $projeto->id
+        	));
+
+        	Historico::create( array(
+        		"tipo"       => Historico::TipoDeploy, 
+        		"descricao"  => "Deploy novo $i",
+        		"user_id"    => $usuario->id,
+        		"projeto_id" => $projeto->id
+        	));
+
+        	if ( $i < 20 ) {
+        		Historico::create( array(
+	        		"tipo"       => Historico::TipoRollBack, 
+	        		"descricao"  => "Rollback novo $i",
+	        		"user_id"    => $usuario->id,
+	        		"projeto_id" => $projeto->id
+	        	));
+        	}
+        }
+
+        $this->command->info('Tabela de historicos preenchida');
         
     }
 }

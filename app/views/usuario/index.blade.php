@@ -35,12 +35,16 @@
                         @foreach ($usuarios as $user)
                         <tr>
                             <td width="70">
-                                <a href="{{{ URL::to('usuario', array($user->id, 'edit')) }}}" class="btn btn-success btn-xs">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="{{{ URL::to('usuario', array($user->id)) }}}" class="btn btn-danger btn-xs">
-                                    <i class="fa fa-ban"></i>
-                                </a>
+                                <div class="btn-group">
+                                    <a href="{{{ URL::to('usuario', array($user->id, 'edit')) }}}" class="btn btn-success btn-xs">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    @if( $user->id != Auth::id() )
+                                    <a href="{{{ URL::to('usuario', array($user->id)) }}}" data-remote="" class="btn btn-danger btn-xs btn-deletar-item" data-toggle="modal" data-target="#deleteModal">
+                                        <i class="fa fa-ban"></i>
+                                    </a>
+                                    @endif
+                                </div>
                             </td>
                             <td width="50">
                                 @if( ! empty( $user->avatar ) )
@@ -56,8 +60,35 @@
                     </table>
                 </div><!-- /.box-body -->
 
-                {{{ $usuarios->links() }}}
+                <div class="box-footer">
+                    {{ $usuarios->links() }}
+                </div>
+
+                <div class="overlay hidden"></div>
+                <div class="loading-img hidden"></div>
             </div><!-- /.box -->
+            </div><!-- /.box -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalLabel">
+                        <i class="fa fa-warning"></i> Confirmar ação
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <p>Confirma que você deseja remover este usuário?</p>
+                    <p><i><small>* esta ação irá somente remover o acesso dele ao sistema</small></i></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger">Remover item</button>
+                </div>
+            </div>
         </div>
     </div>
 @stop
