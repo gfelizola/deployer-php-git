@@ -97,8 +97,10 @@
                                 @if( $historico->projeto )
                                     <b>Projeto:</b> {{ $historico->projeto->nome }}<br>
                                 @endif
-                                <!-- Tag: jira-ESTADAO-1621<br> -->
-                                <!-- Status: <span class="label label-warning">Pendente</span> -->
+
+                                @if( $historico->deploy )
+                                    <b>Tag:</b> {{ $historico->deploy->tag }}
+                                @endif
                             </p>
                         </div>
                     </div>

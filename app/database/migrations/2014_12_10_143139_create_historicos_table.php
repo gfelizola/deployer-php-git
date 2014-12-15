@@ -12,13 +12,14 @@ class CreateHistoricosTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('historicos', function($table)
+		Schema::create("historicos", function($table)
     	{
-	        $table->increments('id');
-	        $table->integer('tipo');
-	        $table->string('descricao');
-	        $table->integer('projeto_id')->nullable();
-	        $table->integer('user_id');
+	        $table->increments("id");
+	        $table->integer("tipo");
+	        $table->string("descricao");
+	        $table->integer("projeto_id")->nullable();
+	        $table->integer("deploy_id")->nullable();
+	        $table->integer("user_id");
 	        $table->timestamps();
 	    });
 	}
@@ -30,7 +31,7 @@ class CreateHistoricosTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('historicos');
+		Schema::drop("historicos");
 	}
 
 }

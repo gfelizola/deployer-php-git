@@ -9,7 +9,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("projeto.index")->with("projetos", Projeto::paginate(10) )->with("message", Session::get("message") );
+		return View::make("projeto.index")->with("projetos", Projeto::paginate( Config::get("paginacao_itens", 20) ) )->with("message", Session::get("message") );
 	}
 
 

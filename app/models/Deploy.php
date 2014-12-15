@@ -1,11 +1,8 @@
 <?php
-
-use LaravelBook\Ardent\Ardent;
-
-class Deploy extends Ardent {
+class Deploy extends Eloquent {
 
 	const pendente  = 0;
-    const aprovado  = 1
+    const aprovado  = 1;
     const reprovado = 2;
 
 	protected $fillable = array(

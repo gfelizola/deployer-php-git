@@ -22,7 +22,7 @@ class HomeController extends BaseController {
 		$rollbacks = Historico::rollbacks()->count();
 		$media     = number_format( 100 - ( ( $rollbacks * 100 ) / ( $deploys > 0 ? $deploys : 1) ), 2 );
 
-		$historico = Historico::orderBy('created_at', 'DESC')->paginate(30);
+		$historico = Historico::orderBy('created_at', 'DESC')->paginate( Config::get("historico_itens", 30) );
 
 		$tratados = array();
 

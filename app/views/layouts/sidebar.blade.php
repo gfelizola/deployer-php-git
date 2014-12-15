@@ -10,17 +10,6 @@
                     <i class="fa fa-dashboard"></i> <span>Painel</span>
                 </a>
             </li>
-            <li class="treeview {{{ strstr(Route::currentRouteName(), 'projeto') ? 'active' : '' }}}">
-                <a href="#">
-                    <i class="fa fa-code"></i>
-                    <span>Projetos</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="{{{ URL::to('projeto') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
-                    <li><a href="{{{ URL::to('projeto/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
-                </ul>
-            </li>
             <li class="treeview {{{ strstr(Route::currentRouteName(), 'deploy') ? 'active' : '' }}}">
                 <a href="#">
                     <i class="fa fa-cloud-upload"></i>
@@ -31,6 +20,17 @@
                     <!-- <li><a href="{{{ URL::to('deploy') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li> -->
                     <li><a href="{{{ URL::to('deploy/create') }}}"><i class="fa fa-angle-double-right"></i> Realizar deploy</a></li>
                     <li><a href="{{{ URL::to('deploy/rollback') }}}"><i class="fa fa-angle-double-right"></i> Realizar rollback</a></li>
+                </ul>
+            </li>
+            <li class="treeview {{{ strstr(Route::currentRouteName(), 'projeto') ? 'active' : '' }}}">
+                <a href="#">
+                    <i class="fa fa-code"></i>
+                    <span>Projetos</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{{ URL::to('projeto') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
+                    <li><a href="{{{ URL::to('projeto/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
                 </ul>
             </li>
             <li class="treeview {{{ strstr(Route::currentRouteName(),'usuario') ? 'active' : '' }}}">

@@ -1,7 +1,5 @@
 <?php
-use LaravelBook\Ardent\Ardent;
-
-class Historico extends Ardent {
+class Historico extends Eloquent {
 
 	const TipoUsuario  = 0;
     const TipoDeploy   = 1;
@@ -13,6 +11,7 @@ class Historico extends Ardent {
 		"descricao",
 		"user_id",
 		"projeto_id",
+		"deploy_id",
 	);
 
 	public function user() {
@@ -21,6 +20,10 @@ class Historico extends Ardent {
 
 	public function projeto() {
 		return $this->belongsTo("Projeto");
+	}
+
+	public function deploy() {
+		return $this->belongsTo("Deploy");
 	}
 
 	public static $rules = array(

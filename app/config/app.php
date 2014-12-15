@@ -196,4 +196,8 @@ return array(
 
 	),
 
+	'paginacao_itens' => 20,
+	'historico_itens' => 50,
+
+
 );
