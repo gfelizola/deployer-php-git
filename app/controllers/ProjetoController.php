@@ -9,7 +9,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("projeto.index")->with("projetos", Projeto::all() );
+		return View::make("projeto.index")->with("projetos", Projeto::paginate(10) )->with("message", Session::get("message") );
 	}
 
 
@@ -20,7 +20,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function create()
 	{
-		return View::make("projeto.edit", array(
+		return View::make("projeto.create", array(
 			"projeto" => new Projeto(),
 			"rota" => "projeto.store",
 		));
@@ -42,9 +42,10 @@ class ProjetoController extends \BaseController {
 			$projeto = Projeto::create( Input::all() );
 
 			Historico::create( array(
-				"tipo"      => Historico::TipoProjeto,
-				"descricao" => "Projeto criado: \"{$projeto->nome}\"",
-				"user_id"   => Auth::user()->id
+				"tipo"       => Historico::TipoProjeto,
+				"descricao"  => "Projeto criado: \"{$projeto->nome}\"",
+				"user_id"    => Auth::user()->id,
+				"projeto_id" => $projeto->id,
 			));
 			
 			return $this->index();
@@ -74,7 +75,7 @@ class ProjetoController extends \BaseController {
 	{
 		return View::make("projeto.edit", array(
 			"projeto" => Projeto::find($id),
-			"rota" => "projeto.update",
+			"rota"    => "projeto/$id/update",
 		));
 	}
 
@@ -87,7 +88,35 @@ class ProjetoController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$rules = Projeto::$rules;
+
+		$rules["repo_senha"] = "";
+
+		$validator = Validator::make(Input::all(), $rules);
+
+		if ($validator->fails()) {
+			return Redirect::to("projeto/$id/edit")->withErrors($validator)->withInput( Input::all() );
+		} else {
+			$projeto               = Projeto::find( $id );
+			$projeto->nome         = Input::get("nome");
+			$projeto->server_root  = Input::get("server_root");
+			$projeto->repo         = Input::get("repo");
+			$projeto->repo_branch  = Input::get("repo_branch");
+			$projeto->repo_usuario = Input::get("repo_usuario");
+			$projeto->repo_senha   = Input::has("repo_senha") ? Input::get("repo_senha") : $projeto->repo_senha;
+			$projeto->repo_key     = Input::has("repo_key") ? Input::get("repo_key") : $projeto->repo_key;
+
+			$projeto->save();
+
+			Historico::create( array(
+				"tipo"       => Historico::TipoProjeto,
+				"descricao"  => "Dados do orojeto atualizados: \"{$projeto->nome}\"",
+				"user_id"    => Auth::user()->id,
+				"projeto_id" => $projeto->id,
+			));
+			
+			return Redirect::to("projeto")->with("message","Projeto atualizado com sucesso");
+		}
 	}
 
 
@@ -99,7 +128,8 @@ class ProjetoController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		Projeto::destroy($id);
+		return Response::json( array('sucesso' => true ) );
 	}
 
 

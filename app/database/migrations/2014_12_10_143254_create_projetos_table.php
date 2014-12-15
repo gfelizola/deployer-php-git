@@ -18,11 +18,11 @@ class CreateProjetosTable extends Migration {
 	        $table->string('nome');
 	        $table->string('server_root');
 	        $table->string('repo');
-	        $table->string('repo_usuario');
-	        $table->string('repo_senha');
-	        $table->string('repo_key');
+	        $table->string('repo_usuario')->nullable();
+	        $table->string('repo_senha')->nullable();
+	        $table->string('repo_key')->nullable();
 	        $table->string('repo_branch');
-	        $table->string('deploy_key');
+	        $table->string('deploy_key')->nullable();
 	        $table->timestamps();
 	    });
 	}

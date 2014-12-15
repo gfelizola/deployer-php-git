@@ -13,3 +13,4 @@
 
 <!-- AdminLTE App -->
 <script src="/js/AdminLTE/AdminLTE.js" type="text/javascript"></script>
+<script src="/js/app.js" type="text/javascript"></script>

@@ -21,7 +21,7 @@
 
             <div class="box box-primary">
                 <div class="box-body">
-                    {{ Form::model($projeto, array('route' => array('projeto.update', $projeto->id), 'method' => 'PUT')) }}
+                    {{ Form::model($projeto, array('route' => 'projeto.store')) }}
                         
                             <div class="form-group {{{ $errors->has('nome') ? 'has-error' : '' }}}">
                                 {{ Form::label("nome", "Nome do projeto") }}
