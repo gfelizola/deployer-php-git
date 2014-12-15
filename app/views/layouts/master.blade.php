@@ -2,7 +2,7 @@
 <html>
     @include('layouts.head')
 
-    <body class="skin-blue">
+    <body class="skin-{{ Auth::user()->skin }} {{ Auth::user()->layout }}">
         @include('layouts.header')
         <div class="wrapper row-offcanvas row-offcanvas-left">
             @include('layouts.sidebar')

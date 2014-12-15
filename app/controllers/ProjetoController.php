@@ -9,7 +9,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		return View::make("projeto.index")->with("projetos", Projeto::all() );
 	}
 
 
@@ -20,7 +20,10 @@ class ProjetoController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		return View::make("projeto.edit", array(
+			"projeto" => new Projeto(),
+			"rota" => "projeto.store",
+		));
 	}
 
 
@@ -31,7 +34,21 @@ class ProjetoController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$validator = Validator::make(Input::all(), Projeto::$rules);
+
+		if ($validator->fails()) {
+			return Redirect::to("projeto/create")->withErrors($validator)->withInput( Input::all() );
+		} else {
+			$projeto = Projeto::create( Input::all() );
+
+			Historico::create( array(
+				"tipo"      => Historico::TipoProjeto,
+				"descricao" => "Projeto criado: \"{$projeto->nome}\"",
+				"user_id"   => Auth::user()->id
+			));
+			
+			return $this->index();
+		}
 	}
 
 
@@ -43,7 +60,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		return $this->edit($id);
 	}
 
 
@@ -55,7 +72,10 @@ class ProjetoController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		return View::make("projeto.edit", array(
+			"projeto" => Projeto::find($id),
+			"rota" => "projeto.update",
+		));
 	}
 
 

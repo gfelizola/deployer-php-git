@@ -8,13 +8,13 @@
     <div class="row">
         <div class="col-xs-12">
             
-            @if (isset($messages) )
-            <div class="alert alert-{{{$message-type}}} alert-dismissable">
+            @if ( $errors->has() )
+            <div class="alert alert-danger alert-dismissable">
                 <i class="fa fa-ban"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                
-                @foreach( $messages->all('<p>:message</p>') as $message )
-                    {{{$messages}}}
+                <p><b>Aviso!</b></p>
+                @foreach( $errors->all('<p>:message</p>') as $message )
+                    {{ $message }}
                 @endforeach
             </div>
             @endif

@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration {
 	        $table->string('nome')->nullable();
 	        $table->string('username')->unique();
 	        $table->string('avatar')->nullable();
+	        $table->string('layout')->default("fixed");
+	        $table->string('skin')->default("blue");
 	        $table->rememberToken();
 	        $table->timestamps();
 	        $table->softDeletes();

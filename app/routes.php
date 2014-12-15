@@ -17,11 +17,12 @@ Route::get("login/bitbucket", "UsuarioController@loginWithBitBucket");
 
 Route::group(array("before" => "auth"), function()
 {
-	Route::get("/", 			"HomeController@showWelcome");
-	Route::get("home", 			"HomeController@showWelcome");
-	Route::get("logout", 		"UsuarioController@logout");
+	Route::get("/", 					"HomeController@showWelcome");
+	Route::get("home", 					"HomeController@showWelcome");
+	Route::get("logout", 				"UsuarioController@logout");
 
-    Route::resource("deploy",  	"DeployController" );
-    Route::resource("projeto",  "ProjetoController" );
-    Route::resource("usuario",  "UsuarioController" );
+    Route::resource("deploy",  			"DeployController" );
+    Route::resource("projeto",  		"ProjetoController" );
+    Route::resource("usuario",  		"UsuarioController" );
+    Route::post("usuario/{id}/update",  "UsuarioController@update" );
 });

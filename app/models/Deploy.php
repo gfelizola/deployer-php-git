@@ -4,10 +4,16 @@ use LaravelBook\Ardent\Ardent;
 
 class Deploy extends Ardent {
 
+	const pendente  = 0;
+    const aprovado  = 1
+    const reprovado = 2;
+
 	protected $fillable = array(
 		'tag', 
 		'descricao', 
-		'status'
+		'status',
+		'user_id',
+		'projeto_id',
 	);
 
 	public function user() {

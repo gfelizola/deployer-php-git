@@ -44,15 +44,18 @@ class UsuarioController extends \BaseController {
 		$validator = Validator::make(Input::all(), $rules);
 
 		if ($validator->fails()) {
-			var_dump($validator->messages());
-		    // return Redirect::to("usuario/create")->withErrors($validator);
+			// var_dump($validator->messages());
+		    return Redirect::to("usuario/create")->withErrors($validator);
 		} else {
 			$usuario = User::create( Input::all() );
 
-			Redirect::to("usuario", array(
-				"message" => "Acesso ao usuário <i>{$usuario->username}</i> liberado.",
-				"message_tipo" => "success",
+			Historico::create( array(
+				"tipo"      => Historico::TipoUsuario,
+				"descricao" => "Acesso liberado para o usuário \"{$usuario->username}\"",
+				"user_id"   => Auth::user()->id
 			));
+			
+			return $this->index();
 		}
 	}
 
@@ -65,7 +68,7 @@ class UsuarioController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		
+		return View::make("usuario.show")->with("usuario", User::find($id));
 	}
 
 
@@ -77,7 +80,7 @@ class UsuarioController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		return View::make("usuario.edit")->with("usuario", User::find($id));
 	}
 
 
@@ -89,7 +92,29 @@ class UsuarioController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$rules = array(
+			"nome" => array("required")
+		);
+
+		$validator = Validator::make(Input::all(), $rules);
+
+		if ($validator->fails()) {
+			return Redirect::to("usuario/$id/edit")->withErrors($validator);
+		} else {
+			$usuario = User::find( $id );
+			$usuario->nome = Input::get("nome");
+			$usuario->skin = Input::get("skin");
+			$usuario->layout = ! empty( Input::get("layout") ) ? Input::get("layout") : "";
+			$usuario->save();
+
+			Historico::create( array(
+				"tipo"      => Historico::TipoUsuario,
+				"descricao" => "Usuário \"{$usuario->username}\" atualizado",
+				"user_id"   => Auth::user()->id
+			));
+			
+			return Redirect::to("usuario");
+		}
 	}
 
 
@@ -139,14 +164,16 @@ class UsuarioController extends \BaseController {
 
 		    $result = json_decode($bb->request('user'));
 
-		    // var_dump($result);
-		    // die();
+		    $avatar = $result->user->avatar;
+		    $avatar = preg_replace("/s=(\d+)/i", "s=120", $avatar);
+
+		    // dd($avatar);
 
 			$usuario = User::where('username', '=', $result->user->username)->first();
 
 		    if( $usuario ){
 		    	$usuario->nome   = $result->user->display_name;
-		    	$usuario->avatar = $result->user->avatar;
+		    	$usuario->avatar = $avatar;
 
 		    	$usuario->save();
 

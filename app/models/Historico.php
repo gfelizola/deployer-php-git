@@ -3,13 +3,15 @@ use LaravelBook\Ardent\Ardent;
 
 class Historico extends Ardent {
 
-	const pendente  = 0;
-    const aprovado  = 1
-    const reprovado = 2;
+	const TipoUsuario  = 0;
+    const TipoDeploy   = 1;
+    const TipoRollBack = 2;
+    const TipoProjeto  = 3;
 
 	protected $fillable = array(
 		'tipo', 
-		'descricao', 
+		'descricao',
+		'user_id',
 	);
 
 	public function user() {
