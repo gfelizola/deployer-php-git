@@ -9,7 +9,7 @@ class DeployController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		return View::make("deploys.index");
 	}
 
 

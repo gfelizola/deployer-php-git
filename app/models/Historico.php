@@ -9,6 +9,7 @@ class Historico extends Eloquent {
 	protected $fillable = array(
 		"tipo", 
 		"descricao",
+		"infos",
 		"user_id",
 		"projeto_id",
 		"deploy_id",

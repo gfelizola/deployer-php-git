@@ -16,10 +16,11 @@ class CreateDeploysTable extends Migration {
         {
             $table->increments('id');
             $table->string('tag');
-            $table->string('descricao');
+            $table->string('descricao')->nullable();
+            $table->string('infos')->nullable();
             $table->integer('projeto_id');
             $table->integer('user_id');
-            $table->integer('status');
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

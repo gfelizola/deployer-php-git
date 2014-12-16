@@ -4,11 +4,15 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"type": "project",
+	"repositories": [{
+        "url": "https://github.com/kbjr/Git.php.git",
+        "type": "git"
+    }],
 	"require": {
 		"laravel/framework": "4.2.*",
 		"artdarek/oauth-4-laravel": "dev-master",
 		"lusitanian/oauth": "~0.3",
-		"laravelbook/ardent": "dev-master"
+		"kbjr/Git.php": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

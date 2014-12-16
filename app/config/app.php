@@ -4,6 +4,21 @@ return array(
 
 	/*
 	|--------------------------------------------------------------------------
+	| Configurações customizadas
+	|--------------------------------------------------------------------------
+	|
+	| Essas configurações foram criadas para o sistema de deploy
+	|
+	*/	
+
+	'paginacao_itens' => 20,
+	'historico_itens' => 50,
+
+	// no arquivo app/local/app.php você pode setar como TRUE se estiver trabalhando em ambiente WINDOWS
+	"WINDOWS"         => FALSE, 
+
+	/*
+	|--------------------------------------------------------------------------
 	| Application Debug Mode
 	|--------------------------------------------------------------------------
 	|
@@ -195,9 +210,6 @@ return array(
 		'OAuth' 			=> 'Artdarek\OAuth\Facade\OAuth',
 
 	),
-
-	'paginacao_itens' => 20,
-	'historico_itens' => 50,
 
 
 );

@@ -9,6 +9,7 @@ class Deploy extends Eloquent {
 		'tag', 
 		'descricao', 
 		'status',
+		'infos',
 		'user_id',
 		'projeto_id',
 	);

@@ -17,6 +17,7 @@ class CreateHistoricosTable extends Migration {
 	        $table->increments("id");
 	        $table->integer("tipo");
 	        $table->string("descricao");
+	        $table->string('infos')->nullable();
 	        $table->integer("projeto_id")->nullable();
 	        $table->integer("deploy_id")->nullable();
 	        $table->integer("user_id");
