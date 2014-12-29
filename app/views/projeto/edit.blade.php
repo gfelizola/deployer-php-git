@@ -75,10 +75,29 @@
                                     </div>
                                 </div>
                             </div>
-                                                    
+
+                            <hr>
+
+                            <div class="form-group {{{ $errors->has('servidor') ? 'has-error' : '' }}}">
+                                {{ Form::label("servidor", "Servidores para deploy") }}
+                                
+                                <div data-toggle="buttons">
+
+                                    
+                                    @foreach ($servidores as $servidor)
+                                    <label class="btn btn-warning btn-lg @if($projeto->servidores->contains($servidor->id)) active @endif">
+                                        {{ Form::checkbox('servidor[]', $servidor->id, $projeto->servidores->contains($servidor->id) ? true : false , ["autocomplete"=>"off", "class"=>"simple"] ) }}
+                                        {{{ $servidor->nome }}}
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        <div class="box-footer">                  
                             <div class="form-group">
                                 {{ Form::submit('Salvar', array( "class" => "btn btn-primary" )) }}
                             </div>
+                        </div>
                     
                     {{ Form::close() }}
                 </div>

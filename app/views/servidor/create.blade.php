@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content-header')
-    <h1>Projeto</h1>
+    <h1>servidor</h1>
 @stop
 
 @section('content')
@@ -21,59 +21,40 @@
 
             <div class="box box-primary">
                 <div class="box-body">
-                    {{ Form::model($projeto, array('route' => 'projeto.store')) }}
+                    {{ Form::model($servidor, array('route' => array('servidor.store') )) }}
                         
                             <div class="form-group {{{ $errors->has('nome') ? 'has-error' : '' }}}">
-                                {{ Form::label("nome", "Nome do projeto") }}
+                                {{ Form::label("nome", "Nome do servidor") }}
                                 {{ Form::text("nome", Input::old("nome"), array( "class" => "form-control" )) }}
                             </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-6">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <h4>Locais de acesso:</h4>
-                                        </div>
-                                    </div>
+
+                            <div class="form-group {{{ $errors->has('tipo_acesso') ? 'has-error' : '' }}}">
+                                <label for="tipo_acesso_shh">
+                                    {{ Form::radio('tipo_acesso', Servidor::TIPO_SSH, $servidor->tipo_acesso ? $servidor->tipo_acesso == Servidor::TIPO_SSH : true, ["id"=>"tipo_acesso_ssh"] ) }}
+                                        SSH <small><i class="text-info">(servidor externo)</i></small>
+                                </label><br>
+
+                                <label for="tipo_acesso_local">
+                                    {{ Form::radio('tipo_acesso', Servidor::TIPO_LOCAL, $servidor->tipo_acesso ? $servidor->tipo_acesso == Servidor::TIPO_LOCAL : false, ["id"=>"tipo_acesso_local"]) }}
+                                        Local <small><i class="text-info">(mesmo servidor do Deployer)</i></small>
+                                </label>
+                            </div>
+
+                            <h4>Preencher os valores abaixo para acesso SSH</h4>
                                                         
-                                    <div class="form-group {{{ $errors->has('server_root') ? 'has-error' : '' }}}">
-                                        {{ Form::label("server_root", "Server Root") }}
-                                        {{ Form::text("server_root", Input::old("server_root"), array( "class" => "form-control" )) }}
-                                    </div>
-                                                        
-                                    <div class="form-group {{{ $errors->has('repo') ? 'has-error' : '' }}}">
-                                        {{ Form::label("repo", "URL do repositório") }}
-                                        {{ Form::text("repo", Input::old("repo"), array( "class" => "form-control" )) }}
-                                    </div>
-                                                        
-                                    <div class="form-group {{{ $errors->has('repo_branch') ? 'has-error' : '' }}}">
-                                        {{ Form::label("repo_branch", "Branch") }}
-                                        {{ Form::text("repo_branch", Input::old("repo_branch"), array( "class" => "form-control" )) }}
-                                    </div>
-                                </div>
-                                
-                                <div class="col-xs-6">
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <h4>Dados de acesso:</h4>
-                                        </div>
-                                    </div>
-                                                        
-                                    <div class="form-group {{{ $errors->has('repo_usuario') ? 'has-error' : '' }}}">
-                                        {{ Form::label("repo_usuario", "Usuário de acesso") }}
-                                        {{ Form::text("repo_usuario", Input::old("repo_usuario"), array( "class" => "form-control" )) }}
-                                    </div>
-                                                        
-                                    <div class="form-group {{{ $errors->has('repo_senha') ? 'has-error' : '' }}}">
-                                        {{ Form::label("repo_senha", "Senha de acesso") }}
-                                        {{ Form::password("repo_senha", array( "class" => "form-control" )) }}
-                                    </div>
-                                                        
-                                    <div class="form-group hidden {{{ $errors->has('repo_key') ? 'has-error' : '' }}}">
-                                        {{ Form::label("repo_key", "Chave de acesso") }}
-                                        {{ Form::hidden("repo_key", Input::old("repo_key"), array( "class" => "form-control" )) }}
-                                    </div>
-                                </div>
+                            <div class="form-group {{{ $errors->has('endereco') ? 'has-error' : '' }}}">
+                                {{ Form::label("endereco", "Endereço") }}
+                                {{ Form::text("endereco", Input::old("endereco"), array( "class" => "form-control" )) }}
+                            </div>
+                                                
+                            <div class="form-group {{{ $errors->has('usuario') ? 'has-error' : '' }}}">
+                                {{ Form::label("usuario", "Usuário de acesso") }}
+                                {{ Form::text("usuario", Input::old("usuario"), array( "class" => "form-control" )) }}
+                            </div>
+                                                
+                            <div class="form-group {{{ $errors->has('senha') ? 'has-error' : '' }}}">
+                                {{ Form::label("senha", "Senha de acesso") }}
+                                {{ Form::password("senha", array( "class" => "form-control" )) }}
                             </div>
                                                     
                             <div class="form-group">

@@ -22,8 +22,10 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de deploys</h3>
-                    <div class="box-tools">
-                        <a href="{{{ URL::to('deploy', array($projeto->id, 'create')) }}}" class="btn bg-navy pull-right">Realizar deploy</a>
+                    <div class="box-tools pull-right">
+                        @foreach($projeto->servidores as $server)
+                            <a href="{{{ URL::to('deploy', array($projeto->id, $server->id, 'create')) }}}" class="btn bg-navy">Deploy em {{{ $server->nome }}}</a>
+                        @endforeach
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">

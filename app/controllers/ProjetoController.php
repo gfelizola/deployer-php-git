@@ -21,8 +21,9 @@ class ProjetoController extends \BaseController {
 	public function create()
 	{
 		return View::make("projeto.create", array(
-			"projeto" => new Projeto(),
-			"rota" => "projeto.store",
+			"projeto"    => new Projeto(),
+			"rota"       => "projeto.store",
+			"servidores" => Servidor::orderBy("nome")->get()
 		));
 	}
 
@@ -74,8 +75,9 @@ class ProjetoController extends \BaseController {
 	public function edit($id)
 	{
 		return View::make("projeto.edit", array(
-			"projeto" => Projeto::find($id),
-			"rota"    => "projeto/$id/update",
+			"projeto"    => Projeto::find($id),
+			"rota"       => "projeto/$id/update",
+			"servidores" => Servidor::orderBy("nome")->get()
 		));
 	}
 
@@ -88,6 +90,8 @@ class ProjetoController extends \BaseController {
 	 */
 	public function update($id)
 	{
+		// dd( Input::get("servidor") );
+
 		$rules = Projeto::$rules;
 
 		$rules["repo_senha"] = "";
@@ -108,9 +112,11 @@ class ProjetoController extends \BaseController {
 
 			$projeto->save();
 
+			$projeto->servidores()->sync( Input::get("servidor") );
+
 			Historico::create( array(
 				"tipo"       => Historico::TipoProjeto,
-				"descricao"  => "Dados do orojeto atualizados: \"{$projeto->nome}\"",
+				"descricao"  => "Dados do projeto atualizados: \"{$projeto->nome}\"",
 				"user_id"    => Auth::user()->id,
 				"projeto_id" => $projeto->id,
 			));

@@ -22,6 +22,11 @@ class Deploy extends Eloquent {
 		return $this->belongsTo('Projeto');
 	}
 
+	public function servidor()
+    {
+        return $this->hasManyThrough('Servidor', 'Projeto');
+    }
+
 	public static $rules = array(
 		'tag' => 'required'
 	);

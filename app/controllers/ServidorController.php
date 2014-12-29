@@ -9,7 +9,7 @@ class ServidorController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		return View::make("servidor.index")->with("servidores", Servidor::paginate( Config::get("app.paginacao_itens", 20) ) )->with("message", Session::get("message") );
 	}
 
 
@@ -20,7 +20,9 @@ class ServidorController extends \BaseController {
 	 */
 	public function create()
 	{
-		//
+		return View::make("servidor.create", array(
+			"servidor" => new Servidor(), 
+		));
 	}
 
 
@@ -31,7 +33,21 @@ class ServidorController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
+		$validator = Validator::make(Input::all(), Servidor::$rules);
+
+		if ($validator->fails()) {
+			return Redirect::to("servidor/create")->withErrors($validator)->withInput( Input::all() );
+		} else {
+			$servidor = Servidor::create( Input::all() );
+
+			Historico::create( array(
+				"tipo"       => Historico::TipoServidor,
+				"descricao"  => "Servidor criado: \"{$servidor->nome}\"",
+				"user_id"    => Auth::user()->id
+			));
+			
+			return $this->index();
+		}
 	}
 
 
@@ -43,7 +59,7 @@ class ServidorController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		return $this->edit($id);
 	}
 
 
@@ -55,7 +71,9 @@ class ServidorController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-		//
+		return View::make("servidor.edit", array(
+			"servidor" => Servidor::find($id)
+		));
 	}
 
 
@@ -67,7 +85,32 @@ class ServidorController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$rules = Servidor::$rules;
+
+		$rules["repo_senha"] = "";
+
+		$validator = Validator::make(Input::all(), Servidor::$rules);
+
+		if ($validator->fails()) {
+			return Redirect::to("servidor/$id/edit")->withErrors($validator)->withInput( Input::all() );
+		} else {
+			$servidor             = Servidor::find( $id );
+			$servidor->nome        = Input::get("nome");
+			$servidor->endereco    = Input::get("endereco");
+			$servidor->usuario     = Input::get("usuario");
+			$servidor->tipo_acesso = Input::get("tipo_acesso");
+			$servidor->senha       = Input::has("senha") ? Input::get("senha") : $servidor->senha;
+
+			$servidor->save();
+
+			Historico::create( array(
+				"tipo"       => Historico::TipoServidor,
+				"descricao"  => "Dados do servidor atualizados: \"{$servidor->nome}\"",
+				"user_id"    => Auth::user()->id
+			));
+			
+			return Redirect::to("servidor")->with("message","Servidor atualizado com sucesso");
+		}
 	}
 
 
@@ -79,8 +122,7 @@ class ServidorController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		//
+		Servidor::destroy($id);
+		return Response::json( array('sucesso' => true ) );
 	}
-
-
 }

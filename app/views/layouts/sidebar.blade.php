@@ -34,6 +34,17 @@
                     <li><a href="{{{ URL::to('deploy/rollback') }}}"><i class="fa fa-angle-double-right"></i> Realizar rollback</a></li>
                 </ul>
             </li>
+            <li class="treeview {{{ strstr(Route::currentRouteName(), 'servidor') ? 'active' : '' }}}">
+                <a href="#">
+                    <i class="fa fa-desktop"></i>
+                    <span>Servidores</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="{{{ URL::to('servidor') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
+                    <li><a href="{{{ URL::to('servidor/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
+                </ul>
+            </li>
             <li class="treeview {{{ strstr(Route::currentRouteName(), 'projeto') ? 'active' : '' }}}">
                 <a href="#">
                     <i class="fa fa-code"></i>

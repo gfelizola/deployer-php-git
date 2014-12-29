@@ -37,6 +37,15 @@ return array(
 			'root'      => '/var/www',
 		),
 
+		'runtime' => array(
+			'host'      => '',
+			'username'  => '',
+			'password'  => '',
+			'key'       => '',
+			'keyphrase' => '',
+			'root'      => '/var/www',
+		),
+
 	),
 
 	/*

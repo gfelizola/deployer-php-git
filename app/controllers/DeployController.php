@@ -18,19 +18,21 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create($projeto_id)
+	public function create($projeto_id, $server_id)
 	{
-		$tags    = array();
-		$projeto = Projeto::find($projeto_id);
-		$repo    = $this->get_repo($projeto);
+		$tags     = array();
+		$projeto  = Projeto::find($projeto_id);
+		$servidor = Servidor::find($server_id);
+		// $repo    = $this->get_repo($projeto);
 
 		$repo->fetch();
 
 		$tags    = $repo->list_tags();
 
 		return View::make("deploy.create", array(
-			"projeto" => $projeto, 
-			"tags"    => $tags
+			"projeto"  => $projeto, 
+			"servidor" => $servidor, 
+			"tags"     => $tags
 		));
 	}
 
@@ -51,55 +53,79 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function fetch($projeto_id)
+	public function fetch($projeto_id, $server_id)
 	{
-		$projeto = Projeto::find($projeto_id);
-		$repo    = $this->get_repo($projeto);
+		$projeto  = Projeto::find($projeto_id);
+		$servidor = Servidor::find($server_id);
+		// $repo    = $this->get_repo($projeto);
 
-		@ini_set('implicit_flush',1);
-		@ob_end_clean();
-		set_time_limit(0);
-		ob_implicit_flush(1);
+		// @ini_set("implicit_flush",1);
+		// @ob_end_clean();
+		// set_time_limit(0);
+		// ob_implicit_flush(1);
 
 		echo "<!DOCTYPE html><html>";
-		echo Response::view('layouts.head')->getOriginalContent();
-		echo "<body class='bg-black console'>";
+		echo Response::view("layouts.head")->getOriginalContent();
+		echo '<body class="bg-black console">';
 
-		try {
-			// $cmd = "ping 127.0.0.1";
-			$cmd = "git fetch https://gfelizola:gustavof87@bitbucket.org/estadao/estadao-2014.git";
+		$servidor = $projeto->servidores->first();
+		// dd( $servidor );
 
-			chdir( $projeto->server_root );
+		list( $servidor_ip, $servidor_port ) = explode( ":", $servidor->endereco );
 
-			echo getcwd() . " > " . $this->trata_url( $cmd, " " );
-			die;
-			flush();
+		Config::set("remote.connections.runtime.host", $servidor_ip);
+		Config::set("remote.connections.runtime.port", $servidor_port);
+		Config::set("remote.connections.runtime.username", $servidor->usuario);
+		Config::set("remote.connections.runtime.password", $servidor->senha);
+		Config::set("remote.connections.runtime.root", $projeto->server_root);
 
-	        $handle = popen($cmd, "r");
+		echo "Conectando no servidor<br>";
 
-	        if (ob_get_level() == 0) 
-	            ob_start();
+		SSH::into("runtime")->run(array(
+		    "cd " . $projeto->server_root,
+		    "pwd",
+		    "git status",
+		),  function($line)
+		{
+			$saida = implode( "<br>", explode( "\n", $line ) );
+		    echo "$saida<br>".PHP_EOL;
+		});
 
-	        while(!feof($handle)) {
+		// try {
+		// 	// $cmd = "ping 127.0.0.1";
+		// 	$cmd = "git fetch https://gfelizola:gustavof87@bitbucket.org/estadao/estadao-2014.git";
 
-	            $buffer = fgets($handle);
-	            $buffer = trim(htmlspecialchars($buffer));
+		// 	chdir( $projeto->server_root );
 
-	            echo $buffer . "<br />";
-	            echo str_pad('', 4096);    
+		// 	echo getcwd() . " > " . $this->trata_url( $cmd, " " );
+		// 	die;
+		// 	flush();
 
-	            ob_flush();
-	            flush();
-	            sleep(1);
-	        }
+	 //        $handle = popen($cmd, "r");
 
-	        pclose($handle);
-	        ob_end_flush();
-		} catch (Exception $e) {
-			var_dump($e);
-		}
+	 //        if (ob_get_level() == 0) 
+	 //            ob_start();
 
-		echo Response::view('layouts.footer')->getOriginalContent();
+	 //        while(!feof($handle)) {
+
+	 //            $buffer = fgets($handle);
+	 //            $buffer = trim(htmlspecialchars($buffer));
+
+	 //            echo $buffer . "<br />";
+	 //            echo str_pad("", 4096);    
+
+	 //            ob_flush();
+	 //            flush();
+	 //            sleep(1);
+	 //        }
+
+	 //        pclose($handle);
+	 //        ob_end_flush();
+		// } catch (Exception $e) {
+		// 	var_dump($e);
+		// }
+
+		echo Response::view("layouts.footer")->getOriginalContent();
 		echo "</body></html>";
 	}
 
@@ -160,7 +186,7 @@ class DeployController extends \BaseController {
 	 */
 	public function get_repo($projeto)
 	{
-		if( Config::get('app.WINDOWS') ) Git::windows_mode();
+		if( Config::get("app.WINDOWS") ) Git::windows_mode();
 
 		$repo = Git::open( $projeto->server_root );
 
@@ -187,7 +213,7 @@ class DeployController extends \BaseController {
 	private function trata_url($texto = "", $prefix = "")
 	{
 		// $reg_exUrl = "_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]-*)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]-*)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/\S*)?$";
-		$reg_exUrl = "_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|'()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s',\|\(\).:;?\-\[\]>\)])_i";
+		$reg_exUrl = '_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|"()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s",\|\(\).:;?\-\[\]>\)])_i';
 		return preg_replace_callback($reg_exUrl, function($matches){
 			$purl = parse_url( trim($matches[0]) );
 
