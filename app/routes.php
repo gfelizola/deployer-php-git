@@ -22,6 +22,7 @@ Route::group(array("before" => "auth"), function()
 	Route::get("logout", 				"UsuarioController@logout");
 
     Route::resource("projeto",  		"ProjetoController" );
+    Route::resource("servidor",  		"ServidorController" );
     Route::resource("usuario",  		"UsuarioController" );
 
     Route::get("projeto/{id}/deploys",  "ProjetoController@deploys" );

@@ -25,4 +25,9 @@ class Projeto extends Eloquent {
     {
         return $this->hasMany('Deploy');
     }
+
+    public function servidores()
+    {
+        return $this->belongsToMany('Servidor', "servidores_projetos");
+    }
 }

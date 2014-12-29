@@ -5,6 +5,7 @@ class Historico extends Eloquent {
     const TipoDeploy   = 1;
     const TipoRollBack = 2;
     const TipoProjeto  = 3;
+    const TipoServidor = 4;
 
 	protected $fillable = array(
 		"tipo", 
