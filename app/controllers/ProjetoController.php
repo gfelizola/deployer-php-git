@@ -9,7 +9,7 @@ class ProjetoController extends \BaseController {
 	 */
 	public function index()
 	{
-		return View::make("projeto.index")->with("projetos", Projeto::paginate( Config::get("paginacao_itens", 20) ) )->with("message", Session::get("message") );
+		return View::make("projeto.index")->with("projetos", Projeto::paginate( Config::get("app.paginacao_itens", 20) ) )->with("message", Session::get("message") );
 	}
 
 
@@ -130,6 +130,26 @@ class ProjetoController extends \BaseController {
 	{
 		Projeto::destroy($id);
 		return Response::json( array('sucesso' => true ) );
+	}
+
+
+	/**
+	 * Lista os deploys do projeto.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function deploys($id)
+	{
+		$projeto = Projeto::find($id);
+		// $deploys = $projeto->deploys->sortBy("created_at",true)->paginate( Config::get("paginacao_itens", 20) );
+		$deploys = Deploy::orderBy("created_at","DESC")->where("projeto_id","=",$id)->paginate( Config::get("app.paginacao_itens", 20) );
+
+		return View::make( "deploy.index", array(
+			"projeto" => $projeto,
+			"deploys" => $deploys,
+			"message" => Session::get("message")
+		));
 	}
 
 

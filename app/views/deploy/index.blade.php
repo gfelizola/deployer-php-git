@@ -1,14 +1,17 @@
 @extends('layouts.master')
 
 @section('content-header')
-    <h1>Deploys</h1>
+    <h1>
+        {{ $projeto->nome }}
+        <small>Deploys</small>
+    </h1>
 @stop
 
 @section('content')
     <div class="row">
         <div class="col-xs-12">
 
-            @if ( $message )
+            @if( $message )
             <div class="alert alert-success alert-dismissable">
                 <i class="fa fa-ban"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -20,7 +23,7 @@
                 <div class="box-header">
                     <h3 class="box-title">Lista de deploys</h3>
                     <div class="box-tools">
-                        <a href="{{{ URL::to('deploy/create') }}}" class="btn bg-navy pull-right">Realizar deploy</a>
+                        <a href="{{{ URL::to('deploy', array($projeto->id, 'create')) }}}" class="btn bg-navy pull-right">Realizar deploy</a>
                     </div>
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
@@ -30,14 +33,14 @@
                             <th>Projeto</th>
                             <th>Tag</th>
                             <th>Autor</th>
-                            <th>Data de Cadastro</th>
+                            <th>Efetuado em</th>
                         </tr>
 
                         @foreach ($deploys as $d)
                         <tr>
                             <td width="70">
                                 <div class="btn-group">
-                                    <a href="{{{ URL::to('deploy', array($projeto->id, 'rollback')) }}}" data-remote="" class="btn btn-danger btn-xs btn-deletar-item" data-toggle="modal" data-target="#deleteModal">
+                                    <a href="{{{ URL::to('deploy', array($d->id, 'rollback')) }}}" data-remote="" class="btn btn-danger btn-xs btn-deletar-item" data-toggle="modal" data-target="#deleteModal">
                                         <i class="fa fa-level-down"></i> Rollback
                                     </a>
                                 </div>
@@ -53,7 +56,7 @@
                 </div><!-- /.box-body -->
 
                 <div class="box-footer">
-                    {{ $projetos->links() }}
+                    {{ $deploys->links() }}
                 </div>
 
                 <div class="overlay hidden"></div>

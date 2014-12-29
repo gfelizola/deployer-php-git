@@ -27,6 +27,7 @@
                     <table class="table table-hover">
                         <tr>
                             <th>Ações</th>
+                            <th>Deploys</th>
                             <th>Nome</th>
                             <th>Repo</th>
                             <th>Data de Cadastro</th>
@@ -43,6 +44,12 @@
                                         <i class="fa fa-ban"></i>
                                     </a>
                                 </div>
+                            </td>
+
+                            <td width="120">
+                                <a href="{{{ URL::to('projeto', array($projeto->id, 'deploys')) }}}" data-remote="" class="btn btn-info btn-xs">
+                                    <i class="fa fa-cloud-upload"></i> Ver Deploys
+                                </a>
                             </td>
                             
                             <td>{{ $projeto->nome }}</td>

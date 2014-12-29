@@ -1,7 +1,5 @@
 <?php
-use LaravelBook\Ardent\Ardent;
-
-class Projeto extends Ardent {
+class Projeto extends Eloquent {
 
 	public static $rules = array(
 		'nome'        => 'required', 
@@ -9,7 +7,7 @@ class Projeto extends Ardent {
 		'repo'        => 'required', 
 		'repo_branch' => 'required', 
 		'repo_senha'  => 'required_with:repo_usuario', 
-		'repo_key'    => 'required_without_all:repo_usuario,repo_senha', 
+		// 'repo_key'    => 'required_without_all:repo_usuario,repo_senha', 
 	);
 
 	protected $fillable = array(
@@ -22,4 +20,9 @@ class Projeto extends Ardent {
 		'repo_branch', 
 		'deploy_key'
 	);
+
+	public function deploys()
+    {
+        return $this->hasMany('Deploy');
+    }
 }

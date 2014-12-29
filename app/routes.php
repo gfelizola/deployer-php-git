@@ -21,9 +21,13 @@ Route::group(array("before" => "auth"), function()
 	Route::get("home", 					"HomeController@showWelcome");
 	Route::get("logout", 				"UsuarioController@logout");
 
-    Route::resource("deploy",  			"DeployController" );
     Route::resource("projeto",  		"ProjetoController" );
     Route::resource("usuario",  		"UsuarioController" );
+
+    Route::get("projeto/{id}/deploys",  "ProjetoController@deploys" );
+
+    Route::get("deploy/{id}/create",  	"DeployController@create" );
+    Route::get("deploy/{id}/fetch",  	"DeployController@fetch" );
 
     Route::post("usuario/{id}/update",  "UsuarioController@update" );
 });

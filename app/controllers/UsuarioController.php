@@ -12,7 +12,7 @@ class UsuarioController extends \BaseController {
 	 */
 	public function index()
 	{
-		$usuarios = User::orderBy('nome', 'ASC')->paginate( Config::get("paginacao_itens", 20) );
+		$usuarios = User::orderBy('nome', 'ASC')->paginate( Config::get("app.paginacao_itens", 20) );
 		return View::make("usuario.index", array('usuarios' => $usuarios));
 	}
 

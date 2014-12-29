@@ -1,0 +1,1071 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"fade",
+				"fadeIn	.fadeIn()"
+			],
+			[
+				"int",
+				"insertBefore	.insertBefore()"
+			],
+			[
+				"load",
+				"load	.load()"
+			],
+			[
+				"trigger",
+				"triggerProxima"
+			],
+			[
+				"inser",
+				"insertBefore	.insertBefore()"
+			],
+			[
+				"add",
+				"addClass	.addClass()"
+			],
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"tt",
+				"tt-n	text-transform:none;"
+			],
+			[
+				"arquivo",
+				"arquivo_cms"
+			],
+			[
+				"arqu",
+				"arquivo_cms"
+			],
+			[
+				"str",
+				"stripos"
+			],
+			[
+				"inc",
+				"incl1	include_once …"
+			],
+			[
+				"include",
+				"include-cms"
+			],
+			[
+				"g",
+				"gfelizola"
+			],
+			[
+				"n",
+				"nowrap"
+			],
+			[
+				"ws",
+				"white-space"
+			],
+			[
+				"ww",
+				"wow-n	word-wrap:none;"
+			],
+			[
+				"url",
+				"urlencode"
+			],
+			[
+				"arr",
+				"array	$… = array (…)"
+			],
+			[
+				"array_m",
+				"array_merge"
+			],
+			[
+				"con",
+				"conteudo"
+			],
+			[
+				"pas",
+				"pasta_padrao"
+			],
+			[
+				"arqui",
+				"arquivo_server"
+			],
+			[
+				"exp",
+				"explode"
+			],
+			[
+				"urlT",
+				"urlTimeMandante"
+			],
+			[
+				"urlBus",
+				"urlBuscaPrefix"
+			],
+			[
+				"ready",
+				"ready	document.ready - $(function(){})"
+			],
+			[
+				"sub",
+				"subs_redirects"
+			],
+			[
+				"is",
+				"is_array"
+			],
+			[
+				"strr",
+				"str_replace"
+			],
+			[
+				"quer",
+				"OAS_query"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "app/views/layouts/sidebar.blade.php",
+			"settings":
+			{
+				"buffer_size": 3214,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "vendor/kbjr/Git.php/Git.php",
+			"settings":
+			{
+				"buffer_size": 15506,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 310.0,
+		"selected_items":
+		[
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
+			[
+				"upl",
+				"SFTP: Upload File"
+			],
+			[
+				"reind",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"css",
+				"Set Syntax: CSS"
+			],
+			[
+				"th",
+				"Themr: List themes"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"down",
+				"SFTP: Download File"
+			],
+			[
+				"prefe",
+				"Preferences: Settings - User"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"form",
+				"Format: Javascript"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"mini",
+				"Minify Javascript to file"
+			]
+		],
+		"width": 514.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/D/localhost/deployer",
+		"/D/localhost/deployer/app",
+		"/D/localhost/deployer/app/views",
+		"/D/localhost/deployer/app/views/layouts"
+	],
+	"file_history":
+	[
+		"/C/Users/tgf112836/AppData/Local/Temp/scp03478/var/www/vol1/estadao-2014/m.estadao/include/noticias.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp03303/var/www/vol1/estadao-2014/m.estadao/include/ultimas.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
+		"/D/localhost/deployer/app/start/global.php",
+		"/D/localhost/estadao-2014/shared/estadao/css/home.css",
+		"/D/localhost/estadao-2014/shared/estadao/css/style.css",
+		"/D/localhost/estadao-2014/www.estadao/index.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp46522/var/www/vol1/estadao-2014/www.estadao/index.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/ticker.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/ticker-indicadores.php",
+		"/D/localhost/estadao-2014/shared/estadao/js/common.src.js",
+		"/D/localhost/estadao-2014/shared/includes/estadao/ticker-essenciais.php",
+		"/D/localhost/estadao-2014/shared/estadao/js/common.js",
+		"/D/localhost/estadao-2014/node_modules/grunt-contrib-concat/docs/concat-options.md",
+		"/D/localhost/estadao-2014/sftp-config.json",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp40999/var/www/vol1/estadao-2014/shared/estadao/css/style.css",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp45516/var/www/vol1/estadao-2014/shared/includes/estadao/head_header.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp54835/var/www/vol1/estadao-2014/m.estadao/css/main.css",
+		"/D/localhost/estadao-2014/m.estadao/css/main.css",
+		"/D/localhost/estadao-2014/m.estadao/css/main.src.css",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp56720/var/www/vol1-producao/estadao-2014/m.estadao/css/main.css",
+		"/D/localhost/estadao-2014/m.estadao/config/config.php",
+		"/D/localhost/estadao-2014/m.estadao/index.php",
+		"/D/localhost/estadao-2014/m.estadao/ultimas/comum.php",
+		"/D/localhost/estadao-2014/m.estadao/include/noticias.php",
+		"/D/localhost/estadao-2014/m.estadao/include/ultimas.php",
+		"/D/wamp/logs/php_error.log",
+		"/D/localhost/estadao-2014/m.estadao/cultura/ultimas/index.php",
+		"/D/localhost/pacaembu/sass/_jcarousel.scss",
+		"/D/localhost/estadao-2014/m.estadao/include/menu.php",
+		"/D/localhost/estadao-2014/m.estadao/include/footer.php",
+		"/D/localhost/estadao-2014/m.estadao/cultura/index.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp42401/www/wp-content/themes/pacaembu/stylesheets/app.css",
+		"/D/localhost/estadao-2014/package.json",
+		"/D/localhost/estadao-2014/Gruntfile.js",
+		"/D/wamp/vhosts/estadao.conf",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp16786/var/www/vol1/estadao-2014/move_fcms",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp07442/var/www/vol1/estadao-2014/move_cms",
+		"/D/localhost/estadao-2014/.gitignore",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp20607/var/www/vol1/estadao-2014/.gitignore",
+		"/D/localhost/estadao-2014/add_ignore.sh",
+		"/D/localhost/estadao-2014/getfiles.sh",
+		"/D/localhost/estadao-2014/shared/noticias/templates/noticia/estadao.php",
+		"/D/localhost/estadao-2014/shared/estadao/js/libs/jquery.inview.min.js",
+		"/D/localhost/estadao-2014/esportes/includes/legado/copa-do-mundo/inc_videos2014.php",
+		"/D/localhost/estadao-2014/www.estadao/jornal-do-carro/noticias/indice_noticias.php",
+		"/D/localhost/estadao-2014/alias/index.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/tags.php",
+		"/D/localhost/estadao-2014/shared/xml/noticia/1580308.xml",
+		"/D/localhost/estadao-2014/shared/estadao/js/modules/ScrollBrns.interna.js",
+		"/D/localhost/estadao-2014/shared/estadao/style.css",
+		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/styles/style.css",
+		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/styles/jcarousel.connected-carousels.css",
+		"/D/localhost/estadao-2014/node_modules/grunt-contrib-watch/node_modules/gaze/test/safewrite_test.js",
+		"/D/localhost/estadao-2014/esportes/futebol/palmeiras/redes-socias/index.php",
+		"/D/localhost/estadao-2014/m.estadao/noticia.php",
+		"/D/localhost/estadao-2014/m.estadao/templates/estadao.htm",
+		"/D/localhost/estadao-2014/shared/xml/noticia/1131660.xml",
+		"/D/localhost/estadao-2014/shared/xml/noticia/1603626.xml",
+		"/D/localhost/estadao-2014/shared/xml/noticia/30000.xml",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp49249/var/www/vol1/estadao-2014/shared/xml/noticia/30000.xml",
+		"/D/localhost/estadao-2014/esportes/futebol/clubes/palmeiras.php",
+		"/D/localhost/estadao-2014/www.estadao/banner-dispatcher/templates/paladar/position_app_londres.htm",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp59972/var/www/vol1/estadaov2/jornal-do-carro/redes-sociais/index.php",
+		"/D/localhost/estadao-2014/internacional/.htaccess",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp28184/var/www/vol1/estadao-2014/arquivos_cms_20141203.txt",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp24233/var/www/vol1/cms/estadao-2014/www.estadao/index.php",
+		"/D/localhost/estadao-2014/shared/config/globalConfig.php",
+		"/D/localhost/estadao-2014/economia/ferramentas/conversor-de-moedas.php",
+		"/D/localhost/estadao-2014/move_cms",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp43441/var/www/vol1/estadao-2014/www.estadao/index.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/automatica_videos_esquerda.php",
+		"/D/localhost/estadao-2014/shared/est3/classificacaoF1/grid_largada_100.xml",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp33153/var/www/vol1/estadao-2014/shared/config/globalConfig.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp07374/var/www/vol1/estadao-2014/shared/estadao/error/.htaccess",
+		"/D/localhost/estadao-2014/include-cms.php",
+		"/D/localhost/estadao-2014/shared/estadao/error/.htaccess",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp44013/var/www/vol1/estadao-2014/shared/estadao/error/404.php",
+		"/D/localhost/estadao-2014/internacional/httpd.conf",
+		"/D/localhost/estadao-2014/shared/estadao/error/noindex.html",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp06972/var/www/vol1/cms/estadao-2014/www.estadao/termo-de-uso/index.php",
+		"/D/localhost/estadao-2014/shared/error/noindex.html",
+		"/D/localhost/estadao-2014/sha",
+		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/SFTP/SFTP.sublime-settings",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp17421/var/www/vol1/estadao-2014/internacional/.htaccess",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp00067/var/www/vol1/estadao-2014/www.estadao/.htaccess",
+		"/D/localhost/estadao-2014/internacional/include-cms.php",
+		"/D/localhost/estadao-2014/internacional/info.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp12921/var/www/vol1/estadao-2014/cultura/.htaccess",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp27415/var/www/vol1/estadao-2014/cultura/.htaccess",
+		"/D/localhost/estadao-2014/cultura/.htaccess",
+		"/D/localhost/estadao-2014/cultura/include-cms.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp27064/var/www/vol1/estadao-2014/.htaccess",
+		"/D/localhost/estadao-2014/.htaccess",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp52962/var/www/vol1/estadao-2014/cultura/.htaccess",
+		"/D/localhost/ewok/.gitignore",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp58881/var/www/vol1/cms/estadao-2014/cultura/index-teste.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp03150/var/www/vol1/estadao-2014/include-cms.php",
+		"/D/localhost/estadao-2014/www.estadao/.htaccess",
+		"/D/localhost/estadao-2014/www.estadao/include-cms.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp11483/var/www/vol1/estadao-2014/www.estadao/.htaccess",
+		"/D/localhost/estadao-2014/www.estadao/.htaccess.CRQ000000061457%20",
+		"/D/localhost/estadao-2014/www.estadao/404.php",
+		"/D/localhost/estadao-2014/shared/noticias/noticia.php",
+		"/D/wamp/bin/apache/apache2.4.9/conf/httpd.conf",
+		"/D/_Arquivos/_Dev/iframe-resizer/teste_iframe.html",
+		"/D/codigo-iframe-fuvest.txt",
+		"/D/localhost/arquivos_cms_limpo.txt",
+		"/D/localhost/estadao-2014/www.estadao/includes/recomendadas.php",
+		"/D/localhost/estadao-2014/www.estadao/tudo-sobre/index.php",
+		"/D/localhost/estadao-2014/www.estadao/termo-de-uso/index.xml",
+		"/D/localhost/estadao-2014/horoscopo/touro.xml",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp01147/var/www/vol1-producao/estadao-2014/www.estadao/includes/topo_da_home.php",
+		"/D/localhost/estadao-2014/www.estadao/includes/topo_da_home.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/cms/jogos_do_dia.php",
+		"/D/localhost/estadao-2014/horoscopo/quiroga.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp59305/var/www/vol1-producao/estadao-2014/horoscopo/sagitario.php",
+		"/D/localhost/estadao-2014/esportes/velocidade/formula-1/circuitos/austria.php",
+		"/D/localhost/estadao-2014/esportes/classificacao/templates/2.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/futebolTabela.php",
+		"/D/localhost/estadao-2014/shared/includes/estadao/futebolRodadas.php",
+		"/D/localhost/estadao-2014/esportes/classificacao/montaTabela.php",
+		"/D/localhost/estadao-2014/esportes/classificacao/templates/1.php",
+		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/menu_institucional.php",
+		"/D/localhost/estadao-2014/node_modules/grunt/node_modules/minimatch/minimatch.js",
+		"/D/localhost/estadao-2014/www.estadao/tudo-sobre/xml/m/mostra-internacional-de-cinema.xml",
+		"/D/localhost/estadao-2014/esportes/includes/legado/copa-do-mundo/inc_tabela.php",
+		"/D/localhost/estadao-2014/deploy/894444e/files-2014-11-26_16-57.txt"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 92.0,
+		"where_history":
+		[
+			"*.php",
+			"*.js",
+			"*.php|js",
+			"*.php",
+			"shared/noticia/*.php"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"username",
+			"ticker",
+			".widgets .lista figure{float: left; margin-right: 5px; width:100px;}\n.widgets .lista figure img{width:100%;}",
+			"relacionadaspessoais",
+			"xmlInternacional",
+			"jcarousel-container-horizontal",
+			"m.esta",
+			") ",
+			"www.estadao/",
+			"noindex",
+			"console",
+			"404",
+			"pasta_atual",
+			"DIR_CMS",
+			"SERVER_ROOT",
+			"\\n",
+			"includes/recomendadas.php",
+			"www.estadao/celular/",
+			"www.estadao/includes/recomendadas.php",
+			"includes/estadao/cms/interessante_.*\\.",
+			"includes/estadao/cms/interessante_1631.",
+			"includes/estadao/cms/jogos_do_dia.php",
+			"\\./www.estadao/newsletter/.*$\\n",
+			"\\./www.estadao/includes/interessante_.*$\\n",
+			"\\./shared/includes/estadao/interessante.*$\\n",
+			"includes/estadao/futebolRodadas.php",
+			"Neve",
+			"includes/estadao/cms/jogos_do_dia",
+			"interess",
+			"includes/interessante",
+			"/includes/interessante",
+			"^(.*\\.(?!(htm|html|php|xml)$))?[^.]*$\\n",
+			"^(.*).png$\\n",
+			"^(.*).jpg$\\n",
+			"\\s{2,}",
+			"0\\n\\.",
+			"\\t",
+			"\\.",
+			"\\n",
+			".css",
+			"Err\\.(.*)\"<br>\" & _",
+			"alias ",
+			"=\"(.*)\"",
+			"alias ",
+			"'",
+			"artigo",
+			"relacionadas",
+			"close",
+			"nivo",
+			"imagemLegenda",
+			"mascaraThumb",
+			"tittleheader",
+			"titlehe",
+			"header.arrow",
+			"featbar",
+			"stsBox",
+			"Publici",
+			"carro",
+			"piaui",
+			"not-done-yet",
+			"minifica",
+			"ARQUIVO ADICIONADO",
+			"nth-child\\s",
+			":\\s;",
+			".nivoSlider .nivo-caption",
+			"nivo-caption",
+			"deloi",
+			"close",
+			"<link",
+			"move(",
+			"setMaxImportSize",
+			"'",
+			".css",
+			"'",
+			"$config",
+			"clubes_lista",
+			"prettyPhoto",
+			"\",",
+			"pontos_co",
+			"\">\\n\\s+<(img|/a)",
+			"sport",
+			"goias",
+			"Seo",
+			"nomeCampeonato",
+			"classificacao",
+			"dados",
+			"$VOLTAR",
+			"$voltar",
+			"shared/",
+			"$classe",
+			"sftp",
+			"URL_MIDLEWARE",
+			"urlSeoRoot",
+			"arte",
+			"nacional",
+			"dev.politica",
+			"DIR_",
+			"alias",
+			"directory",
+			".widgets",
+			"especia",
+			"/$",
+			"/var",
+			"oespmobi",
+			"cyc",
+			".col2-3",
+			".widgets",
+			"–",
+			"   ",
+			"54w",
+			".x86_64",
+			"peter",
+			"C:\\Development\\adt-bundle",
+			"banner"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"xmlCultura",
+			"PASTA_ATUAL",
+			"$DIR_CMS",
+			"$SERVER_ROOT",
+			" ",
+			"",
+			" ",
+			"0.",
+			" ",
+			"\\n.",
+			"",
+			"\"$1: \" & Err.$1 & \"<br>\" & _",
+			"",
+			"=$1",
+			"",
+			"\"",
+			"nth-child",
+			"\"",
+			".png\",",
+			"\"><$1",
+			"/var/www/vol1/estadao-2014/shared/",
+			"dev.www",
+			"",
+			"var",
+			"-",
+			"55w -",
+			"55w ",
+			"55w",
+			"",
+			"tgf112836",
+			"D:\\_Arquivos\\_Dev\\adt-bundle"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "app/views/layouts/sidebar.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3214,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								594,
+								602
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "vendor/kbjr/Git.php/Git.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12668,
+								12668
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 8134.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 99.0
+	},
+	"project": "deployer.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"git.p",
+				"vendor\\kbjr\\Git.php\\Git.php"
+			],
+			[
+				"common.s",
+				"shared\\estadao\\js\\common.src.js"
+			],
+			[
+				"includes/estadao/ticker-essenciais.php",
+				"shared\\includes\\estadao\\ticker-essenciais.php"
+			],
+			[
+				"includes/estadao/ticker.php",
+				"shared\\includes\\estadao\\ticker.php"
+			],
+			[
+				"invie",
+				"shared\\estadao\\js\\libs\\jquery.inview.min.js"
+			],
+			[
+				"1580308.xml",
+				"shared\\xml\\noticia\\1580308.xml"
+			],
+			[
+				"scrollbrns.interna.js",
+				"shared\\estadao\\js\\modules\\ScrollBrns.interna.js"
+			],
+			[
+				"style.css",
+				"shared\\estadao\\css\\style.css"
+			],
+			[
+				"includes/estadao/tags.php",
+				"shared\\includes\\estadao\\tags.php"
+			],
+			[
+				"palmeiras/re",
+				"esportes\\futebol\\palmeiras\\redes-socias\\index.php"
+			],
+			[
+				"comm",
+				"shared\\estadao\\js\\common.js"
+			],
+			[
+				"includes/estadao/automatica_videos_esquerda.php",
+				"shared\\includes\\estadao\\automatica_videos_esquerda.php"
+			],
+			[
+				"globalcon",
+				"shared\\config\\globalConfig.php"
+			],
+			[
+				"global",
+				"shared\\config\\globalConfig.php"
+			],
+			[
+				"include-s",
+				"www.estadao\\include-cms.php"
+			],
+			[
+				"www.estadao/includes/recomendadas.php",
+				"www.estadao\\includes\\recomendadas.php"
+			],
+			[
+				"www.estadao/tudo-sobre/index.php",
+				"www.estadao\\tudo-sobre\\index.php"
+			],
+			[
+				"www.estadao/termo-de-uso/index.xml",
+				"www.estadao\\termo-de-uso\\index.xml"
+			],
+			[
+				"www.estadao/includes/topo_da_home.php",
+				"www.estadao\\includes\\topo_da_home.php"
+			],
+			[
+				"includes/estadao/cms/jogos_do_dia.php",
+				"shared\\includes\\estadao\\cms\\jogos_do_dia.php"
+			],
+			[
+				"quiroga.php",
+				"horoscopo\\quiroga.php"
+			],
+			[
+				"horoscopo/touro.xml",
+				"horoscopo\\touro.xml"
+			],
+			[
+				"esportes/futebol/clubes/palmeiras.php",
+				"esportes\\futebol\\clubes\\palmeiras.php"
+			],
+			[
+				"esportes/velocidade/formula-1/circuitos/austria.php",
+				"esportes\\velocidade\\formula-1\\circuitos\\austria.php"
+			],
+			[
+				"includes/estadao/futeboltabela.php",
+				"shared\\includes\\estadao\\futebolTabela.php"
+			],
+			[
+				"montat",
+				"esportes\\classificacao\\montaTabela.php"
+			],
+			[
+				"includes/estadao/futebolrodadas.php",
+				"shared\\includes\\estadao\\futebolRodadas.php"
+			],
+			[
+				"esportes/futebol/index.php",
+				"esportes\\futebol\\index.php"
+			],
+			[
+				"home.src",
+				"shared\\estadao\\css\\home.src.css"
+			],
+			[
+				"style.src",
+				"shared\\estadao\\css\\style.src.css"
+			],
+			[
+				"www.estadao/inde",
+				"www.estadao\\index.php"
+			],
+			[
+				".",
+				".gitignore"
+			],
+			[
+				"noticia.src.",
+				"shared\\estadao\\css\\noticia.src.css"
+			],
+			[
+				"/estadao/css/subhome.src.css",
+				"shared\\estadao\\css\\subhome.src.css"
+			],
+			[
+				"/estadao/js/nivo-slider/nivo-slider.src.css",
+				"shared\\estadao\\js\\nivo-slider\\nivo-slider.src.css"
+			],
+			[
+				"/estadao/css/nivo-lightbox.src.css",
+				"shared\\estadao\\css\\nivo-lightbox.src.css"
+			],
+			[
+				"/estadao/css/style.src.css",
+				"shared\\estadao\\css\\style.src.css"
+			],
+			[
+				"head_h",
+				"shared\\includes\\estadao\\head_header.php"
+			],
+			[
+				"pac",
+				"package.json"
+			],
+			[
+				"gru",
+				"Gruntfile.js"
+			],
+			[
+				"shared/estadao/js/playervideo.src.js",
+				"shared\\estadao\\js\\playervideo.src.js"
+			],
+			[
+				"pack",
+				"package.json"
+			],
+			[
+				"packa",
+				"package.json"
+			],
+			[
+				"bro",
+				"economia\\broadcast\\broadcast.css"
+			],
+			[
+				".git",
+				".gitignore"
+			],
+			[
+				"grun",
+				"Gruntfile.js"
+			],
+			[
+				"nivo",
+				"shared\\estadao\\css\\nivo-lightbox.css"
+			],
+			[
+				"remove",
+				"shared\\estadao\\css\\home-full-removed.css"
+			],
+			[
+				"esportes/inde",
+				"esportes\\index.php"
+			],
+			[
+				"css/style",
+				"shared\\estadao\\css\\style.css"
+			],
+			[
+				"styl",
+				"shared\\estadao\\style.css"
+			],
+			[
+				"css/home",
+				"shared\\estadao\\css\\home.css"
+			],
+			[
+				"home-f",
+				"shared\\estadao\\css\\home-full-removed.css"
+			],
+			[
+				"includes/estadao/automatica_jornaldocarro.php",
+				"shared\\includes\\estadao\\automatica_jornaldocarro.php"
+			],
+			[
+				"www.estadao/index.",
+				"www.estadao\\index.php"
+			],
+			[
+				"head_hea",
+				"shared\\includes\\estadao\\head_header.php"
+			],
+			[
+				"css/home.css",
+				"shared\\estadao\\css\\home.css"
+			],
+			[
+				"grunt",
+				"Gruntfile.js"
+			],
+			[
+				"includes/common/header-main",
+				"shared\\includes\\common\\header-main.php"
+			],
+			[
+				"includes/common/cabecalho-home",
+				"shared\\includes\\common\\cabecalho-home.php"
+			],
+			[
+				"includes/estadao/body_header",
+				"shared\\includes\\estadao\\body_header.php"
+			],
+			[
+				"includes/common/toolbar",
+				"shared\\includes\\common\\toolbar.php"
+			],
+			[
+				"body_he",
+				"shared\\includes\\estadao\\body_header.php"
+			],
+			[
+				"head_css",
+				"shared\\includes\\estadao\\head_css.php"
+			],
+			[
+				"index-m",
+				"www.estadao\\index-min.php"
+			],
+			[
+				"head_header",
+				"shared\\includes\\estadao\\head_header.php"
+			],
+			[
+				"head",
+				"shared\\includes\\estadao\\head_css.php"
+			],
+			[
+				"index-mi",
+				"www.estadao\\index-min.php"
+			],
+			[
+				"min_c",
+				"shared\\estadao\\css\\min_css.php"
+			],
+			[
+				"includes/estadao/head_header",
+				"shared\\includes\\estadao\\head_header.php"
+			],
+			[
+				"head_",
+				"shared\\includes\\common\\head_header.php"
+			],
+			[
+				"index-min",
+				"www.estadao\\index-min.php"
+			],
+			[
+				"shared/includes/estadao/automatica_jornaldocarr",
+				"shared\\includes\\estadao\\automatica_jornaldocarro.php"
+			],
+			[
+				"class",
+				"shared\\includes\\estadao\\classificacao.php"
+			],
+			[
+				"esportes.css",
+				"shared\\estadao\\css\\esportes.css"
+			],
+			[
+				"util/s",
+				"shared\\classes\\util\\Seo.php"
+			],
+			[
+				"monta",
+				"esportes\\classificacao\\montaTabela.php"
+			],
+			[
+				"classificacao/t",
+				"esportes\\classificacao\\templates\\2.php"
+			],
+			[
+				"util/com",
+				"shared\\classes\\util\\Comum.php"
+			],
+			[
+				"classi",
+				"shared\\includes\\estadao\\classificacao.php"
+			],
+			[
+				"style",
+				"shared\\estadao\\css\\style.css"
+			],
+			[
+				"ultimas.css",
+				"shared\\estadao\\css\\ultimas.css"
+			],
+			[
+				"shared/includes/subm",
+				"shared\\includes\\estadao\\submenu.php"
+			],
+			[
+				"globalc",
+				"shared\\config\\globalConfig.php"
+			],
+			[
+				"template/poli",
+				"shared\\discute\\templates\\politica.php"
+			],
+			[
+				"template/no",
+				"shared\\noticias\\templates\\noticia\\estadao.php"
+			],
+			[
+				"sharednoti",
+				"shared\\noticias\\noticia.php"
+			],
+			[
+				"style.cs",
+				"shared\\estadao\\style.css"
+			],
+			[
+				"notici",
+				"shared\\estadao\\css\\noticia.css"
+			],
+			[
+				"lateral.inc",
+				"shared\\aovivo\\inc\\lateral.inc.php"
+			],
+			[
+				"noticia.css",
+				"shared\\estadao\\css\\noticia.css"
+			],
+			[
+				"",
+				".gitignore"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"D:\\_Arquivos\\_Dev\\QuemJogaJS\\quem-joga.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 306.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -66,12 +66,12 @@
                                                         
                                     <div class="form-group {{{ $errors->has('repo_senha') ? 'has-error' : '' }}}">
                                         {{ Form::label("repo_senha", "Senha de acesso") }}
-                                        {{ Form::text("repo_senha", "", array( "class" => "form-control" )) }}
+                                        {{ Form::password("repo_senha", array( "class" => "form-control" )) }}
                                     </div>
                                                         
-                                    <div class="form-group {{{ $errors->has('repo_key') ? 'has-error' : '' }}}">
+                                    <div class="form-group hidden {{{ $errors->has('repo_key') ? 'has-error' : '' }}}">
                                         {{ Form::label("repo_key", "Chave de acesso") }}
-                                        {{ Form::text("repo_key", Input::old("repo_key"), array( "class" => "form-control" )) }}
+                                        {{ Form::hidden("repo_key", Input::old("repo_key"), array( "class" => "form-control" )) }}
                                     </div>
                                 </div>
                             </div>
