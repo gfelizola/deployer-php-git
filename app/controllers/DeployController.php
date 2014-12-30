@@ -25,9 +25,9 @@ class DeployController extends \BaseController {
 		$servidor = Servidor::find($server_id);
 		// $repo    = $this->get_repo($projeto);
 
-		$repo->fetch();
+		// $repo->fetch();
 
-		$tags    = $repo->list_tags();
+		// $tags    = $repo->list_tags();
 
 		return View::make("deploy.create", array(
 			"projeto"  => $projeto, 
@@ -56,7 +56,9 @@ class DeployController extends \BaseController {
 	public function fetch($projeto_id, $server_id)
 	{
 		$projeto  = Projeto::find($projeto_id);
-		$servidor = Servidor::find($server_id);
+		$servidor = $projeto->servidores->find($server_id);
+
+		// dd($servidor->pivot->root);
 		// $repo    = $this->get_repo($projeto);
 
 		// @ini_set("implicit_flush",1);
@@ -68,28 +70,43 @@ class DeployController extends \BaseController {
 		echo Response::view("layouts.head")->getOriginalContent();
 		echo '<body class="bg-black console">';
 
-		$servidor = $projeto->servidores->first();
+		// $servidor = $projeto->servidores->first();
 		// dd( $servidor );
 
-		list( $servidor_ip, $servidor_port ) = explode( ":", $servidor->endereco );
-
-		Config::set("remote.connections.runtime.host", $servidor_ip);
-		Config::set("remote.connections.runtime.port", $servidor_port);
+		Config::set("remote.connections.runtime.host", $servidor->endereco);
 		Config::set("remote.connections.runtime.username", $servidor->usuario);
 		Config::set("remote.connections.runtime.password", $servidor->senha);
-		Config::set("remote.connections.runtime.root", $projeto->server_root);
+		Config::set("remote.connections.runtime.root", $servidor->pivot->root);
 
-		echo "Conectando no servidor<br>";
+		$ssh = SSH::into("runtime");
 
-		SSH::into("runtime")->run(array(
-		    "cd " . $projeto->server_root,
-		    "pwd",
-		    "git status",
-		),  function($line)
-		{
-			$saida = implode( "<br>", explode( "\n", $line ) );
-		    echo "$saida<br>".PHP_EOL;
+		$pasta_existe = true;
+		
+		$ssh->run("cd " . $servidor->pivot->root, function($line){
+			// $saida = implode( "<br>", explode( "\n", $line ) );
+		    if( empty( $line ) ){
+		    	echo "Linha vazio";
+		    	$pasta_existe = false;
+		    }
 		});
+
+		if( $pasta_existe ){
+			echo "iniciar verificações para Deploy";
+		} else {
+			$remote = $this->get_repo_url($projeto);
+			echo "Iniciar repositório from $remote";
+		}
+
+		// SSH::into("runtime")->run(array(
+		//     "if [ -e " . $servidor->pivot->root . " ]; then fi" ,
+		//     "pwd",
+		//     "git status",
+		//     "git fetch",
+		// ),  function($line)
+		// {
+		// 	$saida = implode( "<br>", explode( "\n", $line ) );
+		//     echo "$saida<br>".PHP_EOL;
+		// });
 
 		// try {
 		// 	// $cmd = "ping 127.0.0.1";
@@ -200,7 +217,7 @@ class DeployController extends \BaseController {
 					$purl["pass"] = $projeto->repo_senha;
 				}
 
-				$remote = $purl["scheme"] . "://" . $purl["user"] . ":" . $purl["pass"] . "@" . $purl["host"] . $purl["path"];
+				$remote = $this->get_repo_url($projeto);
 
 				$repo->set_remote( $remote );
 				$repo->set_branch( $projeto->repo_branch );
@@ -208,6 +225,29 @@ class DeployController extends \BaseController {
 		}
 
 		return $repo;
+	}
+
+
+	/**
+	 * Busca o repositório e retorna o objeto tratado
+	 *
+	 * @param  Projeto  $p
+	 * @return GitRepo
+	 */
+	public function get_repo_url($projeto)
+	{
+		if( ! strstr("git@", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
+			$purl = parse_url($projeto->repo);
+
+			if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){
+				$purl["user"] = $projeto->repo_usuario;
+				$purl["pass"] = $projeto->repo_senha;
+			}
+
+			return $purl["scheme"] . "://" . $purl["user"] . ":" . $purl["pass"] . "@" . $purl["host"] . $purl["path"];
+		}
+
+		return $projeto->repo;
 	}
 
 	private function trata_url($texto = "", $prefix = "")

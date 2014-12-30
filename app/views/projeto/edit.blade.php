@@ -36,7 +36,7 @@
                                         </div>
                                     </div>
                                                         
-                                    <div class="form-group {{{ $errors->has('server_root') ? 'has-error' : '' }}}">
+                                    <div class="form-group hidden {{{ $errors->has('server_root') ? 'has-error' : '' }}}">
                                         {{ Form::label("server_root", "Server Root") }}
                                         {{ Form::text("server_root", Input::old("server_root"), array( "class" => "form-control" )) }}
                                     </div>
@@ -78,21 +78,31 @@
 
                             <hr>
 
-                            <div class="form-group {{{ $errors->has('servidor') ? 'has-error' : '' }}}">
-                                {{ Form::label("servidor", "Servidores para deploy") }}
-                                
-                                <div data-toggle="buttons">
+                            <h4>Servidores para deploy</h4>
+                            <p><span class="fa fa-warning"></span> <i>Ao selecionar o servidor, defina a pasta raiz onde será realizado o deploy</i></p>
 
+                            <div class="form-horizontal">
+                                @foreach ($servidores as $servidor)
+                                <div class="form-group">
+                                    <label class="col-sm-2">{{{ $servidor->nome }}}</label>
+                                    <div class="input-group col-sm-10">
+                                        <div class="input-group-addon">
+                                            {{ Form::checkbox('servidor[]', $servidor->id, $projeto->servidores->contains($servidor->id) ? true : false , ["autocomplete"=>"off", "class"=>"simple"] ) }}
+                                        </div>
                                     
-                                    @foreach ($servidores as $servidor)
-                                    <label class="btn btn-warning btn-lg @if($projeto->servidores->contains($servidor->id)) active @endif">
-                                        {{ Form::checkbox('servidor[]', $servidor->id, $projeto->servidores->contains($servidor->id) ? true : false , ["autocomplete"=>"off", "class"=>"simple"] ) }}
-                                        {{{ $servidor->nome }}}
-                                    </label>
-                                    @endforeach
+                                        @if( Input::old("servidor_" . $servidor->id . "_root") )
+                                            {{ Form::text("servidor_" . $servidor->id . "_root", Input::old("servidor_" . $servidor->id . "_root"), array( "class" => "form-control", "placeholder" => "raiz (ex. /var/www)" )) }}
+                                        @elseif( $projeto->servidores->contains($servidor->id) )
+                                            {{ Form::text("servidor_" . $servidor->id . "_root", $projeto->servidores->find($servidor->id)->pivot->root, array( "class" => "form-control", "placeholder" => "raiz (ex. /var/www)" )) }}
+                                        @else
+                                            {{ Form::text("servidor_" . $servidor->id . "_root", "", array( "class" => "form-control", "placeholder" => "raiz (ex. /var/www)" )) }}
+                                        @endif
+                                    </div>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
+
                         <div class="box-footer">                  
                             <div class="form-group">
                                 {{ Form::submit('Salvar', array( "class" => "btn btn-primary" )) }}

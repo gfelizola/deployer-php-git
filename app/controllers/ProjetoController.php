@@ -35,12 +35,33 @@ class ProjetoController extends \BaseController {
 	 */
 	public function store()
 	{
-		$validator = Validator::make(Input::all(), Projeto::$rules);
+		$rules = Projeto::$rules;
+		$servidores = Input::get("servidor");
+
+		$messages = array();
+
+		// dd($servidores);
+
+		if($servidores){
+			foreach ($servidores as $s){
+			    $rules["servidor_".$s."_root"] = "required";
+			    $messages["servidor_".$s."_root.required"] = "O campo 'raiz' dos servidores selecionados é obrigatório.";
+			}
+		}
+
+		$validator = Validator::make(Input::all(), $rules, $messages);
 
 		if ($validator->fails()) {
 			return Redirect::to("projeto/create")->withErrors($validator)->withInput( Input::all() );
 		} else {
 			$projeto = Projeto::create( Input::all() );
+			$servidores_salva = array();
+
+			foreach ($servidores as $s) {
+				$servidores_salva[$s] = array( "root" => Input::get("servidor_" . $s . "_root") );
+			}
+
+			$projeto->servidores()->sync( $servidores_salva );
 
 			Historico::create( array(
 				"tipo"       => Historico::TipoProjeto,
@@ -90,13 +111,19 @@ class ProjetoController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		// dd( Input::get("servidor") );
-
+		$messages = array();
+		$servidores = Input::get("servidor");
 		$rules = Projeto::$rules;
-
 		$rules["repo_senha"] = "";
 
-		$validator = Validator::make(Input::all(), $rules);
+		if($servidores){
+			foreach ($servidores as $s){
+			    $rules["servidor_".$s."_root"] = "required";
+			    $messages["servidor_".$s."_root.required"] = "O campo 'raiz' dos servidores selecionados é obrigatório.";
+			}
+		}
+
+		$validator = Validator::make(Input::all(), $rules, $messages);
 
 		if ($validator->fails()) {
 			return Redirect::to("projeto/$id/edit")->withErrors($validator)->withInput( Input::all() );
@@ -112,7 +139,15 @@ class ProjetoController extends \BaseController {
 
 			$projeto->save();
 
-			$projeto->servidores()->sync( Input::get("servidor") );
+			$servidores = Input::get("servidor");
+
+			$servidores_salva = array();
+
+			foreach ($servidores as $s) {
+				$servidores_salva[$s] = array( "root" => Input::get("servidor_" . $s . "_root") );
+			}
+
+			$projeto->servidores()->sync( $servidores_salva );
 
 			Historico::create( array(
 				"tipo"       => Historico::TipoProjeto,

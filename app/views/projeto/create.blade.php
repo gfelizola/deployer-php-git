@@ -36,7 +36,7 @@
                                         </div>
                                     </div>
                                                         
-                                    <div class="form-group {{{ $errors->has('server_root') ? 'has-error' : '' }}}">
+                                    <div class="form-group hidden {{{ $errors->has('server_root') ? 'has-error' : '' }}}">
                                         {{ Form::label("server_root", "Server Root") }}
                                         {{ Form::text("server_root", Input::old("server_root"), array( "class" => "form-control" )) }}
                                     </div>
@@ -75,10 +75,33 @@
                                     </div>
                                 </div>
                             </div>
-                                                    
+
+                            <hr>
+
+                            <h4 class="{{{ $errors->has('servidor') ? 'text-red' : '' }}}">Servidores para deploy</h4>
+                            <p class="{{{ $errors->has('servidor') ? 'text-red' : '' }}}"><span class="fa fa-warning"></span> <i>Ao selecionar o servidor, defina a pasta raiz onde será realizado o deploy</i></p>
+
+                            <div class="form-horizontal">
+                                @foreach ($servidores as $servidor)
+                                <div class="form-group {{{ $errors->has('servidor_' . $servidor->id . '_root') ? 'has-error' : '' }}}">
+                                    <label class="col-sm-2">{{{ $servidor->nome }}}</label>
+                                    <div class="input-group col-sm-10">
+                                        <div class="input-group-addon">
+                                            {{ Form::checkbox('servidor[]', $servidor->id, $projeto->servidores->contains($servidor->id) ? true : false , ["autocomplete"=>"off", "class"=>"simple"] ) }}
+                                        </div>
+                                    
+                                        {{ Form::text("servidor_" . $servidor->id . "_root", Input::old("servidor_" . $servidor->id . "_root"), array( "class" => "form-control", "placeholder" => "raiz (ex. /var/www)" )) }}
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <div class="box-footer">                  
                             <div class="form-group">
                                 {{ Form::submit('Salvar', array( "class" => "btn btn-primary" )) }}
                             </div>
+                        </div>
                     
                     {{ Form::close() }}
                 </div>

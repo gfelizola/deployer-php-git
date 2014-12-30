@@ -28,9 +28,7 @@ Route::group(array("before" => "auth"), function()
     Route::get("projeto/{id}/deploys",      "ProjetoController@deploys" );
 
     Route::get("deploy/{pid}/{sid}/create", "DeployController@create" );
-    Route::get("deploy/{pid}/{sid}/fetch",  "DeployController@create" );
-    // Route::get("deploy/{id}/create",        "DeployController@create" );
-    Route::get("deploy/{id}/fetch",         "DeployController@fetch" );
+    Route::get("deploy/{pid}/{sid}/fetch",  "DeployController@fetch" );
 
     Route::post("usuario/{id}/update",      "UsuarioController@update" );
 });

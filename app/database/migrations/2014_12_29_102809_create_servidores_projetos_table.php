@@ -16,6 +16,7 @@ class CreateServidoresProjetosTable extends Migration {
 		{
 			$table->integer('projeto_id');
 			$table->integer('servidor_id');
+			$table->string('root');
 		});
 	}
 

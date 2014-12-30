@@ -50,6 +50,11 @@ class ProjetoTableSeeder extends Seeder {
     {
         DB::table('servidores')->delete();
 
+        Servidor::create(array(
+            "nome"        => "Local (deployer)",
+            "tipo_acesso" => Servidor::TIPO_LOCAL,
+        ));
+
         $dev = Servidor::create(array(
             "nome"        => "Dev (230)",
             "endereco"    => "200.185.166.130:22",
@@ -72,7 +77,7 @@ class ProjetoTableSeeder extends Seeder {
     		"repo_branch"  => "master",
     	));
 
-        $projeto->servidores()->save($dev);
+        $projeto->servidores()->attach(array( $dev->id => array( "root" => "/var/www/vol1/estadao-2014") ) );
 
         $this->command->info('Tabela de projetos preenchida');
     }

@@ -3,7 +3,7 @@ class Projeto extends Eloquent {
 
 	public static $rules = array(
 		'nome'        => 'required', 
-		'server_root' => 'required', 
+		// 'server_root' => 'required', 
 		'repo'        => 'required', 
 		'repo_branch' => 'required', 
 		'repo_senha'  => 'required_with:repo_usuario', 
@@ -29,6 +29,6 @@ class Projeto extends Eloquent {
 
     public function servidores()
     {
-        return $this->belongsToMany('Servidor', "servidores_projetos");
+        return $this->belongsToMany('Servidor', "servidores_projetos")->withPivot("root");
     }
 }

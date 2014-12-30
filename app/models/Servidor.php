@@ -12,6 +12,7 @@ class Servidor extends Eloquent {
 		'endereco'    => 'required_if:tipo_acesso,ssh', 
 		'usuario'     => 'required_if:tipo_acesso,ssh', 
 		'senha'       => 'required_if:tipo_acesso,ssh', 
+		// 'key'       => 'required_if:tipo_acesso,ssh', 
 	);
 
 	protected $fillable = array(
@@ -24,6 +25,6 @@ class Servidor extends Eloquent {
 
     public function projetos()
     {
-        return $this->belongsToMany('Projeto', "servidores_projetos");
+        return $this->belongsToMany('Projeto', "servidores_projetos")->withPivot("root");
     }
 }

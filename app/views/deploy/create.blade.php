@@ -19,13 +19,13 @@
             </div>
             @endif
             
-            {{ Form::open( array('url' => 'deploy/' . $projeto->id .'/realizar' )) }}
+            {{ Form::open( array('url' => 'deploy/' . $projeto->id .'/' . $servidor->id .'/realizar' )) }}
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="panel panel-default">
                             <div class="panel-header">Atualizando infos do repositório</div>
                             <div class="panel-body bg-black">
-                                <iframe src="{{{ URL::to('deploy/' . $projeto->id .'/fetch') }}}" frameborder="0" width="100%" height="300" scrolling="no"></iframe>
+                                <iframe src="{{{ URL::to('deploy/' . $projeto->id . '/' . $servidor->id .'/fetch') }}}" frameborder="0" width="100%" height="300" scrolling="no"></iframe>
                             </div>
                         </div>
 
