@@ -38,112 +38,171 @@ class DeployController extends \BaseController {
 
 
 	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-
-	/**
-	 * Store a newly created resource in storage.
+	 * Atualiza os dados do repositório
 	 *
 	 * @return Response
 	 */
 	public function fetch($projeto_id, $server_id)
 	{
+		set_time_limit(600);
+
+		$projeto  = Projeto::find($projeto_id);
+		$servidor = $projeto->servidores->find($server_id);
+		$ssh      = $this->get_ssh($servidor);
+		
+		echo $this->console_header();
+		
+		$ssh->run( array(
+			"cd " . $servidor->pivot->root,
+			"pwd"
+		), function($line) use ($ssh, $projeto, $servidor, $projeto_id, $server_id)
+		{
+			echo $this->line2html($line);
+		});
+
+	    $remote = $this->get_repo_url($projeto);
+
+		if( $ssh->status() !== 0 )
+		{
+			echo "Pasta não encontrada<br>";
+			echo "Iniciar repositório from " . $this->trata_url($remote);
+			echo "<script>";
+			echo "window.top.mostrarCloneModal('" . $this->trata_url($remote) . "', '" . URL::to("deploy", array($projeto_id, $server_id, "clonar") ) . "');";
+			echo "</script>";
+		}
+		else
+		{
+			echo "Iniciar atualizações para Deploy<br>";
+
+				
+			$ssh->run( array(
+				"cd " . $servidor->pivot->root,
+				"git fetch " . $remote
+			), function($line)
+			{
+			    echo $this->line2html($line);
+			});
+
+			echo "\n\n<script>\n";
+			echo "window.top.location = '" . URL::to("deploy", array($projeto_id, $server_id, "dados") ) . "';";
+			echo "\n</script>";
+		}
+
+		echo $this->console_footer();
+	}
+
+	/**
+	 * Clona o repositório no diretório de destino do servidor
+	 *
+	 * @return Response
+	 */
+	public function clonar($projeto_id, $server_id)
+	{
+		set_time_limit(600);
+
 		$projeto  = Projeto::find($projeto_id);
 		$servidor = $projeto->servidores->find($server_id);
 
-		// dd($servidor->pivot->root);
-		// $repo    = $this->get_repo($projeto);
+		echo $this->console_header();
 
-		// @ini_set("implicit_flush",1);
-		// @ob_end_clean();
-		// set_time_limit(0);
-		// ob_implicit_flush(1);
+		$remote  = $this->get_repo_url($projeto);
+		$comando = "git clone $remote " . $servidor->pivot->root;
 
-		echo "<!DOCTYPE html><html>";
-		echo Response::view("layouts.head")->getOriginalContent();
-		echo '<body class="bg-black console">';
-
-		// $servidor = $projeto->servidores->first();
-		// dd( $servidor );
-
-		Config::set("remote.connections.runtime.host", $servidor->endereco);
-		Config::set("remote.connections.runtime.username", $servidor->usuario);
-		Config::set("remote.connections.runtime.password", $servidor->senha);
-		Config::set("remote.connections.runtime.root", $servidor->pivot->root);
-
-		$ssh = SSH::into("runtime");
-
-		$pasta_existe = true;
-		
-		$ssh->run("cd " . $servidor->pivot->root, function($line){
-			// $saida = implode( "<br>", explode( "\n", $line ) );
-		    if( empty( $line ) ){
-		    	echo "Linha vazio";
-		    	$pasta_existe = false;
-		    }
+		$ssh = $this->get_ssh($servidor);
+		$ssh->run($comando, function($line)
+		{
+		    echo $this->line2html($line);
 		});
 
-		if( $pasta_existe ){
-			echo "iniciar verificações para Deploy";
-		} else {
-			$remote = $this->get_repo_url($projeto);
-			echo "Iniciar repositório from $remote";
+		echo "Verificação completa, iniciar Deploy<br>";
+
+		echo "<script>";
+		echo "window.top.location = '" . URL::to("deploy", array($projeto_id, $server_id, "dados") ) . "');";
+		echo "</script>";
+
+		echo $this->console_footer();
+	}
+
+	/**
+	 * Clona o repositório no diretório de destino do servidor
+	 *
+	 * @return Response
+	 */
+	public function dados($projeto_id, $server_id)
+	{
+		$projeto  = Projeto::find($projeto_id);
+		$servidor = $projeto->servidores->find($server_id);
+
+		$remote   = $this->get_repo_url($projeto);
+		$ssh      = $this->get_ssh($servidor);
+
+		$retorno  = "";
+		$ssh->run( array(
+				"cd " . $servidor->pivot->root,
+				"git tag -l"
+			), function($line) use(&$retorno)
+			{
+			    $retorno .= $line;
+			});
+
+		$tagArray = explode("\n", $retorno);
+		$tags = array();
+		foreach ($tagArray as $i => &$tag) {
+			$tag = trim($tag);
+			if ($tag != '') {
+				$tags[$tag] = $tag;
+			}
 		}
 
-		// SSH::into("runtime")->run(array(
-		//     "if [ -e " . $servidor->pivot->root . " ]; then fi" ,
-		//     "pwd",
-		//     "git status",
-		//     "git fetch",
-		// ),  function($line)
-		// {
-		// 	$saida = implode( "<br>", explode( "\n", $line ) );
-		//     echo "$saida<br>".PHP_EOL;
-		// });
+		$tags[""] = "Selecione a tag";
+		arsort($tags);
 
-		// try {
-		// 	// $cmd = "ping 127.0.0.1";
-		// 	$cmd = "git fetch https://gfelizola:gustavof87@bitbucket.org/estadao/estadao-2014.git";
+		return Response::view("deploy.dados", array(
+			"tags" => $tags,
+			"projeto" => $projeto,
+			"servidor" => $servidor,
+		));
+	}
 
-		// 	chdir( $projeto->server_root );
 
-		// 	echo getcwd() . " > " . $this->trata_url( $cmd, " " );
-		// 	die;
-		// 	flush();
+	/**
+	 * Realiza deploy de tag
+	 *
+	 * @return Response
+	 */
+	public function realizar($projeto_id, $server_id)
+	{
+		$validator = Validator::make(Input::all(), Deploy::$rules);
 
-	 //        $handle = popen($cmd, "r");
+		if ($validator->fails()) 
+		{
+			return Redirect::to("deploy/$projeto_id/$server_id/dados")->withErrors($validator)->withInput( Input::all() );
+		}
+		else
+		{
+			set_time_limit(600);
 
-	 //        if (ob_get_level() == 0) 
-	 //            ob_start();
+			$projeto  = Projeto::find($projeto_id);
+			$servidor = $projeto->servidores->find($server_id);
 
-	 //        while(!feof($handle)) {
+			$remote   = $this->get_repo_url($projeto);
+			$ssh      = $this->get_ssh($servidor);
 
-	 //            $buffer = fgets($handle);
-	 //            $buffer = trim(htmlspecialchars($buffer));
+			$tag      = Input::get("tag");
 
-	 //            echo $buffer . "<br />";
-	 //            echo str_pad("", 4096);    
+			echo $this->console_header();
 
-	 //            ob_flush();
-	 //            flush();
-	 //            sleep(1);
-	 //        }
+			$ssh->run( array(
+				"cd " . $servidor->pivot->root,
+				"git checkout " . $projeto->repo_branch,
+				"git pull $remote tags/$tag -v",
+			), function($line)
+			{
+			    echo $this->line2html($line);
+			});
 
-	 //        pclose($handle);
-	 //        ob_end_flush();
-		// } catch (Exception $e) {
-		// 	var_dump($e);
-		// }
-
-		echo Response::view("layouts.footer")->getOriginalContent();
-		echo "</body></html>";
+			echo $this->console_footer();
+		}
 	}
 
 
@@ -229,10 +288,27 @@ class DeployController extends \BaseController {
 
 
 	/**
+	 * Configura e retorna a instância de SSH
+	 *
+	 * @param  Servidor $servidor
+	 * @return SSH
+	 */
+	public function get_ssh($servidor)
+	{
+		Config::set("remote.connections.runtime.host", $servidor->endereco);
+		Config::set("remote.connections.runtime.username", $servidor->usuario);
+		Config::set("remote.connections.runtime.password", $servidor->senha);
+		Config::set("remote.connections.runtime.root", $servidor->pivot->root);
+
+		return SSH::into("runtime");
+	}
+
+
+	/**
 	 * Busca o repositório e retorna o objeto tratado
 	 *
-	 * @param  Projeto  $p
-	 * @return GitRepo
+	 * @param  Projeto $p
+	 * @return String
 	 */
 	public function get_repo_url($projeto)
 	{
@@ -250,7 +326,14 @@ class DeployController extends \BaseController {
 		return $projeto->repo;
 	}
 
-	private function trata_url($texto = "", $prefix = "")
+
+	/**
+	 * Função que esconde a senha para mostrar a url ao usuário
+	 *
+	 * @param  String $texto
+	 * @return String
+	 */
+	private function trata_url($texto = "")
 	{
 		// $reg_exUrl = "_^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]-*)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]-*)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/\S*)?$";
 		$reg_exUrl = '_(^|[\s.:;?\-\]<\(])(https?://[-\w;/?:@&=+$\|\_.!~*\|"()\[\]%#,☺]+[\w/#](\(\))?)(?=$|[\s",\|\(\).:;?\-\[\]>\)])_i';
@@ -259,5 +342,45 @@ class DeployController extends \BaseController {
 
 			return " " . $purl["scheme"] . "://" . $purl["user"] . ":******@" . $purl["host"] . $purl["path"];
 		}, $texto);
+	}
+
+
+	/**
+	 * Função que trata saida para o console (quebras de linha = <br>)
+	 *
+	 * @param  String $line
+	 * @return String
+	 */
+	private function line2html($line)
+	{
+		return implode( "<br>", explode( "\n", $line ) ) . "<br>";
+	}
+
+	/**
+	 * Função que monta o header do console padrão
+	 *
+	 * @return String
+	 */
+	private function console_header()
+	{
+		$saida = "<!DOCTYPE html>\n<html>\n";
+		$saida .= Response::view("layouts.head")->getOriginalContent();
+		$saida .= "\n<body class='bg-black console'>";
+		$saida .= "\n\n";
+
+		return $saida;
+	}
+
+	/**
+	 * Função que monta o header do console padrão
+	 *
+	 * @return String
+	 */
+	private function console_footer()
+	{
+		$saida = "\n\n" . Response::view("layouts.footer")->getOriginalContent();
+		$saida .= "\n</body></html>";
+
+		return $saida;
 	}
 }

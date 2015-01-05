@@ -72,7 +72,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Confirmar ação</h4>
+                    <h4 class="modal-title" id="deleteModalLabel"><i class="fa fa-warning"></i> Confirmar ação</h4>
                 </div>
                 <div class="modal-body">
                     <p>Confirme que você deseja remover este item</p>

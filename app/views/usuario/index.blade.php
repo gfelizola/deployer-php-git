@@ -76,7 +76,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="modalLabel">
+                    <h4 class="modal-title" id="deleteModalLabel">
                         <i class="fa fa-warning"></i> Confirmar ação
                     </h4>
                 </div>

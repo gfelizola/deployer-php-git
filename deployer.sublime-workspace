@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"ser",
+				"servidor"
+			],
+			[
+				"proje",
+				"projeto_id"
+			],
+			[
+				"attr",
+				"attr	.attr() - single"
+			],
+			[
+				"pas",
+				"pasta_existe"
+			],
+			[
+				"for",
+				"foreach	foreach …"
+			],
+			[
+				"par",
+				"parse_url"
+			],
+			[
 				"fade",
 				"fadeIn	.fadeIn()"
 			],
@@ -26,10 +50,6 @@
 			[
 				"add",
 				"addClass	.addClass()"
-			],
-			[
-				"for",
-				"for	for (…) {…}"
 			],
 			[
 				"tt",
@@ -88,10 +108,6 @@
 				"conteudo"
 			],
 			[
-				"pas",
-				"pasta_padrao"
-			],
-			[
 				"arqui",
 				"arquivo_server"
 			],
@@ -132,18 +148,54 @@
 	"buffers":
 	[
 		{
-			"file": "app/views/layouts/sidebar.blade.php",
+			"contents": "<?php\n\nclass DeployController extends \\BaseController {\n\n	/**\n	 * Display a listing of the resource.\n	 *\n	 * @return Response\n	 */\n	public function index()\n	{\n		return View::make(\"deploy.index\");\n	}\n\n\n	/**\n	 * Show the form for creating a new resource.\n	 *\n	 * @return Response\n	 */\n	public function create($projeto_id, $server_id)\n	{\n		$tags     = array();\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = Servidor::find($server_id);\n		// $repo    = $this->get_repo($projeto);\n\n		// $repo->fetch();\n\n		// $tags    = $repo->list_tags();\n\n		return View::make(\"deploy.create\", array(\n			\"projeto\"  => $projeto, \n			\"servidor\" => $servidor, \n			\"tags\"     => $tags\n		));\n	}\n\n\n	/**\n	 * Store a newly created resource in storage.\n	 *\n	 * @return Response\n	 */\n	public function store()\n	{\n		//\n	}\n\n\n	/**\n	 * Atualiza os dados do repositório\n	 *\n	 * @return Response\n	 */\n	public function fetch($projeto_id, $server_id)\n	{\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = $projeto->servidores->find($server_id);\n\n		echo \"<!DOCTYPE html>\\n<html>\\n\";\n		echo Response::view(\"layouts.head\")->getOriginalContent();\n		echo \"\\n<body class='bg-black console'>\";\n		echo \"\\n\\n\";\n\n		Config::set(\"remote.connections.runtime.host\", $servidor->endereco);\n		Config::set(\"remote.connections.runtime.username\", $servidor->usuario);\n		Config::set(\"remote.connections.runtime.password\", $servidor->senha);\n		Config::set(\"remote.connections.runtime.root\", $servidor->pivot->root);\n\n		$ssh = SSH::into(\"runtime\");\n\n		$pasta_existe = true;\n		\n		$ssh->run(\"cd \" . $servidor->pivot->root, function($line) use (&$pasta_existe)\n		{\n		    if( ! empty( $line ) ){\n		    	echo \"Pasta não encontrada<br>\";\n		    	$pasta_existe = false;\n		    } else {\n		    	echo \"Linha vazia - Tudo ok<br>\";\n		    }\n		});\n\n		if( $pasta_existe ){\n			echo \"iniciar verificações para Deploy\";\n		} else {\n			$remote = $this->get_repo_url($projeto);\n			echo \"Iniciar repositório from \" . $this->trata_url($remote);\n			echo \"<script>\";\n			echo \"window.top.mostrarCloneModal('\" . $this->trata_url($remote) . \"', '\" . URL::to(\"deploy\", array($projeto_id, $server_id, \"clonar\") ) . \"');\";\n			echo \"</script>\";\n		}\n\n		echo \"\\n\\n\" . Response::view(\"layouts.footer\")->getOriginalContent();\n		echo \"</body></html>\";\n	}\n\n	/**\n	 * Atualiza os dados do repositório\n	 *\n	 * @return Response\n	 */\n	public function clonar($projeto_id, $server_id)\n	{\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = $projeto->servidores->find($server_id);\n\n		echo \"<!DOCTYPE html>\\n<html>\\n\";\n		echo Response::view(\"layouts.head\")->getOriginalContent();\n		echo \"\\n<body class='bg-black console'>\";\n		echo \"\\n\\n\";\n\n		Config::set(\"remote.connections.runtime.host\", $servidor->endereco);\n		Config::set(\"remote.connections.runtime.username\", $servidor->usuario);\n		Config::set(\"remote.connections.runtime.password\", $servidor->senha);\n		Config::set(\"remote.connections.runtime.root\", $servidor->pivot->root);\n\n		$remote  = $this->get_repo_url($projeto);\n		$comando = \"git clone $remote \" . $servidor->pivot->root;\n\n		$ssh = SSH::into(\"runtime\");\n		$ssh->run($comando, function($line)\n		{\n		    $saida = implode( \"<br>\", explode( \"\\n\", $line) );\n		    echo $saida;\n		});\n\n		echo \"Verificação completa, iniciar Deploy<br>\";\n\n\n		echo \"<script>\";\n		echo \"window.top.location = '\" . URL::to(\"deploy\", array($projeto_id, $server_id, \"clonar\") ) . \"');\";\n		echo \"</script>\";\n\n		echo \"\\n\\n\" . Response::view(\"layouts.footer\")->getOriginalContent();\n		echo \"</body></html>\";\n	}\n\n\n	/**\n	 * Display the specified resource.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function show($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Show the form for editing the specified resource.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function edit($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Update the specified resource in storage.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function update($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Remove the specified resource from storage.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function destroy($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Busca o repositório e retorna o objeto tratado\n	 *\n	 * @param  Projeto  $p\n	 * @return GitRepo\n	 */\n	public function get_repo($projeto)\n	{\n		if( Config::get(\"app.WINDOWS\") ) Git::windows_mode();\n\n		$repo = Git::open( $projeto->server_root );\n\n		if( $repo->test_git() ){\n			\n			if( ! strstr(\"git@\", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)\n				$purl = parse_url($projeto->repo);\n\n				if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){\n					$purl[\"user\"] = $projeto->repo_usuario;\n					$purl[\"pass\"] = $projeto->repo_senha;\n				}\n\n				$remote = $this->get_repo_url($projeto);\n\n				$repo->set_remote( $remote );\n				$repo->set_branch( $projeto->repo_branch );\n			}\n		}\n\n		return $repo;\n	}\n\n\n	/**\n	 * Busca o repositório e retorna o objeto tratado\n	 *\n	 * @param  Projeto  $p\n	 * @return GitRepo\n	 */\n	public function get_repo_url($projeto)\n	{\n		if( ! strstr(\"git@\", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)\n			$purl = parse_url($projeto->repo);\n\n			if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){\n				$purl[\"user\"] = $projeto->repo_usuario;\n				$purl[\"pass\"] = $projeto->repo_senha;\n			}\n\n			return $purl[\"scheme\"] . \"://\" . $purl[\"user\"] . \":\" . $purl[\"pass\"] . \"@\" . $purl[\"host\"] . $purl[\"path\"];\n		}\n\n		return $projeto->repo;\n	}\n\n	private function trata_url($texto = \"\", $prefix = \"\")\n	{\n		// $reg_exUrl = \"_^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]-*)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]-*)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/\\S*)?$\";\n		$reg_exUrl = '_(^|[\\s.:;?\\-\\]<\\(])(https?://[-\\w;/?:@&=+$\\|\\_.!~*\\|\"()\\[\\]%#,☺]+[\\w/#](\\(\\))?)(?=$|[\\s\",\\|\\(\\).:;?\\-\\[\\]>\\)])_i';\n		return preg_replace_callback($reg_exUrl, function($matches){\n			$purl = parse_url( trim($matches[0]) );\n\n			return \" \" . $purl[\"scheme\"] . \"://\" . $purl[\"user\"] . \":******@\" . $purl[\"host\"] . $purl[\"path\"];\n		}, $texto);\n	}\n}",
+			"file": "app/controllers/DeployController.php",
+			"file_size": 6123,
+			"file_write_time": 130644228802768561,
 			"settings":
 			{
-				"buffer_size": 3214,
+				"buffer_size": 6309,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "public/js/app.js",
+			"settings":
+			{
+				"buffer_size": 1439,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "vendor/kbjr/Git.php/Git.php",
+			"file": "app/views/deploy/create.blade.php",
 			"settings":
 			{
-				"buffer_size": 15506,
+				"buffer_size": 3787,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
+			"settings":
+			{
+				"buffer_size": 612,
+				"line_ending": "Windows",
+				"name": "import urllib.request,os; pr='Preferences.sublime-"
+			}
+		},
+		{
+			"file": "app/views/deploy/index.blade.php",
+			"settings":
+			{
+				"buffer_size": 3477,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/models/Deploy.php",
+			"settings":
+			{
+				"buffer_size": 523,
 				"line_ending": "Windows"
 			}
 		}
@@ -151,9 +203,13 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 310.0,
+		"height": 135.0,
 		"selected_items":
 		[
+			[
+				"prefe",
+				"Preferences: Settings - User"
+			],
 			[
 				"wra",
 				"Word Wrap: Toggle"
@@ -183,10 +239,6 @@
 				"SFTP: Download File"
 			],
 			[
-				"prefe",
-				"Preferences: Settings - User"
-			],
-			[
 				"install",
 				"Package Control: Install Package"
 			],
@@ -207,9 +259,10 @@
 	},
 	"console":
 	{
-		"height": 126.0,
+		"height": 321.0,
 		"history":
 		[
+			"import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
 			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
 		]
 	},
@@ -226,14 +279,67 @@
 	[
 		"/D/localhost/deployer",
 		"/D/localhost/deployer/app",
+		"/D/localhost/deployer/app/controllers",
 		"/D/localhost/deployer/app/views",
-		"/D/localhost/deployer/app/views/layouts"
+		"/D/localhost/deployer/app/views/deploy",
+		"/D/localhost/deployer/app/views/usuario",
+		"/D/localhost/deployer/public",
+		"/D/localhost/deployer/public/js"
 	],
 	"file_history":
 	[
+		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Adapter/PhpAdapter.php",
+		"/D/localhost/deployer/phpunit.xml",
+		"/D/localhost/deployer/app/routes.php",
+		"/D/localhost/deployer/composer.json",
+		"/D/localhost/deployer/vendor/composer/ClassLoader.php",
+		"/D/localhost/deployer/app/views/usuario/index.blade.php",
+		"/D/localhost/deployer/app/views/servidor/index.blade.php",
+		"/D/localhost/deployer/app/views/projeto/index.blade.php",
+		"/D/localhost/deployer/app/views/projeto/create.blade.php",
+		"/D/localhost/deployer/app/controllers/ProjetoController.php",
+		"/D/localhost/deployer/app/views/deploy/index.blade.php",
+		"/D/localhost/deployer/app/models/Projeto.php",
+		"/D/localhost/deployer/app/views/projeto/edit.blade.php",
+		"/D/localhost/deployer/app/models/Servidor.php",
+		"/D/localhost/deployer/app/database/seeds/DatabaseSeeder.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_29_102809_create_servidores_projetos_table.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/SecLibGateway.php",
+		"/D/localhost/deployer/vendor/phpseclib/phpseclib/phpseclib/Net/SFTP.php",
+		"/D/localhost/deployer/vendor/kbjr/Git.php/Git.php",
+		"/C/Users/tgf112836/.ssh/known_hosts",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
+		"/D/localhost/deployer/app/config/remote.php",
+		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/ResponseObjectInterface.php",
+		"/D/localhost/deployer/readme.md",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/Connection.php",
+		"/D/localhost/deployer/app/controllers/DeployController.php",
+		"/D/localhost/deployer/public/js/AdminLTE/AdminLTE.js",
+		"/D/localhost/deployer/app/views/layouts/footer.blade.php",
+		"/D/localhost/deployer/app/controllers/ServidorController.php",
+		"/D/localhost/deployer/app/views/layouts/sidebar.blade.php",
+		"/D/localhost/deployer/app/views/servidor/edit.blade.php",
+		"/D/localhost/deployer/app/views/servidor/create.blade.php",
+		"/D/localhost/deployer/public/less/sidebar.less",
+		"/D/localhost/deployer/vendor/symfony/process/Symfony/Component/Process/Tests/SigchildDisabledProcessTest.php",
+		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/swift_init.php",
+		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Events/SimpleEventDispatcher.php",
+		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Iterator/SizeRangeFilterIterator.php",
+		"/D/localhost/deployer/server.php",
+		"/D/localhost/deployer/app/lang/pt/validation.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_29_102446_create_servidores_table.php",
+		"/D/localhost/deployer/app/models/Historico.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Hashing/HasherInterface.php",
+		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/D/localhost/deployer/app/views/deploy/create.blade.php",
+		"/D/localhost/deployer/app/views/layouts/master.blade.php",
+		"/D/_Arquivos/_Dev/portugues.html",
+		"/D/localhost/deployer/app/config/app.php",
+		"/D/localhost/deployer/public/css/AdminLTE.css",
+		"/D/localhost/deployer/app/views/hello.blade.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp03478/var/www/vol1/estadao-2014/m.estadao/include/noticias.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp03303/var/www/vol1/estadao-2014/m.estadao/include/ultimas.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
 		"/D/localhost/deployer/app/start/global.php",
 		"/D/localhost/estadao-2014/shared/estadao/css/home.css",
 		"/D/localhost/estadao-2014/shared/estadao/css/style.css",
@@ -309,56 +415,7 @@
 		"/D/localhost/estadao-2014/include-cms.php",
 		"/D/localhost/estadao-2014/shared/estadao/error/.htaccess",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp44013/var/www/vol1/estadao-2014/shared/estadao/error/404.php",
-		"/D/localhost/estadao-2014/internacional/httpd.conf",
-		"/D/localhost/estadao-2014/shared/estadao/error/noindex.html",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp06972/var/www/vol1/cms/estadao-2014/www.estadao/termo-de-uso/index.php",
-		"/D/localhost/estadao-2014/shared/error/noindex.html",
-		"/D/localhost/estadao-2014/sha",
-		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/SFTP/SFTP.sublime-settings",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp17421/var/www/vol1/estadao-2014/internacional/.htaccess",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp00067/var/www/vol1/estadao-2014/www.estadao/.htaccess",
-		"/D/localhost/estadao-2014/internacional/include-cms.php",
-		"/D/localhost/estadao-2014/internacional/info.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp12921/var/www/vol1/estadao-2014/cultura/.htaccess",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp27415/var/www/vol1/estadao-2014/cultura/.htaccess",
-		"/D/localhost/estadao-2014/cultura/.htaccess",
-		"/D/localhost/estadao-2014/cultura/include-cms.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp27064/var/www/vol1/estadao-2014/.htaccess",
-		"/D/localhost/estadao-2014/.htaccess",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp52962/var/www/vol1/estadao-2014/cultura/.htaccess",
-		"/D/localhost/ewok/.gitignore",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp58881/var/www/vol1/cms/estadao-2014/cultura/index-teste.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp03150/var/www/vol1/estadao-2014/include-cms.php",
-		"/D/localhost/estadao-2014/www.estadao/.htaccess",
-		"/D/localhost/estadao-2014/www.estadao/include-cms.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp11483/var/www/vol1/estadao-2014/www.estadao/.htaccess",
-		"/D/localhost/estadao-2014/www.estadao/.htaccess.CRQ000000061457%20",
-		"/D/localhost/estadao-2014/www.estadao/404.php",
-		"/D/localhost/estadao-2014/shared/noticias/noticia.php",
-		"/D/wamp/bin/apache/apache2.4.9/conf/httpd.conf",
-		"/D/_Arquivos/_Dev/iframe-resizer/teste_iframe.html",
-		"/D/codigo-iframe-fuvest.txt",
-		"/D/localhost/arquivos_cms_limpo.txt",
-		"/D/localhost/estadao-2014/www.estadao/includes/recomendadas.php",
-		"/D/localhost/estadao-2014/www.estadao/tudo-sobre/index.php",
-		"/D/localhost/estadao-2014/www.estadao/termo-de-uso/index.xml",
-		"/D/localhost/estadao-2014/horoscopo/touro.xml",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp01147/var/www/vol1-producao/estadao-2014/www.estadao/includes/topo_da_home.php",
-		"/D/localhost/estadao-2014/www.estadao/includes/topo_da_home.php",
-		"/D/localhost/estadao-2014/shared/includes/estadao/cms/jogos_do_dia.php",
-		"/D/localhost/estadao-2014/horoscopo/quiroga.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp59305/var/www/vol1-producao/estadao-2014/horoscopo/sagitario.php",
-		"/D/localhost/estadao-2014/esportes/velocidade/formula-1/circuitos/austria.php",
-		"/D/localhost/estadao-2014/esportes/classificacao/templates/2.php",
-		"/D/localhost/estadao-2014/shared/includes/estadao/futebolTabela.php",
-		"/D/localhost/estadao-2014/shared/includes/estadao/futebolRodadas.php",
-		"/D/localhost/estadao-2014/esportes/classificacao/montaTabela.php",
-		"/D/localhost/estadao-2014/esportes/classificacao/templates/1.php",
-		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/menu_institucional.php",
-		"/D/localhost/estadao-2014/node_modules/grunt/node_modules/minimatch/minimatch.js",
-		"/D/localhost/estadao-2014/www.estadao/tudo-sobre/xml/m/mostra-internacional-de-cinema.xml",
-		"/D/localhost/estadao-2014/esportes/includes/legado/copa-do-mundo/inc_tabela.php",
-		"/D/localhost/estadao-2014/deploy/894444e/files-2014-11-26_16-57.txt"
+		"/D/localhost/estadao-2014/internacional/httpd.conf"
 	],
 	"find":
 	{
@@ -381,6 +438,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"run",
+			"'",
+			"get_repo",
+			"projeto",
+			"projetos",
+			"Projet",
+			"valeCartaEnigmaEN",
+			"tags",
+			"trata_url",
 			"username",
 			"ticker",
 			".widgets .lista figure{float: left; margin-right: 5px; width:100px;}\n.widgets .lista figure img{width:100%;}",
@@ -502,6 +568,10 @@
 		"regex": true,
 		"replace_history":
 		[
+			"\"",
+			"servidor",
+			"servidores",
+			"valeCartaEnigma",
 			"xmlCultura",
 			"PASTA_ATUAL",
 			"$DIR_CMS",
@@ -543,24 +613,150 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/views/layouts/sidebar.blade.php",
+					"file": "app/controllers/DeployController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3214,
+						"buffer_size": 6309,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								594,
-								602
+								3301,
+								3301
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1479.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "public/js/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1439,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								306,
+								306
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/views/deploy/create.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1027,
+								1027
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 35.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 612,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								612,
+								612
+							]
+						],
+						"settings":
+						{
+							"auto_name": "import urllib.request,os; pr='Preferences.sublime-",
+							"incomplete_sync": null,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 3496.0,
+						"translation.y": -0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "app/views/deploy/index.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3477,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2731,
+								3469
 							]
 						],
 						"settings":
@@ -573,27 +769,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 468.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
-					"file": "vendor/kbjr/Git.php/Git.php",
+					"buffer": 5,
+					"file": "app/models/Deploy.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15506,
+						"buffer_size": 523,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								12668,
-								12668
+								219,
+								219
 							]
 						],
 						"settings":
@@ -605,10 +801,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8134.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -656,7 +852,7 @@
 	"project": "deployer.sublime-project",
 	"replace":
 	{
-		"height": 42.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -664,6 +860,30 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"rou",
+				"app\\routes.php"
+			],
+			[
+				"rout",
+				"app\\routes.php"
+			],
+			[
+				"reomte",
+				"app\\config\\remote.php"
+			],
+			[
+				"js/adminlte/adminlte.js",
+				"public\\js\\AdminLTE\\AdminLTE.js"
+			],
+			[
+				"sidebar",
+				"app\\views\\layouts\\sidebar.blade.php"
+			],
+			[
+				"histori",
+				"app\\models\\Historico.php"
+			],
 			[
 				"git.p",
 				"vendor\\kbjr\\Git.php\\Git.php"

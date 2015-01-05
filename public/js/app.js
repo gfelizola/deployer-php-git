@@ -1,20 +1,30 @@
+var mostrarCloneModal = function( repo, urlClone ){
+	var modal = $('#cloneModal');
+	modal.find('.modal-body .repositorio').html(repo);
+	modal.find('.btn-danger').attr("href", urlClone).unbind('click').click(function(event) {
+		event.preventDefault();
+		$("#console_frame").attr('src', $(this).attr('href'));
+	});
+	modal.modal('show');
+};
+
+var showLoading = function(){
+	var $overlay = $(".box .overlay");
+	var $loading = $(".box .loading-img");
+
+	$loading.removeClass("hidden");
+	$overlay.removeClass("hidden");
+};
+
+var hideLoading = function(){
+	var $overlay = $(".box .overlay");
+	var $loading = $(".box .loading-img");
+
+	$loading.addClass("hidden");
+	$overlay.addClass("hidden");
+};
+
 $(function() {
-
-	var showLoading = function(){
-		var $overlay = $(".box .overlay");
-		var $loading = $(".box .loading-img");
-
-		$loading.removeClass("hidden");
-		$overlay.removeClass("hidden");
-	};
-
-	var hideLoading = function(){
-		var $overlay = $(".box .overlay");
-		var $loading = $(".box .loading-img");
-
-		$loading.addClass("hidden");
-		$overlay.addClass("hidden");
-	};
 	
 	$("#deleteModal").on("show.bs.modal", function(e) {
 		var botao = $(e.relatedTarget);
@@ -43,8 +53,6 @@ $(function() {
 		    	.always(function() {
 		    		console.log("AJAX COMPLETE");
 		    	});
-		    	
-
 		    });
 	});
 });

@@ -17,18 +17,21 @@ Route::get("login/bitbucket", "UsuarioController@loginWithBitBucket");
 
 Route::group(array("before" => "auth"), function()
 {
-	Route::get("/", 					"HomeController@showWelcome");
-	Route::get("home", 					"HomeController@showWelcome");
-	Route::get("logout", 				"UsuarioController@logout");
+	Route::get("/",                                 "HomeController@showWelcome");
+	Route::get("home",                              "HomeController@showWelcome");
+	Route::get("logout",                            "UsuarioController@logout");
 
-    Route::resource("projeto",  		"ProjetoController" );
-    Route::resource("servidor",  		"ServidorController" );
-    Route::resource("usuario",  		"UsuarioController" );
+    Route::resource("projeto",                      "ProjetoController" );
+    Route::resource("servidor",                     "ServidorController" );
+    Route::resource("usuario",                      "UsuarioController" );
 
-    Route::get("projeto/{id}/deploys",      "ProjetoController@deploys" );
+    Route::get("projeto/{id}/deploys",              "ProjetoController@deploys" );
 
-    Route::get("deploy/{pid}/{sid}/create", "DeployController@create" );
-    Route::get("deploy/{pid}/{sid}/fetch",  "DeployController@fetch" );
+    Route::get("deploy/{pid}/{sid}/create",         "DeployController@create" );
+    Route::get("deploy/{pid}/{sid}/fetch",          "DeployController@fetch" );
+    Route::get("deploy/{pid}/{sid}/clonar",         "DeployController@clonar" );
+    Route::get("deploy/{pid}/{sid}/dados",          "DeployController@dados" );
+    Route::post("deploy/{pid}/{sid}/realizar",      "DeployController@realizar" );
 
-    Route::post("usuario/{id}/update",      "UsuarioController@update" );
+    Route::post("usuario/{id}/update",              "UsuarioController@update" );
 });
