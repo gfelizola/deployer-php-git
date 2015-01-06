@@ -46,6 +46,11 @@ class UsuarioController extends \BaseController {
 		    return Redirect::to("usuario/create")->withErrors($validator);
 		} else {
 			$usuario = User::create( Input::all() );
+			$usuario->roles()->attach(3);
+
+			if(Input::get("admin") ){
+				$usuario->roles()->attach(1);
+			}
 
 			Historico::create( array(
 				"tipo"      => Historico::TipoUsuario,
@@ -105,13 +110,23 @@ class UsuarioController extends \BaseController {
 			$usuario->layout = ! empty( Input::get("layout") ) ? Input::get("layout") : "";
 			$usuario->save();
 
+			$usuario->roles()->sync([3]);
+
+			if(Input::get("admin") ){
+				$usuario->roles()->attach(1);
+			}
+
 			Historico::create( array(
 				"tipo"      => Historico::TipoUsuario,
 				"descricao" => "Usuário \"{$usuario->username}\" atualizado",
 				"user_id"   => Auth::user()->id
 			));
 			
-			return Redirect::to("usuario");
+			if( Auth::user()->is_admin() ){
+				return Redirect::to("usuario");
+			} else {
+				return Redirect::to("usuario/" . Auth::id() );
+			}
 		}
 	}
 

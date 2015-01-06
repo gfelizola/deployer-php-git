@@ -41,6 +41,7 @@ class HomeController extends BaseController {
 			"rollbacks"  => $rollbacks,
 			"media"      => $media,
 			"historicos" => $tratados,
+			"mensagem"   => Session::pull("mensagem")
 		);
 
 		return View::make("hello", $dados);

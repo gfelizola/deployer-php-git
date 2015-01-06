@@ -5,6 +5,16 @@
 @stop
 
 @section('content')
+    
+    @if ( isset($mensagem) )
+    <div class="alert alert-danger alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <b>Aviso!</b><br>
+        {{{$mensagem}}}
+    </div>
+    @endif
+
     <!-- Small boxes (Dados/Reports) -->
     <div class="row">
         <div class="col-lg-3 col-xs-6">
@@ -88,7 +98,10 @@
                         <span class="time"><i class="fa fa-clock-o"></i> {{ $historico->created_at->format('H:i') }}</span>
                         <h3 class="timeline-header">
                             @if( $historico->user )
-                            <a href="usuario/{{ $historico->user->id }}">{{ $historico->user->nome }}</a>
+                            <a href="usuario/{{ $historico->user->id }}">
+                                <img src="{{ $historico->user->avatar }}" width="25" height="25" class="img-circle" alt="{{{ $historico->user->nome }}}">
+                                    {{{ $historico->user->nome }}}
+                            </a>
                             @endif
                         </h3>
                         <div class="timeline-body">
@@ -99,7 +112,8 @@
                                 @endif
 
                                 @if( $historico->deploy )
-                                    <b>Tag:</b> {{ $historico->deploy->tag }}
+                                    <b>Servidor:</b> {{ $historico->deploy->servidor->nome }} <i>({{ preg_replace( '/\:.+\/?/', '', $historico->deploy->servidor->endereco )  }})</i><br>
+                                    <b>Tag:</b> {{ $historico->deploy->tag }}<br>
                                 @endif
                             </p>
                         </div>

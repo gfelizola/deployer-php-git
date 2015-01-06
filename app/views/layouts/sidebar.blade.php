@@ -22,18 +22,7 @@
                     <i class="fa fa-dashboard"></i> <span>Painel</span>
                 </a>
             </li>
-            <li class="treeview {{{ strstr(Route::currentRouteName(), 'deploy') ? 'active' : '' }}}">
-                <a href="#">
-                    <i class="fa fa-cloud-upload"></i>
-                    <span>Deploys</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <!-- <li><a href="{{{ URL::to('deploy') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li> -->
-                    <li><a href="{{{ URL::to('deploy/create') }}}"><i class="fa fa-angle-double-right"></i> Realizar deploy</a></li>
-                    <li><a href="{{{ URL::to('deploy/rollback') }}}"><i class="fa fa-angle-double-right"></i> Realizar rollback</a></li>
-                </ul>
-            </li>
+            @if( Auth::user()->is_admin() )
             <li class="treeview {{{ strstr(Route::currentRouteName(), 'servidor') ? 'active' : '' }}}">
                 <a href="#">
                     <i class="fa fa-desktop"></i>
@@ -45,6 +34,7 @@
                     <li><a href="{{{ URL::to('servidor/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
                 </ul>
             </li>
+            @endif
             <li class="treeview {{{ strstr(Route::currentRouteName(), 'projeto') ? 'active' : '' }}}">
                 <a href="#">
                     <i class="fa fa-code"></i>
@@ -53,7 +43,9 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{{ URL::to('projeto') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
-                    <li><a href="{{{ URL::to('projeto/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
+                    @if( Auth::user()->is_admin() )
+                        <li><a href="{{{ URL::to('projeto/create') }}}"><i class="fa fa-angle-double-right"></i> Cadastrar novo</a></li>
+                    @endif
                 </ul>
             </li>
             <li class="treeview {{{ strstr(Route::currentRouteName(),'usuario') ? 'active' : '' }}}">
@@ -63,8 +55,9 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="{{{ URL::to('usuario') }}}"><i class="fa fa-angle-double-right"></i> Ver todos</a></li>
+                    @if( Auth::user()->is_admin() )
                     <li><a href="{{{ URL::to('usuario/create') }}}"><i class="fa fa-angle-double-right"></i> Adicionar novo</a></li>
-                    <!-- <li><a href="{{{ URL::to('usuario/roles') }}}"><i class="fa fa-angle-double-right"></i> Gerenciar acessos</a></li> -->
+                    @endif
                 </ul>
             </li>
         </ul>

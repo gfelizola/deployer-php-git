@@ -4,7 +4,7 @@
     <body class="bg-black">
 
         <div class="form-box" id="login-box">
-            @if (isset($mensagem) )
+            @if ( isset($mensagem) )
             <div class="alert alert-danger alert-dismissable">
                 <i class="fa fa-ban"></i>
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

@@ -27,4 +27,14 @@ class User extends Eloquent implements UserInterface {
 	public static $rules = array(
 		'username' => 'required'
 	);
+
+	public function roles()
+    {
+        return $this->belongsToMany('Role', "role_user");
+    }
+
+    public function is_admin()
+    {
+    	return $this->roles->contains(1);
+    }
 }

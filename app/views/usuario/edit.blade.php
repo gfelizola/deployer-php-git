@@ -56,6 +56,17 @@
                                     {{ Form::checkbox('layout', 'fixed', $usuario->layout == User::LAYOUT_FIXED) }}
                                 </div>
                             </div>
+
+                            @if( Auth::user()->is_admin() )
+
+                            <div class="form-group {{{ $errors->has('admin') ? 'has-error' : '' }}}">
+                                {{ Form::label("Admin", "Admin", array("class" => "col-xs-2") ) }}
+                                <div class="col-xs-10">
+                                    {{ Form::checkbox('admin', '1', $usuario->roles->contains(1) ) }}
+                                </div>
+                            </div>
+
+                            @endif
                         
                             <div class="form-group">
                                 <div class="col-xs-10 col-xs-offset-2">{{ Form::submit('Salvar', array( "class" => "btn btn-primary" )); }}</div>

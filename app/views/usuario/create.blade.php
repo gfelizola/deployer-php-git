@@ -27,6 +27,13 @@
                         {{ Form::label("username", "Nome de usuário no BitBucket") }}<br>
                         {{ Form::text("username", "", array( "class" => "form-control" )) }}
                     </div>
+                    
+                    <div class="form-group {{{ $errors->has('admin') ? 'has-error' : '' }}}">
+                        <label for="admin">
+                            {{ Form::checkbox('admin', 1, false ) }}
+                                Adicionar com nível de Administrador?
+                        </label>
+                    </div>
 
                     <div class="form-group">
                         {{ Form::submit('Salvar', array( "class" => "btn btn-primary" )); }}

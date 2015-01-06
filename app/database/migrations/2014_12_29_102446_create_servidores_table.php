@@ -18,9 +18,9 @@ class CreateServidoresTable extends Migration {
 			$table->timestamps();
 			$table->integer('tipo_acesso');
 			$table->string('nome');
-			$table->string('endereco');
-			$table->string('usuario');
-			$table->string('senha');
+			$table->string('endereco')->nullable();
+			$table->string('usuario')->nullable();
+			$table->string('senha')->nullable();
 		});
 	}
 

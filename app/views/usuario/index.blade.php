@@ -19,9 +19,11 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de usuários</h3>
+                    @if( Auth::user()->is_admin() )
                     <div class="box-tools">
                         <a href="{{{ URL::to('usuario/create') }}}" class="btn bg-navy pull-right">Adicionar novo</a>
                     </div>
+                    @endif
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">

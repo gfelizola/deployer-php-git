@@ -183,9 +183,8 @@ class ProjetoController extends \BaseController {
 	public function deploys($id)
 	{
 		$projeto = Projeto::find($id);
-		// $deploys = $projeto->deploys->sortBy("created_at",true)->paginate( Config::get("paginacao_itens", 20) );
 		$deploys = Deploy::orderBy("created_at","DESC")->where("projeto_id","=",$id)->paginate( Config::get("app.paginacao_itens", 20) );
-
+		
 		return View::make( "deploy.index", array(
 			"projeto" => $projeto,
 			"deploys" => $deploys,

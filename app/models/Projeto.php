@@ -29,6 +29,6 @@ class Projeto extends Eloquent {
 
     public function servidores()
     {
-        return $this->belongsToMany('Servidor', "servidores_projetos")->withPivot("root");
+        return $this->belongsToMany('Servidor', "servidores_projetos")->withPivot("root","tag_atual");
     }
 }

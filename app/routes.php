@@ -21,10 +21,7 @@ Route::group(array("before" => "auth"), function()
 	Route::get("home",                              "HomeController@showWelcome");
 	Route::get("logout",                            "UsuarioController@logout");
 
-    Route::resource("projeto",                      "ProjetoController" );
-    Route::resource("servidor",                     "ServidorController" );
-    Route::resource("usuario",                      "UsuarioController" );
-
+    Route::get("projeto",                           "ProjetoController@index" );
     Route::get("projeto/{id}/deploys",              "ProjetoController@deploys" );
 
     Route::get("deploy/{pid}/{sid}/create",         "DeployController@create" );
@@ -32,6 +29,24 @@ Route::group(array("before" => "auth"), function()
     Route::get("deploy/{pid}/{sid}/clonar",         "DeployController@clonar" );
     Route::get("deploy/{pid}/{sid}/dados",          "DeployController@dados" );
     Route::post("deploy/{pid}/{sid}/realizar",      "DeployController@realizar" );
+    Route::post("deploy/{id}/rollback",             array(
+        "before" => "csrf", 
+        "uses"   => "DeployController@rollback"
+    ));
 
+    // Route::resource("projeto",                      "ProjetoController" );
+    Route::resource("usuario",                      "UsuarioController" );
     Route::post("usuario/{id}/update",              "UsuarioController@update" );
+});
+
+Route::group(array("before" => "auth|admin"), function(){
+    
+    Route::get("projeto/create",                    "ProjetoController@create" );
+    Route::get("projeto/{id}",                      "ProjetoController@show" );
+    Route::get("projeto/{id}/edit",                 "ProjetoController@edit" );
+    Route::post("projeto",                          "ProjetoController@store" );
+    Route::post("projeto/{id}/update",              "ProjetoController@update" );
+
+    Route::resource("servidor",                     "ServidorController" );
+    Route::get("usuario/create",                    "UsuarioController@create" );
 });

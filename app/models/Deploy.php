@@ -5,6 +5,10 @@ class Deploy extends Eloquent {
     const aprovado  = 1;
     const reprovado = 2;
 
+	public static $rules = array(
+		'tag' => 'required'
+	);
+
 	protected $fillable = array(
 		'tag', 
 		'descricao', 
@@ -12,6 +16,7 @@ class Deploy extends Eloquent {
 		'infos',
 		'user_id',
 		'projeto_id',
+		'servidor_id',
 	);
 
 	public function user() {
@@ -22,13 +27,7 @@ class Deploy extends Eloquent {
 		return $this->belongsTo('Projeto');
 	}
 
-	public function servidor()
-    {
-        return $this->hasManyThrough('Servidor', 'Projeto');
-    }
-
-	public static $rules = array(
-		'tag' => 'required'
-	);
-
+	public function servidor() {
+		return $this->belongsTo('Servidor');
+	}
 }

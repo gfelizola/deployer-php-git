@@ -55,4 +55,9 @@ $(function() {
 		    	});
 		    });
 	});
+
+	$("#rollbackModal").on("show.bs.modal", function(e) {
+		var botao = $(e.relatedTarget);
+	    $(this).find("form").attr("action", botao.attr("href"));
+	});
 });

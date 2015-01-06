@@ -74,10 +74,10 @@ class DeployController extends \BaseController {
 		{
 			echo "Iniciar atualizações para Deploy<br>";
 
-				
+			// dd("git fetch $remote -v");
 			$ssh->run( array(
 				"cd " . $servidor->pivot->root,
-				"git fetch " . $remote
+				"git fetch $remote --tags --verbose"
 			), function($line)
 			{
 			    echo $this->line2html($line);
@@ -180,29 +180,112 @@ class DeployController extends \BaseController {
 		}
 		else
 		{
-			set_time_limit(600);
+			$tag        = Input::get("tag");
+			$tag_existe = Deploy::where("servidor_id","=",$server_id)->where("tag","=",$tag)->first();
 
-			$projeto  = Projeto::find($projeto_id);
-			$servidor = $projeto->servidores->find($server_id);
-
-			$remote   = $this->get_repo_url($projeto);
-			$ssh      = $this->get_ssh($servidor);
-
-			$tag      = Input::get("tag");
-
-			echo $this->console_header();
-
-			$ssh->run( array(
-				"cd " . $servidor->pivot->root,
-				"git checkout " . $projeto->repo_branch,
-				"git pull $remote tags/$tag -v",
-			), function($line)
+			if( $tag_existe )
 			{
-			    echo $this->line2html($line);
-			});
+				return Redirect::to("deploy/$projeto_id/$server_id/dados")
+					->withErrors( array("tag_existe" => "A tag <b>$tag</b> já foi carregada no servidor.<br>Escolha outra tag ou crie uma nova tag para realizar o deploy.") )
+					->withInput( Input::all() );
+			}
+			else
+			{
+				set_time_limit(600);
 
-			echo $this->console_footer();
+				$retorno  = "";
+				$projeto  = Projeto::find($projeto_id);
+				$servidor = $projeto->servidores->find($server_id);
+				$remote   = $this->get_repo_url($projeto);
+				$ssh      = $this->get_ssh($servidor);
+
+				$this->verifica_status($projeto, $servidor);
+
+				$ssh->run( array(
+					"cd " . $servidor->pivot->root,
+					"git pull $remote {$projeto->repo_branch}",
+					"git checkout " . $tag,
+				), 
+				function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
+
+				echo $this->line2html($retorno);
+				echo "<br><hr><br>";
+
+				if( $ssh->status() != 0 ){
+					$mensagem = "Houveram erros durante o deploy, por favor valide a mensagem.";
+				} else {
+					$mensagem = "Deploy realizado com sucesso";
+					$infos    = array(
+						"log_cmd" => $retorno
+					);
+
+					$deploy = Deploy::create( array(
+						"tag"         => $tag,
+						"descricao"   => Input::get("descricao"),
+						"status"      => Deploy::aprovado,
+						"user_id"     => Auth::user()->id,
+						"projeto_id"  => $projeto_id,
+						"servidor_id" => $server_id,
+						"infos"       => json_encode($infos)
+					));
+
+					Historico::create( array(
+						"tipo"       => Historico::TipoDeploy,
+						"descricao"  => "Deploy realizado.",
+						"projeto_id" => $projeto_id,
+						"deploy_id"  => $deploy->id,
+						"user_id"    => Auth::user()->id
+					));
+
+					$projeto->servidores()->updateExistingPivot($server_id, array("tag_atual" => $tag));
+				}
+
+				return Redirect::to("projeto/$projeto_id/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
+			}
 		}
+	}
+
+
+	/**
+	 * Realiza rollback de tag/versão
+	 *
+	 * @return Response
+	 */
+	public function rollback($deploy_id)
+	{
+		set_time_limit(600); //10 minutos
+
+		$deploy   = Deploy::find($deploy_id);
+		$projeto  = $deploy->projeto;
+		$servidor = $projeto->servidores->find($deploy->servidor->id);
+		$remote   = $this->get_repo_url($projeto);
+		$ssh      = $this->get_ssh($servidor);
+		$tag      = $deploy->tag;
+
+		$retorno  = "";
+		$ssh->run( array(
+			"cd " . $servidor->pivot->root,
+			"git checkout $tag",
+		), 
+		function($line) use(&$retorno)
+		{
+		    $retorno .= $line;
+		});
+
+		Historico::create( array(
+			"tipo"       => Historico::TipoRollBack,
+			"descricao"  => "Rollback realizado.",
+			"projeto_id" => $projeto->id,
+			"deploy_id"  => $deploy->id,
+			"user_id"    => Auth::user()->id
+		));
+
+		$projeto->servidores()->updateExistingPivot($servidor->id, array("tag_atual" => $tag));
+
+		return Redirect::to("projeto/{$projeto->id}/deploys")->with("message","Rollback realizado com sucesso<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
 	}
 
 
@@ -301,6 +384,100 @@ class DeployController extends \BaseController {
 		Config::set("remote.connections.runtime.root", $servidor->pivot->root);
 
 		return SSH::into("runtime");
+	}
+
+
+	/**
+	 * Verifica status dos arquivos no servidor antes de realizar o deploy
+	 *
+	 * @param  Projeto $projeto
+	 * @param  Servidor $servidor
+	 * @return Boolean
+	 */
+	public function verifica_status($projeto,$servidor)
+	{
+		$retorno  = "";
+		$servidor = $projeto->servidores->find($servidor->id);
+		$ssh      = $this->get_ssh($servidor);
+
+		$ssh->run( array(
+			"cd " . $servidor->pivot->root,
+			"git status --porcelain --untracked-files=no",
+		), 
+		function($line) use(&$retorno)
+		{
+		    $retorno .= $line;
+		});
+
+		echo "<h3>Status</h3><br>";
+		echo $this->line2html($retorno);
+		echo "<br><hr><br>";
+
+		$linhas = explode("\n", $retorno);
+		foreach ($linhas as $k => $l) {
+			if( empty(trim($l)) ) unset( $linhas[$k] );
+		}
+
+		if( count($linhas) > 0 )
+		{
+			$remote   = $this->get_repo_url($projeto);
+			$ignore = $ssh->getString($servidor->pivot->root . "/.gitignore");
+
+			$adicionados = array();
+
+			foreach ($linhas as $linha) {
+				$larr    = explode(" ", $linha);
+				$arquivo = end( $larr );
+
+				if( strtolower($arquivo) != ".gitignore" ){ //ignorando as mudanças no próprio gitignore
+					if( ! stripos($ignore, $arquivo) ){
+						$ignore .= "\n$arquivo";
+						$adicionados[] = $arquivo;
+					}
+				}
+			}
+
+			// echo "<h3>Arquivo .gitignore</h3><br>";
+			// echo $this->line2html($ignore);
+			// echo "<br><hr><br>";
+
+			if( count($adicionados) > 0 ){
+				$retorno = "";
+
+				// $ssh->run( array(
+				// 	"cd " . $servidor->pivot->root,
+				// 	"git pull $remote " . $projeto->repo_branch, 
+				// ), function($line) use(&$retorno)
+				// {
+				//     $retorno .= $line;
+				// });
+
+				$ssh->putString($servidor->pivot->root . "/.gitignore", $ignore);
+
+				$comandos = array( "cd " . $servidor->pivot->root );
+
+				foreach ($adicionados as $novo) {
+					$comandos[] = "git rm --cached $novo";
+				}
+
+				$comandos[] = "git add " . $servidor->pivot->root . "/.gitignore";
+				$comandos[] = "git commit -m 'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'";
+				$comandos[] = "git push $remote " . $projeto->repo_branch;
+
+				$ssh->run( $comandos, function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
+
+				// echo "<h3>Retorno da gravação do gitignore</h3><br>";
+				// echo $this->line2html($retorno);
+				// echo "<br><hr><br>";
+			}
+		}
+
+		// die();
+
+		return true;
 	}
 
 

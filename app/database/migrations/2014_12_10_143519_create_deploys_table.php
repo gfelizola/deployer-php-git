@@ -20,6 +20,7 @@ class CreateDeploysTable extends Migration {
             $table->string('infos')->nullable();
             $table->integer('projeto_id');
             $table->integer('user_id');
+            $table->integer('servidor_id');
             $table->integer('status')->nullable();
             $table->timestamps();
         });

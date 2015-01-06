@@ -19,14 +19,18 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Lista de projetos</h3>
+                    @if( Auth::user()->is_admin() )
                     <div class="box-tools">
                         <a href="{{{ URL::to('projeto/create') }}}" class="btn bg-navy pull-right">Adicionar novo</a>
                     </div>
+                    @endif
                 </div><!-- /.box-header -->
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tr>
+                            @if( Auth::user()->is_admin() )
                             <th>Ações</th>
+                            @endif
                             <th>Deploys</th>
                             <th>Nome</th>
                             <th>Repo</th>
@@ -35,6 +39,7 @@
 
                         @foreach ($projetos as $projeto)
                         <tr>
+                            @if( Auth::user()->is_admin() )
                             <td width="70">
                                 <div class="btn-group">
                                     <a href="{{{ URL::to('projeto', array($projeto->id, 'edit')) }}}" class="btn btn-success btn-xs">
@@ -45,6 +50,7 @@
                                     </a>
                                 </div>
                             </td>
+                            @endif
 
                             <td width="120">
                                 <a href="{{{ URL::to('projeto', array($projeto->id, 'deploys')) }}}" data-remote="" class="btn btn-info btn-xs">

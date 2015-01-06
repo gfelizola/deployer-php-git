@@ -85,3 +85,15 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+/*
+| Verifica se o usuário tem nível de acesso para determinada tarefa
+*/
+
+Route::filter('admin', function()
+{
+    if( ! Auth::user()->is_admin() ){
+    	return Redirect::to('/')->with('mensagem', 'Seu usuário não tem acesso a essa página.');	
+    }
+});
+
