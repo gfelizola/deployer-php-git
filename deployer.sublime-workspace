@@ -4,7 +4,43 @@
 		"selected_items":
 		[
 			[
+				"unse",
+				"unset"
+			],
+			[
+				"servi",
+				"servidor"
+			],
+			[
+				"dep",
+				"deploy"
+			],
+			[
+				"tag",
+				"tag_existe"
+			],
+			[
+				"json",
+				"json_encode"
+			],
+			[
+				"jso",
+				"json_encode"
+			],
+			[
+				"proj",
+				"projeto"
+			],
+			[
 				"ser",
+				"server_id"
+			],
+			[
+				"projeto",
+				"projeto_id"
+			],
+			[
+				"serv",
 				"servidor"
 			],
 			[
@@ -148,64 +184,25 @@
 	"buffers":
 	[
 		{
-			"contents": "<?php\n\nclass DeployController extends \\BaseController {\n\n	/**\n	 * Display a listing of the resource.\n	 *\n	 * @return Response\n	 */\n	public function index()\n	{\n		return View::make(\"deploy.index\");\n	}\n\n\n	/**\n	 * Show the form for creating a new resource.\n	 *\n	 * @return Response\n	 */\n	public function create($projeto_id, $server_id)\n	{\n		$tags     = array();\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = Servidor::find($server_id);\n		// $repo    = $this->get_repo($projeto);\n\n		// $repo->fetch();\n\n		// $tags    = $repo->list_tags();\n\n		return View::make(\"deploy.create\", array(\n			\"projeto\"  => $projeto, \n			\"servidor\" => $servidor, \n			\"tags\"     => $tags\n		));\n	}\n\n\n	/**\n	 * Store a newly created resource in storage.\n	 *\n	 * @return Response\n	 */\n	public function store()\n	{\n		//\n	}\n\n\n	/**\n	 * Atualiza os dados do repositório\n	 *\n	 * @return Response\n	 */\n	public function fetch($projeto_id, $server_id)\n	{\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = $projeto->servidores->find($server_id);\n\n		echo \"<!DOCTYPE html>\\n<html>\\n\";\n		echo Response::view(\"layouts.head\")->getOriginalContent();\n		echo \"\\n<body class='bg-black console'>\";\n		echo \"\\n\\n\";\n\n		Config::set(\"remote.connections.runtime.host\", $servidor->endereco);\n		Config::set(\"remote.connections.runtime.username\", $servidor->usuario);\n		Config::set(\"remote.connections.runtime.password\", $servidor->senha);\n		Config::set(\"remote.connections.runtime.root\", $servidor->pivot->root);\n\n		$ssh = SSH::into(\"runtime\");\n\n		$pasta_existe = true;\n		\n		$ssh->run(\"cd \" . $servidor->pivot->root, function($line) use (&$pasta_existe)\n		{\n		    if( ! empty( $line ) ){\n		    	echo \"Pasta não encontrada<br>\";\n		    	$pasta_existe = false;\n		    } else {\n		    	echo \"Linha vazia - Tudo ok<br>\";\n		    }\n		});\n\n		if( $pasta_existe ){\n			echo \"iniciar verificações para Deploy\";\n		} else {\n			$remote = $this->get_repo_url($projeto);\n			echo \"Iniciar repositório from \" . $this->trata_url($remote);\n			echo \"<script>\";\n			echo \"window.top.mostrarCloneModal('\" . $this->trata_url($remote) . \"', '\" . URL::to(\"deploy\", array($projeto_id, $server_id, \"clonar\") ) . \"');\";\n			echo \"</script>\";\n		}\n\n		echo \"\\n\\n\" . Response::view(\"layouts.footer\")->getOriginalContent();\n		echo \"</body></html>\";\n	}\n\n	/**\n	 * Atualiza os dados do repositório\n	 *\n	 * @return Response\n	 */\n	public function clonar($projeto_id, $server_id)\n	{\n		$projeto  = Projeto::find($projeto_id);\n		$servidor = $projeto->servidores->find($server_id);\n\n		echo \"<!DOCTYPE html>\\n<html>\\n\";\n		echo Response::view(\"layouts.head\")->getOriginalContent();\n		echo \"\\n<body class='bg-black console'>\";\n		echo \"\\n\\n\";\n\n		Config::set(\"remote.connections.runtime.host\", $servidor->endereco);\n		Config::set(\"remote.connections.runtime.username\", $servidor->usuario);\n		Config::set(\"remote.connections.runtime.password\", $servidor->senha);\n		Config::set(\"remote.connections.runtime.root\", $servidor->pivot->root);\n\n		$remote  = $this->get_repo_url($projeto);\n		$comando = \"git clone $remote \" . $servidor->pivot->root;\n\n		$ssh = SSH::into(\"runtime\");\n		$ssh->run($comando, function($line)\n		{\n		    $saida = implode( \"<br>\", explode( \"\\n\", $line) );\n		    echo $saida;\n		});\n\n		echo \"Verificação completa, iniciar Deploy<br>\";\n\n\n		echo \"<script>\";\n		echo \"window.top.location = '\" . URL::to(\"deploy\", array($projeto_id, $server_id, \"clonar\") ) . \"');\";\n		echo \"</script>\";\n\n		echo \"\\n\\n\" . Response::view(\"layouts.footer\")->getOriginalContent();\n		echo \"</body></html>\";\n	}\n\n\n	/**\n	 * Display the specified resource.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function show($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Show the form for editing the specified resource.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function edit($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Update the specified resource in storage.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function update($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Remove the specified resource from storage.\n	 *\n	 * @param  int  $id\n	 * @return Response\n	 */\n	public function destroy($id)\n	{\n		//\n	}\n\n\n	/**\n	 * Busca o repositório e retorna o objeto tratado\n	 *\n	 * @param  Projeto  $p\n	 * @return GitRepo\n	 */\n	public function get_repo($projeto)\n	{\n		if( Config::get(\"app.WINDOWS\") ) Git::windows_mode();\n\n		$repo = Git::open( $projeto->server_root );\n\n		if( $repo->test_git() ){\n			\n			if( ! strstr(\"git@\", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)\n				$purl = parse_url($projeto->repo);\n\n				if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){\n					$purl[\"user\"] = $projeto->repo_usuario;\n					$purl[\"pass\"] = $projeto->repo_senha;\n				}\n\n				$remote = $this->get_repo_url($projeto);\n\n				$repo->set_remote( $remote );\n				$repo->set_branch( $projeto->repo_branch );\n			}\n		}\n\n		return $repo;\n	}\n\n\n	/**\n	 * Busca o repositório e retorna o objeto tratado\n	 *\n	 * @param  Projeto  $p\n	 * @return GitRepo\n	 */\n	public function get_repo_url($projeto)\n	{\n		if( ! strstr(\"git@\", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)\n			$purl = parse_url($projeto->repo);\n\n			if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){\n				$purl[\"user\"] = $projeto->repo_usuario;\n				$purl[\"pass\"] = $projeto->repo_senha;\n			}\n\n			return $purl[\"scheme\"] . \"://\" . $purl[\"user\"] . \":\" . $purl[\"pass\"] . \"@\" . $purl[\"host\"] . $purl[\"path\"];\n		}\n\n		return $projeto->repo;\n	}\n\n	private function trata_url($texto = \"\", $prefix = \"\")\n	{\n		// $reg_exUrl = \"_^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!(?:10|127)(?:\\.\\d{1,3}){3})(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]-*)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]-*)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/\\S*)?$\";\n		$reg_exUrl = '_(^|[\\s.:;?\\-\\]<\\(])(https?://[-\\w;/?:@&=+$\\|\\_.!~*\\|\"()\\[\\]%#,☺]+[\\w/#](\\(\\))?)(?=$|[\\s\",\\|\\(\\).:;?\\-\\[\\]>\\)])_i';\n		return preg_replace_callback($reg_exUrl, function($matches){\n			$purl = parse_url( trim($matches[0]) );\n\n			return \" \" . $purl[\"scheme\"] . \"://\" . $purl[\"user\"] . \":******@\" . $purl[\"host\"] . $purl[\"path\"];\n		}, $texto);\n	}\n}",
-			"file": "app/controllers/DeployController.php",
-			"file_size": 6123,
-			"file_write_time": 130644228802768561,
+			"contents": "Aumentar qtde de notícias no mobile\n\nMudança realizada para aumentar a quantidade de notícias apresentada na home da versão mobile\n\nSeguir plano anexo",
 			"settings":
 			{
-				"buffer_size": 6309,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "public/js/app.js",
-			"settings":
-			{
-				"buffer_size": 1439,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app/views/deploy/create.blade.php",
-			"settings":
-			{
-				"buffer_size": 3787,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
-			"settings":
-			{
-				"buffer_size": 612,
+				"buffer_size": 150,
 				"line_ending": "Windows",
-				"name": "import urllib.request,os; pr='Preferences.sublime-"
-			}
-		},
-		{
-			"file": "app/views/deploy/index.blade.php",
-			"settings":
-			{
-				"buffer_size": 3477,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "app/models/Deploy.php",
-			"settings":
-			{
-				"buffer_size": 523,
-				"line_ending": "Windows"
+				"name": "Aumentar qtde de notícias no mobile"
 			}
 		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 135.0,
+		"height": 235.0,
 		"selected_items":
 		[
+			[
+				"javas",
+				"Set Syntax: JavaScript"
+			],
 			[
 				"prefe",
 				"Preferences: Settings - User"
@@ -262,6 +259,8 @@
 		"height": 321.0,
 		"history":
 		[
+			"import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({'http': 'oesp0527.grpoesp.com.br:8080'}))); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
+			"import urllib.request,os,hashlib; h = '2deb499853c4371624f5a07e27c334aa' + 'bf8c4e67d14fb0525ba4f89698a6d7e1'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
 			"import urllib.request,os; pr='Preferences.sublime-settings'; ip='ignored_packages'; n='Package Control'; s=sublime.load_settings(pr); ig=s.get(ip); ig.append(n); s.set(ip,ig); sublime.save_settings('Preferences.sublime-settings'); pf=n+'.sublime-package'; urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler())); by=urllib.request.urlopen('https://packagecontrol.io/'+pf.replace(' ','%20')).read(); open(os.path.join(sublime.installed_packages_path(),pf),'wb').write(by); ig.remove(n); s.set(ip,ig); sublime.save_settings(pr); print('Package Control: 3.0.0 upgrade successful!')",
 			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
 		]
@@ -278,66 +277,117 @@
 	"expanded_folders":
 	[
 		"/D/localhost/deployer",
-		"/D/localhost/deployer/app",
-		"/D/localhost/deployer/app/controllers",
+		"/D/localhost/deployer/app/database/migrations",
+		"/D/localhost/deployer/app/database/seeds",
+		"/D/localhost/deployer/app/models",
 		"/D/localhost/deployer/app/views",
-		"/D/localhost/deployer/app/views/deploy",
-		"/D/localhost/deployer/app/views/usuario",
-		"/D/localhost/deployer/public",
-		"/D/localhost/deployer/public/js"
+		"/D/localhost/deployer/app/views/projeto",
+		"/D/localhost/deployer/app/views/usuario"
 	],
 	"file_history":
 	[
-		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Adapter/PhpAdapter.php",
-		"/D/localhost/deployer/phpunit.xml",
+		"/D/localhost/deployer/app/controllers/DeployController.php",
+		"/D/localhost/deployer/public/index.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp45746/var/www/vol1/estadao-2014-tmp2/.gitignore",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp03472/var/www/vol1/estadao-2014-tmp2/Gruntfile.js",
+		"/D/localhost/deployer/app/views/usuario/show.blade.php",
+		"/D/localhost/deployer/app/views/deploy/index.blade.php",
 		"/D/localhost/deployer/app/routes.php",
+		"/D/localhost/deployer/app/views/projeto/index.blade.php",
+		"/D/localhost/deployer/public/js/app.js",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp37606/var/www/vol1/estadao-2014-tmp2/www.estadao/Sitemap.xml",
+		"/D/localhost/estadao-2014/www.estadao/index.xml",
+		"/D/localhost/deployer/app/views/hello.blade.php",
+		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/Command/HashExists.php",
+		"/D/localhost/deployer/app/models/Historico.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp02905/var/www/vol1/estadao-2014-tmp2/www.estadao/index-min.php",
+		"/D/localhost/deployer/app/views/deploy/dados.blade.php",
+		"/D/localhost/deployer/app/models/User.php",
+		"/D/localhost/deployer/app/filters.php",
+		"/D/localhost/deployer/app/views/usuario/create.blade.php",
+		"/D/localhost/deployer/app/controllers/HomeController.php",
+		"/D/localhost/deployer/app/views/usuario/index.blade.php",
+		"/D/localhost/deployer/app/controllers/UsuarioController.php",
+		"/D/localhost/deployer/app/views/usuario/edit.blade.php",
+		"/D/localhost/deployer/app/views/layouts/sidebar.blade.php",
+		"/D/localhost/deployer/app/views/login.blade.php",
+		"/D/localhost/deployer/app/views/servidor/create.blade.php",
+		"/D/localhost/deployer/app/models/Role.php",
+		"/D/localhost/deployer/app/database/seeds/DatabaseSeeder.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_29_102446_create_servidores_table.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_29_102809_create_servidores_projetos_table.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_10_142844_create_roles_table.php",
+		"/D/localhost/teste-novo1.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_10_143011_create_role_user_table.php",
+		"/D/localhost/deployer/app/models/Servidor.php",
+		"/D/localhost/deployer/app/config/services.php",
+		"/D/localhost/deployer/server.php",
+		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/ServerException.php",
+		"/D/localhost/deployer/app/models/Deploy.php",
+		"/D/localhost/deployer/deployer.sublime-project",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Encryption/DecryptException.php",
+		"/D/localhost/deployer/vendor/symfony/http-kernel/Symfony/Component/HttpKernel/UriSigner.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Auth/AuthManager.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Support/Facades/Auth.php",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Auth/AuthServiceProvider.php",
+		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Transport/Esmtp/Authenticator.php",
+		"/D/localhost/deployer/vendor/symfony/security-core/Symfony/Component/Security/Core/AuthenticationEvents.php",
+		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Transport/Esmtp/AuthHandler.php",
+		"/D/localhost/deployer/vendor/symfony/security-core/Symfony/Component/Security/Core/Event/AuthenticationEvent.php",
+		"/D/localhost/deployer/vendor/phpseclib/phpseclib/AUTHORS",
+		"/D/localhost/deployer/app/config/auth.php",
+		"/D/localhost/deployer/bootstrap/autoload.php",
+		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/ApacheUrlMatcher.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp53993/var/www/vol1/estadao-2014-tmp2/add_ignore",
+		"/D/localhost/estadao-2014/.gitignore",
+		"/D/localhost/deployer/vendor/kbjr/Git.php/Git.php",
+		"/D/localhost/deployer/app/storage/views/b70839780c4f99d00cedb3d8e6cf1ece",
+		"/D/localhost/deployer/app/controllers/ProjetoController.php",
+		"/D/localhost/deployer/app/config/app.php",
+		"/D/localhost/deployer/vendor/composer/autoload_psr4.php",
+		"/D/localhost/deployer/artisan",
+		"/D/localhost/deployer/app/controllers/ServidorController.php",
+		"/D/localhost/deploy/classes/git-estadao.php",
+		"/D/localhost/deployer/app/models/Projeto.php",
+		"/D/localhost/deployer/app/database/migrations/2014_12_10_143519_create_deploys_table.php",
+		"/D/localhost/deployer/app/views/deploy/create.blade.php",
+		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/RedirectableUrlMatcher.php",
+		"/D/localhost/deployer/public/empty.html",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/View/Engines/EngineResolver.php",
+		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/Command/ServerObject.php",
+		"/D/localhost/deployer/vendor/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/RouterListener.php",
+		"/D/localhost/deployer/app/database/production.sqlite",
+		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php",
+		"/D/localhost/deployer/phpunit.xml",
+		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Adapter/PhpAdapter.php",
 		"/D/localhost/deployer/composer.json",
 		"/D/localhost/deployer/vendor/composer/ClassLoader.php",
-		"/D/localhost/deployer/app/views/usuario/index.blade.php",
 		"/D/localhost/deployer/app/views/servidor/index.blade.php",
-		"/D/localhost/deployer/app/views/projeto/index.blade.php",
 		"/D/localhost/deployer/app/views/projeto/create.blade.php",
-		"/D/localhost/deployer/app/controllers/ProjetoController.php",
-		"/D/localhost/deployer/app/views/deploy/index.blade.php",
-		"/D/localhost/deployer/app/models/Projeto.php",
 		"/D/localhost/deployer/app/views/projeto/edit.blade.php",
-		"/D/localhost/deployer/app/models/Servidor.php",
-		"/D/localhost/deployer/app/database/seeds/DatabaseSeeder.php",
-		"/D/localhost/deployer/app/database/migrations/2014_12_29_102809_create_servidores_projetos_table.php",
 		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/SecLibGateway.php",
 		"/D/localhost/deployer/vendor/phpseclib/phpseclib/phpseclib/Net/SFTP.php",
-		"/D/localhost/deployer/vendor/kbjr/Git.php/Git.php",
 		"/C/Users/tgf112836/.ssh/known_hosts",
 		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
 		"/D/localhost/deployer/app/config/remote.php",
 		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/ResponseObjectInterface.php",
 		"/D/localhost/deployer/readme.md",
 		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/Connection.php",
-		"/D/localhost/deployer/app/controllers/DeployController.php",
 		"/D/localhost/deployer/public/js/AdminLTE/AdminLTE.js",
 		"/D/localhost/deployer/app/views/layouts/footer.blade.php",
-		"/D/localhost/deployer/app/controllers/ServidorController.php",
-		"/D/localhost/deployer/app/views/layouts/sidebar.blade.php",
 		"/D/localhost/deployer/app/views/servidor/edit.blade.php",
-		"/D/localhost/deployer/app/views/servidor/create.blade.php",
 		"/D/localhost/deployer/public/less/sidebar.less",
 		"/D/localhost/deployer/vendor/symfony/process/Symfony/Component/Process/Tests/SigchildDisabledProcessTest.php",
 		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/swift_init.php",
 		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Events/SimpleEventDispatcher.php",
 		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Iterator/SizeRangeFilterIterator.php",
-		"/D/localhost/deployer/server.php",
 		"/D/localhost/deployer/app/lang/pt/validation.php",
-		"/D/localhost/deployer/app/database/migrations/2014_12_29_102446_create_servidores_table.php",
-		"/D/localhost/deployer/app/models/Historico.php",
 		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Hashing/HasherInterface.php",
 		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/D/localhost/deployer/app/views/deploy/create.blade.php",
 		"/D/localhost/deployer/app/views/layouts/master.blade.php",
 		"/D/_Arquivos/_Dev/portugues.html",
-		"/D/localhost/deployer/app/config/app.php",
 		"/D/localhost/deployer/public/css/AdminLTE.css",
-		"/D/localhost/deployer/app/views/hello.blade.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp03478/var/www/vol1/estadao-2014/m.estadao/include/noticias.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp03303/var/www/vol1/estadao-2014/m.estadao/include/ultimas.php",
 		"/D/localhost/deployer/app/start/global.php",
@@ -363,59 +413,7 @@
 		"/D/localhost/estadao-2014/m.estadao/ultimas/comum.php",
 		"/D/localhost/estadao-2014/m.estadao/include/noticias.php",
 		"/D/localhost/estadao-2014/m.estadao/include/ultimas.php",
-		"/D/wamp/logs/php_error.log",
-		"/D/localhost/estadao-2014/m.estadao/cultura/ultimas/index.php",
-		"/D/localhost/pacaembu/sass/_jcarousel.scss",
-		"/D/localhost/estadao-2014/m.estadao/include/menu.php",
-		"/D/localhost/estadao-2014/m.estadao/include/footer.php",
-		"/D/localhost/estadao-2014/m.estadao/cultura/index.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp42401/www/wp-content/themes/pacaembu/stylesheets/app.css",
-		"/D/localhost/estadao-2014/package.json",
-		"/D/localhost/estadao-2014/Gruntfile.js",
-		"/D/wamp/vhosts/estadao.conf",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp16786/var/www/vol1/estadao-2014/move_fcms",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp07442/var/www/vol1/estadao-2014/move_cms",
-		"/D/localhost/estadao-2014/.gitignore",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp20607/var/www/vol1/estadao-2014/.gitignore",
-		"/D/localhost/estadao-2014/add_ignore.sh",
-		"/D/localhost/estadao-2014/getfiles.sh",
-		"/D/localhost/estadao-2014/shared/noticias/templates/noticia/estadao.php",
-		"/D/localhost/estadao-2014/shared/estadao/js/libs/jquery.inview.min.js",
-		"/D/localhost/estadao-2014/esportes/includes/legado/copa-do-mundo/inc_videos2014.php",
-		"/D/localhost/estadao-2014/www.estadao/jornal-do-carro/noticias/indice_noticias.php",
-		"/D/localhost/estadao-2014/alias/index.php",
-		"/D/localhost/estadao-2014/shared/includes/estadao/tags.php",
-		"/D/localhost/estadao-2014/shared/xml/noticia/1580308.xml",
-		"/D/localhost/estadao-2014/shared/estadao/js/modules/ScrollBrns.interna.js",
-		"/D/localhost/estadao-2014/shared/estadao/style.css",
-		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/styles/style.css",
-		"/D/localhost/estadao-2014/esportes/futebol/copa-do-mundo/videos/site/view/styles/jcarousel.connected-carousels.css",
-		"/D/localhost/estadao-2014/node_modules/grunt-contrib-watch/node_modules/gaze/test/safewrite_test.js",
-		"/D/localhost/estadao-2014/esportes/futebol/palmeiras/redes-socias/index.php",
-		"/D/localhost/estadao-2014/m.estadao/noticia.php",
-		"/D/localhost/estadao-2014/m.estadao/templates/estadao.htm",
-		"/D/localhost/estadao-2014/shared/xml/noticia/1131660.xml",
-		"/D/localhost/estadao-2014/shared/xml/noticia/1603626.xml",
-		"/D/localhost/estadao-2014/shared/xml/noticia/30000.xml",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp49249/var/www/vol1/estadao-2014/shared/xml/noticia/30000.xml",
-		"/D/localhost/estadao-2014/esportes/futebol/clubes/palmeiras.php",
-		"/D/localhost/estadao-2014/www.estadao/banner-dispatcher/templates/paladar/position_app_londres.htm",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp59972/var/www/vol1/estadaov2/jornal-do-carro/redes-sociais/index.php",
-		"/D/localhost/estadao-2014/internacional/.htaccess",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp28184/var/www/vol1/estadao-2014/arquivos_cms_20141203.txt",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp24233/var/www/vol1/cms/estadao-2014/www.estadao/index.php",
-		"/D/localhost/estadao-2014/shared/config/globalConfig.php",
-		"/D/localhost/estadao-2014/economia/ferramentas/conversor-de-moedas.php",
-		"/D/localhost/estadao-2014/move_cms",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp43441/var/www/vol1/estadao-2014/www.estadao/index.php",
-		"/D/localhost/estadao-2014/shared/includes/estadao/automatica_videos_esquerda.php",
-		"/D/localhost/estadao-2014/shared/est3/classificacaoF1/grid_largada_100.xml",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp33153/var/www/vol1/estadao-2014/shared/config/globalConfig.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp07374/var/www/vol1/estadao-2014/shared/estadao/error/.htaccess",
-		"/D/localhost/estadao-2014/include-cms.php",
-		"/D/localhost/estadao-2014/shared/estadao/error/.htaccess",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp44013/var/www/vol1/estadao-2014/shared/estadao/error/404.php",
-		"/D/localhost/estadao-2014/internacional/httpd.conf"
+		"/D/wamp/logs/php_error.log"
 	],
 	"find":
 	{
@@ -438,6 +436,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"verifica_status",
+			"header",
+			"verifica_status",
+			"status",
+			"'",
+			"$pasta_existe",
+			"$dep",
+			"trata_url",
 			"run",
 			"'",
 			"get_repo",
@@ -557,10 +563,7 @@
 			"–",
 			"   ",
 			"54w",
-			".x86_64",
-			"peter",
-			"C:\\Development\\adt-bundle",
-			"banner"
+			".x86_64"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -613,198 +616,36 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "app/controllers/DeployController.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6309,
+						"buffer_size": 150,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3301,
-								3301
+								132,
+								150
 							]
 						],
 						"settings":
 						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1479.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "public/js/app.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1439,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								306,
-								306
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "app/views/deploy/create.blade.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3787,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1027,
-								1027
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 35.0,
-						"translation.y": 153.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 612,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								612,
-								612
-							]
-						],
-						"settings":
-						{
-							"auto_name": "import urllib.request,os; pr='Preferences.sublime-",
+							"auto_name": "Aumentar qtde de notícias no mobile",
 							"incomplete_sync": null,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
-						"translation.x": 3496.0,
-						"translation.y": -0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "app/views/deploy/index.blade.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3477,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2731,
-								3469
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 468.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "app/models/Deploy.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 523,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								219,
-								219
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -812,7 +653,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 23.0
+		"height": 22.0
 	},
 	"input":
 	{
@@ -861,7 +702,55 @@
 		"selected_items":
 		[
 			[
+				"hell",
+				"app\\views\\hello.blade.php"
+			],
+			[
+				"user",
+				"app\\models\\User.php"
+			],
+			[
+				"servid",
+				"app\\models\\Servidor.php"
+			],
+			[
+				"deplo",
+				"app\\models\\Deploy.php"
+			],
+			[
+				"auth",
+				"vendor\\laravel\\framework\\src\\Illuminate\\Auth\\AuthManager.php"
+			],
+			[
+				"git.php",
+				"vendor\\kbjr\\Git.php\\Git.php"
+			],
+			[
+				"histop",
+				"app\\models\\Historico.php"
+			],
+			[
+				"app.js",
+				"public\\js\\app.js"
+			],
+			[
+				"his",
+				"app\\models\\Historico.php"
+			],
+			[
 				"rou",
+				"app\\routes.php"
+			],
+			[
+				"proje",
+				"app\\models\\Projeto.php"
+			],
+			[
+				"projeto",
+				"app\\models\\Projeto.php"
+			],
+			[
+				"route",
 				"app\\routes.php"
 			],
 			[
