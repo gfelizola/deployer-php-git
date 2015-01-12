@@ -1,6 +1,15 @@
 <?php
 
+use MrRio\ShellWrap as sh;
+use MrRio\ShellWrapException;
+
 class DeployController extends \BaseController {
+
+	private $projeto;
+	private $servidor;
+
+	private $cmd_retorno;
+	private $cmd_saida;
 
 	/**
 	 * Display a listing of the resource.
@@ -18,11 +27,11 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create($projeto_id, $server_id)
+	public function create($projeto, $server_id)
 	{
-		$tags     = array();
-		$projeto  = Projeto::find($projeto_id);
-		$servidor = Servidor::find($server_id);
+		$tags           = array();
+		$this->projeto  = $projeto;
+		$this->servidor = $projeto->servidores->find($server_id);
 		// $repo    = $this->get_repo($projeto);
 
 		// $repo->fetch();
@@ -30,8 +39,8 @@ class DeployController extends \BaseController {
 		// $tags    = $repo->list_tags();
 
 		return View::make("deploy.create", array(
-			"projeto"  => $projeto, 
-			"servidor" => $servidor, 
+			"projeto"  => $this->projeto, 
+			"servidor" => $this->servidor, 
 			"tags"     => $tags
 		));
 	}
@@ -42,50 +51,93 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function fetch($projeto_id, $server_id)
+	public function fetch($projeto, $server_id)
 	{
 		set_time_limit(600);
 
-		$projeto  = Projeto::find($projeto_id);
-		$servidor = $projeto->servidores->find($server_id);
-		$ssh      = $this->get_ssh($servidor);
-		
+		$this->projeto  = $projeto;
+		$this->servidor = $projeto->servidores->find($server_id);
+
 		echo $this->console_header();
-		
-		$ssh->run( array(
-			"cd " . $servidor->pivot->root,
-			"pwd"
-		), function($line) use ($ssh, $projeto, $servidor, $projeto_id, $server_id)
+
+		$this->cmd_saida   = 0;
+		$this->cmd_retorno = NULL;
+
+		if( $this->is_local() )
 		{
-			echo $this->line2html($line);
-		});
+			try {
+				sh::$displayStdout = true;
+				sh::$displayStderr = true;
+				
+				sh::cd($this->servidor->pivot->root);
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh = $this->get_ssh();
+			$ssh->run( array(
+				"cd " . $servidor->pivot->root,
+				"pwd"
+			), function($line) {
+				echo $this->line2html($line);
+			});
+
+			$this->cmd_saida = $ssh->status();
+		}
 
 	    $remote = $this->get_repo_url($projeto);
 
-		if( $ssh->status() !== 0 )
+		if( $this->cmd_saida !== 0 )
 		{
-			echo "Pasta não encontrada<br>";
-			echo "Iniciar repositório from " . $this->trata_url($remote);
+			echo "<br>Pasta não encontrada<br>";
+			echo "Iniciar clone do repositório " . $this->trata_url($remote);
 			echo "<script>";
-			echo "window.top.mostrarCloneModal('" . $this->trata_url($remote) . "', '" . URL::to("deploy", array($projeto_id, $server_id, "clonar") ) . "');";
+			echo "window.top.mostrarCloneModal('" . $this->trata_url($remote) . "', '" . URL::to("deploy", array($projeto->id, $server_id, "clonar") ) . "');";
 			echo "</script>";
 		}
 		else
 		{
 			echo "Iniciar atualizações para Deploy<br>";
 
-			// dd("git fetch $remote -v");
-			$ssh->run( array(
-				"cd " . $servidor->pivot->root,
-				"git fetch $remote --tags --verbose"
-			), function($line)
+			if( $this->is_local() )
 			{
-			    echo $this->line2html($line);
-			});
+				try {
+					sh::$cwd = $this->servidor->pivot->root;
+					echo sh::pwd();
+					echo "<br>";
+					sh::git("fetch", $remote, "--tags", "--verbose");
+				} catch (ShellWrapException $e) {
+					$this->cmd_retorno = $e->getMessage();
+					$this->cmd_saida   = $e->getCode();
+				}
+			}
+			else
+			{
+				$ssh->run( array(
+					"cd " . $this->servidor->pivot->root,
+					"git fetch $remote --tags --verbose"
+				), function($line)
+				{
+				    echo $this->line2html($line);
+				});
+			}
 
-			echo "\n\n<script>\n";
-			echo "window.top.location = '" . URL::to("deploy", array($projeto_id, $server_id, "dados") ) . "';";
-			echo "\n</script>";
+			if( $this->cmd_saida === 0 )
+			{
+				echo "\n\n<script>\n";
+				echo "window.top.location = '" . URL::to("deploy", array($this->projeto->id, $server_id, "dados") ) . "';";
+				echo "\n</script>";
+			}
+			else
+			{
+				echo "ERRO";
+				echo "\n\n<script>\n";
+				echo "alert('Houveram erros ao atualizar, veja as informações no box.');";
+				echo "\n</script>";
+			}
 		}
 
 		echo $this->console_footer();
@@ -96,29 +148,61 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function clonar($projeto_id, $server_id)
+	public function clonar($projeto, $server_id)
 	{
 		set_time_limit(600);
-
-		$projeto  = Projeto::find($projeto_id);
-		$servidor = $projeto->servidores->find($server_id);
-
 		echo $this->console_header();
 
-		$remote  = $this->get_repo_url($projeto);
-		$comando = "git clone $remote " . $servidor->pivot->root;
+		$this->projeto     = $projeto;
+		$this->servidor    = $projeto->servidores->find($server_id);
 
-		$ssh = $this->get_ssh($servidor);
-		$ssh->run($comando, function($line)
+		$remote            = $this->get_repo_url();
+
+		echo "<b>Iniciando clonagem.</b><br>Por favor aguarde, o request pode levar algum tempo<br>";
+
+		$this->cmd_retorno = NULL;
+		$this->cmd_saida   = 0;
+
+		if( $this->is_local() )
 		{
-		    echo $this->line2html($line);
-		});
+			try {
+				sh::$displayStdout = true;
+				sh::$displayStderr = true;
 
-		echo "Verificação completa, iniciar Deploy<br>";
+				flush();
+				ob_flush();
+				
+				sh::git("clone", $remote, $this->servidor->pivot->root);
 
-		echo "<script>";
-		echo "window.top.location = '" . URL::to("deploy", array($projeto_id, $server_id, "dados") ) . "');";
-		echo "</script>";
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh = $this->get_ssh();
+			$ssh->run("git clone $remote " . $this->servidor->pivot->root, function($line)
+			{
+			    echo $this->line2html($line);
+			});
+
+			$this->cmd_saida = $ssh->status();
+		}
+
+		if( $this->cmd_saida === 0 ){
+			echo "Clonagem completa, iniciar Deploy<br>";
+
+			echo "<script>";
+			echo "window.top.location = '" . URL::to("deploy", array($projeto->id, $server_id, "dados") ) . "');";
+			echo "</script>";
+		}
+		else
+		{
+			echo "Erro ao clonar.<br>";
+		}
+
+		
 
 		echo $this->console_footer();
 	}
@@ -128,39 +212,68 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function dados($projeto_id, $server_id)
+	public function dados($projeto, $server_id)
 	{
-		$projeto  = Projeto::find($projeto_id);
-		$servidor = $projeto->servidores->find($server_id);
+		$this->projeto  = $projeto;
+		$this->servidor = $projeto->servidores->find($server_id);
 
-		$remote   = $this->get_repo_url($projeto);
-		$ssh      = $this->get_ssh($servidor);
-
+		$this->cmd_retorno = NULL;
+		$this->cmd_saida   = 0;
 		$retorno  = "";
-		$ssh->run( array(
-				"cd " . $servidor->pivot->root,
+
+		if( $this->is_local() )
+		{
+			try {
+				sh::$cwd = $this->servidor->pivot->root;
+				sh::git("tag", "-l", function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
+
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh = $this->get_ssh();
+			$ssh->run( array(
+				"cd " . $this->servidor->pivot->root,
 				"git tag -l"
 			), function($line) use(&$retorno)
 			{
 			    $retorno .= $line;
 			});
 
-		$tagArray = explode("\n", $retorno);
-		$tags = array();
-		foreach ($tagArray as $i => &$tag) {
-			$tag = trim($tag);
-			if ($tag != '') {
-				$tags[$tag] = $tag;
-			}
+			$this->cmd_saida = $ssh->status();
 		}
 
-		$tags[""] = "Selecione a tag";
-		arsort($tags);
+		$this->cmd_retorno = $retorno;
+
+		if( $this->cmd_saida === 0 )
+		{
+			$tagArray = explode("\n", $retorno);
+			$tags = array();
+			foreach ($tagArray as $i => &$tag) {
+				$tag = trim($tag);
+				if ($tag != '') {
+					$tags[$tag] = $tag;
+				}
+			}
+
+			$tags[""] = "Selecione a tag";
+			arsort($tags);
+		}
+		else
+		{
+			throw new Exception("Não foi possível carregar as tags. " . $this->cmd_retorno, 1);
+		}
 
 		return Response::view("deploy.dados", array(
 			"tags" => $tags,
-			"projeto" => $projeto,
-			"servidor" => $servidor,
+			"projeto" => $this->projeto,
+			"servidor" => $this->servidor,
 		));
 	}
 
@@ -170,13 +283,13 @@ class DeployController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function realizar($projeto_id, $server_id)
+	public function realizar($projeto, $server_id)
 	{
 		$validator = Validator::make(Input::all(), Deploy::$rules);
 
 		if ($validator->fails()) 
 		{
-			return Redirect::to("deploy/$projeto_id/$server_id/dados")->withErrors($validator)->withInput( Input::all() );
+			return Redirect::to("deploy/{$projeto->id}/$server_id/dados")->withErrors($validator)->withInput( Input::all() );
 		}
 		else
 		{
@@ -185,7 +298,7 @@ class DeployController extends \BaseController {
 
 			if( $tag_existe )
 			{
-				return Redirect::to("deploy/$projeto_id/$server_id/dados")
+				return Redirect::to("deploy/{$projeto->id}/$server_id/dados")
 					->withErrors( array("tag_existe" => "A tag <b>$tag</b> já foi carregada no servidor.<br>Escolha outra tag ou crie uma nova tag para realizar o deploy.") )
 					->withInput( Input::all() );
 			}
@@ -193,28 +306,60 @@ class DeployController extends \BaseController {
 			{
 				set_time_limit(600);
 
-				$retorno  = "";
-				$projeto  = Projeto::find($projeto_id);
-				$servidor = $projeto->servidores->find($server_id);
-				$remote   = $this->get_repo_url($projeto);
-				$ssh      = $this->get_ssh($servidor);
+				$retorno        = "";
+				$this->projeto  = $projeto;
+				$this->servidor = $projeto->servidores->find($server_id);
+				$remote         = $this->get_repo_url();
 
-				$this->verifica_status($projeto, $servidor);
+				$this->verifica_status();
 
-				$ssh->run( array(
-					"cd " . $servidor->pivot->root,
-					"git pull $remote {$projeto->repo_branch}",
-					"git checkout " . $tag,
-				), 
-				function($line) use(&$retorno)
+				$this->cmd_retorno = NULL;
+				$this->cmd_saida   = 0;
+
+				if( $this->is_local() )
 				{
-				    $retorno .= $line;
-				});
+					try {
+						sh::$displayStdout = false;
+						sh::$displayStderr = true;
+
+						flush();
+						ob_flush();
+						
+						sh::$cwd = $this->servidor->pivot->root;
+						sh::git("reset", "--hard", "origin/{$this->projeto->repo_branch}", function($line) use(&$retorno)
+						{
+						    $retorno .= $line;
+						});
+						sh::git("checkout", $tag, function($line) use(&$retorno)
+						{
+						    $retorno .= $line;
+						});
+
+					} catch (ShellWrapException $e) {
+						$this->cmd_retorno = $e->getMessage();
+						$this->cmd_saida   = $e->getCode();
+					}
+				}
+				else
+				{
+					$ssh = $this->get_ssh();
+					$ssh->run( array(
+						"cd " . $this->servidor->pivot->root,
+						"git reset --hard $remote {$this->projeto->repo_branch}",
+						"git checkout " . $tag,
+					), 
+					function($line) use(&$retorno)
+					{
+					    $retorno .= $line;
+					});
+
+					$this->cmd_saida = $ssh->status();
+				}
 
 				echo $this->line2html($retorno);
 				echo "<br><hr><br>";
 
-				if( $ssh->status() != 0 ){
+				if( $this->cmd_saida !== 0 ){
 					$mensagem = "Houveram erros durante o deploy, por favor valide a mensagem.";
 				} else {
 					$mensagem = "Deploy realizado com sucesso";
@@ -227,7 +372,7 @@ class DeployController extends \BaseController {
 						"descricao"   => Input::get("descricao"),
 						"status"      => Deploy::aprovado,
 						"user_id"     => Auth::user()->id,
-						"projeto_id"  => $projeto_id,
+						"projeto_id"  => $this->projeto->id,
 						"servidor_id" => $server_id,
 						"infos"       => json_encode($infos)
 					));
@@ -235,7 +380,7 @@ class DeployController extends \BaseController {
 					Historico::create( array(
 						"tipo"       => Historico::TipoDeploy,
 						"descricao"  => "Deploy realizado.",
-						"projeto_id" => $projeto_id,
+						"projeto_id" => $this->projeto->id,
 						"deploy_id"  => $deploy->id,
 						"user_id"    => Auth::user()->id
 					));
@@ -243,7 +388,8 @@ class DeployController extends \BaseController {
 					$projeto->servidores()->updateExistingPivot($server_id, array("tag_atual" => $tag));
 				}
 
-				return Redirect::to("projeto/$projeto_id/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
+				// die($mensagem);
+				return Redirect::to("projeto/{$projeto->id}/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
 			}
 		}
 	}
@@ -258,16 +404,16 @@ class DeployController extends \BaseController {
 	{
 		set_time_limit(600); //10 minutos
 
-		$deploy   = Deploy::find($deploy_id);
-		$projeto  = $deploy->projeto;
-		$servidor = $projeto->servidores->find($deploy->servidor->id);
-		$remote   = $this->get_repo_url($projeto);
-		$ssh      = $this->get_ssh($servidor);
-		$tag      = $deploy->tag;
+		$deploy         = Deploy::find($deploy_id);
+		$this->projeto  = $deploy->projeto;
+		$this->servidor = $this->projeto->servidores->find($deploy->servidor->id);
+		$remote         = $this->get_repo_url();
+		$ssh            = $this->get_ssh();
+		$tag            = $deploy->tag;
 
 		$retorno  = "";
 		$ssh->run( array(
-			"cd " . $servidor->pivot->root,
+			"cd " . $this->servidor->pivot->root,
 			"git checkout $tag",
 		), 
 		function($line) use(&$retorno)
@@ -290,79 +436,31 @@ class DeployController extends \BaseController {
 
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
-
-
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
-
-
-	/**
 	 * Busca o repositório e retorna o objeto tratado
 	 *
 	 * @param  Projeto  $p
 	 * @return GitRepo
 	 */
-	public function get_repo($projeto)
+	public function get_repo()
 	{
 		if( Config::get("app.WINDOWS") ) Git::windows_mode();
 
-		$repo = Git::open( $projeto->server_root );
+		$repo = Git::open( $this->projeto->server_root );
 
 		if( $repo->test_git() ){
 			
-			if( ! strstr("git@", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
-				$purl = parse_url($projeto->repo);
+			if( ! strstr("git@", $this->projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
+				$purl = parse_url($this->projeto->repo);
 
-				if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){
-					$purl["user"] = $projeto->repo_usuario;
-					$purl["pass"] = $projeto->repo_senha;
+				if( isset( $this->projeto->repo_usuario ) && ! empty( $this->projeto->repo_usuario ) ){
+					$purl["user"] = $this->projeto->repo_usuario;
+					$purl["pass"] = $this->projeto->repo_senha;
 				}
 
-				$remote = $this->get_repo_url($projeto);
+				$remote = $this->get_repo_url($this->projeto);
 
 				$repo->set_remote( $remote );
-				$repo->set_branch( $projeto->repo_branch );
+				$repo->set_branch( $this->projeto->repo_branch );
 			}
 		}
 
@@ -376,12 +474,12 @@ class DeployController extends \BaseController {
 	 * @param  Servidor $servidor
 	 * @return SSH
 	 */
-	public function get_ssh($servidor)
+	public function get_ssh()
 	{
-		Config::set("remote.connections.runtime.host", $servidor->endereco);
-		Config::set("remote.connections.runtime.username", $servidor->usuario);
-		Config::set("remote.connections.runtime.password", $servidor->senha);
-		Config::set("remote.connections.runtime.root", $servidor->pivot->root);
+		Config::set("remote.connections.runtime.host", $this->servidor->endereco);
+		Config::set("remote.connections.runtime.username", $this->servidor->usuario);
+		Config::set("remote.connections.runtime.password", $this->servidor->senha);
+		Config::set("remote.connections.runtime.root", $this->servidor->pivot->root);
 
 		return SSH::into("runtime");
 	}
@@ -394,20 +492,48 @@ class DeployController extends \BaseController {
 	 * @param  Servidor $servidor
 	 * @return Boolean
 	 */
-	public function verifica_status($projeto,$servidor)
+	public function verifica_status()
 	{
 		$retorno  = "";
-		$servidor = $projeto->servidores->find($servidor->id);
-		$ssh      = $this->get_ssh($servidor);
 
-		$ssh->run( array(
-			"cd " . $servidor->pivot->root,
-			"git status --porcelain --untracked-files=no",
-		), 
-		function($line) use(&$retorno)
+		$this->cmd_retorno = NULL;
+		$this->cmd_saida   = 0;
+		
+
+		if( $this->is_local() )
 		{
-		    $retorno .= $line;
-		});
+			try {
+				sh::$displayStdout = false;
+				sh::$displayStderr = true;
+
+				flush();
+				ob_flush();
+				
+				sh::$cwd = $this->servidor->pivot->root;
+				sh::git("status", "--porcelain", "--untracked-files=no", function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
+
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh = $this->get_ssh();
+			$ssh->run( array(
+				"cd " . $this->servidor->pivot->root,
+				"git status --porcelain --untracked-files=no",
+			), 
+			function($line) use(&$retorno)
+			{
+			    $retorno .= $line;
+			});
+
+			$this->cmd_saida = $ssh->status();
+		}
 
 		echo "<h3>Status</h3><br>";
 		echo $this->line2html($retorno);
@@ -420,8 +546,15 @@ class DeployController extends \BaseController {
 
 		if( count($linhas) > 0 )
 		{
-			$remote   = $this->get_repo_url($projeto);
-			$ignore = $ssh->getString($servidor->pivot->root . "/.gitignore");
+			$gitignore = $this->servidor->pivot->root . "/.gitignore";
+			$remote    = $this->get_repo_url();
+			$ignore    = "";
+
+			if( $this->is_local() ){
+				$ignore = file_get_contents($gitignore);
+			} else {
+				$ignore = $ssh->getString($gitignore);
+			}
 
 			$adicionados = array();
 
@@ -437,47 +570,57 @@ class DeployController extends \BaseController {
 				}
 			}
 
-			// echo "<h3>Arquivo .gitignore</h3><br>";
-			// echo $this->line2html($ignore);
-			// echo "<br><hr><br>";
-
 			if( count($adicionados) > 0 ){
 				$retorno = "";
 
-				// $ssh->run( array(
-				// 	"cd " . $servidor->pivot->root,
-				// 	"git pull $remote " . $projeto->repo_branch, 
-				// ), function($line) use(&$retorno)
-				// {
-				//     $retorno .= $line;
-				// });
+				$this->cmd_retorno = NULL;
+				$this->cmd_saida   = 0;
 
-				$ssh->putString($servidor->pivot->root . "/.gitignore", $ignore);
-
-				$comandos = array( "cd " . $servidor->pivot->root );
-
-				foreach ($adicionados as $novo) {
-					$comandos[] = "git rm --cached $novo";
-				}
-
-				$comandos[] = "git add " . $servidor->pivot->root . "/.gitignore";
-				$comandos[] = "git commit -m 'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'";
-				$comandos[] = "git push $remote " . $projeto->repo_branch;
-
-				$ssh->run( $comandos, function($line) use(&$retorno)
+				if( $this->is_local() )
 				{
-				    $retorno .= $line;
-				});
+					file_put_contents($gitignore, $ignore);
 
-				// echo "<h3>Retorno da gravação do gitignore</h3><br>";
-				// echo $this->line2html($retorno);
-				// echo "<br><hr><br>";
+					try {
+						sh::$cwd = $this->servidor->pivot->root;
+
+						foreach ($adicionados as $novo) {
+							sh::git("rm","--cached",$novo);
+						}
+
+						sh::git("add", $gitignore);
+						sh::git("commit", "-m", "'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'");
+						sh::git("push", $remote, $this->projeto->repo_branch);
+
+					} catch (ShellWrapException $e) {
+						$this->cmd_retorno = $e->getMessage();
+						$this->cmd_saida   = $e->getCode();
+					}
+				}
+				else
+				{
+					$ssh->putString($gitignore, $ignore);
+
+					$comandos = array( "cd " . $this->servidor->pivot->root );
+
+					foreach ($adicionados as $novo) {
+						$comandos[] = "git rm --cached $novo";
+					}
+
+					$comandos[] = "git add " . $this->servidor->pivot->root . "/.gitignore";
+					$comandos[] = "git commit -m 'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'";
+					$comandos[] = "git push $remote " . $this->projeto->repo_branch;
+
+					$ssh->run( $comandos, function($line) use(&$retorno)
+					{
+					    $retorno .= $line;
+					});
+
+					$this->cmd_saida = $ssh->status();
+				}
 			}
 		}
 
 		// die();
-
-		return true;
 	}
 
 
@@ -487,20 +630,20 @@ class DeployController extends \BaseController {
 	 * @param  Projeto $p
 	 * @return String
 	 */
-	public function get_repo_url($projeto)
+	public function get_repo_url()
 	{
-		if( ! strstr("git@", $projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
-			$purl = parse_url($projeto->repo);
+		if( ! strstr("git@", $this->projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
+			$purl = parse_url($this->projeto->repo);
 
-			if( isset( $projeto->repo_usuario ) && ! empty( $projeto->repo_usuario ) ){
-				$purl["user"] = $projeto->repo_usuario;
-				$purl["pass"] = $projeto->repo_senha;
+			if( isset( $this->projeto->repo_usuario ) && ! empty( $this->projeto->repo_usuario ) ){
+				$purl["user"] = $this->projeto->repo_usuario;
+				$purl["pass"] = $this->projeto->repo_senha;
 			}
 
 			return $purl["scheme"] . "://" . $purl["user"] . ":" . $purl["pass"] . "@" . $purl["host"] . $purl["path"];
 		}
 
-		return $projeto->repo;
+		return $this->projeto->repo;
 	}
 
 
@@ -560,4 +703,16 @@ class DeployController extends \BaseController {
 
 		return $saida;
 	}
+
+	/**
+	 * Função helper para validar se estamos rodando em servidor local
+	 *
+	 * @return Boolean
+	 */
+	private function is_local()
+	{
+		return $this->servidor->tipo_acesso == Servidor::TIPO_LOCAL;
+	}
+
+	
 }
