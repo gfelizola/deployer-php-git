@@ -69,10 +69,11 @@ class ServidorController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($servidor)
 	{
+		// dd($id);
 		return View::make("servidor.edit", array(
-			"servidor" => Servidor::find($id)
+			"servidor" => $servidor
 		));
 	}
 
@@ -83,18 +84,18 @@ class ServidorController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($servidor)
 	{
 		$rules = Servidor::$rules;
 
-		$rules["repo_senha"] = "";
+		$rules["senha"] = "";
 
-		$validator = Validator::make(Input::all(), Servidor::$rules);
+		$validator = Validator::make(Input::all(), $rules);
 
 		if ($validator->fails()) {
-			return Redirect::to("servidor/$id/edit")->withErrors($validator)->withInput( Input::all() );
+			return Redirect::to("servidor/{$servidor->id}/edit")->withErrors($validator)->withInput( Input::all() );
 		} else {
-			$servidor             = Servidor::find( $id );
+			// $servidor             = Servidor::find( $id );
 			$servidor->nome        = Input::get("nome");
 			$servidor->endereco    = Input::get("endereco");
 			$servidor->usuario     = Input::get("usuario");
@@ -120,9 +121,9 @@ class ServidorController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($servidor)
 	{
-		Servidor::destroy($id);
+		Servidor::destroy($servidor->id);
 		return Response::json( array('sucesso' => true ) );
 	}
 }

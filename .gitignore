@@ -7,3 +7,4 @@ composer.lock
 .DS_Store
 Thumbs.db
 /dev-deploy-be/sftp-config.json
+/dev-deploy/sftp-config.json

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content-header')
-    <h1>servidor</h1>
+    <h1>Servidor</h1>
 @stop
 
 @section('content')

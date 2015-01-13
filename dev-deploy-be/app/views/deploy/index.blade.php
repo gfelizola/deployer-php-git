@@ -24,7 +24,7 @@
                     <h3 class="box-title">Lista de deploys</h3>
                     <div class="box-tools pull-right">
                         @foreach($projeto->servidores as $server)
-                            <a href="{{{ URL::to('deploy', array($projeto->id, $server->id, 'create')) }}}" class="btn bg-navy">Deploy em {{{ $server->nome }}}</a>
+                            <a href="{{{ URL::to('deploy', array($projeto->id, $server->id, 'create')) }}}" class="btn btn-success text-white">Novo deploy em {{{ $server->nome }}}</a>
                         @endforeach
                     </div>
                 </div><!-- /.box-header -->
@@ -38,7 +38,7 @@
                             <th>Efetuado em</th>
                         </tr>
 
-                        <?php $pos_atual = false; ?>
+                        <?php $pos_atual = true; ?>
 
                         @foreach ($deploys as $d)
                             @if( $d->projeto->servidores->find($d->servidor->id)->pivot->tag_atual == $d->tag )

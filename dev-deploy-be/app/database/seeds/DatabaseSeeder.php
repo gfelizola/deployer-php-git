@@ -108,38 +108,7 @@ class HistoricoTableSeeder extends Seeder {
     	$usuario = User::all()->first();
     	$projeto = Projeto::all()->first();
 
-		DB::table('historicos')->delete();    	
-
-        for ($i=0; $i < 5; $i++) { 
-        	Historico::create( array(
-        		"tipo"       => Historico::TipoUsuario, 
-        		"descricao"  => "Usuário novo $i",
-        		"user_id"    => $usuario->id
-        	));
-
-        	Historico::create( array(
-        		"tipo"       => Historico::TipoProjeto, 
-        		"descricao"  => "Novo projeto $i",
-        		"user_id"    => $usuario->id,
-        		"projeto_id" => $projeto->id
-        	));
-
-        	Historico::create( array(
-        		"tipo"       => Historico::TipoDeploy, 
-        		"descricao"  => "Deploy novo $i",
-        		"user_id"    => $usuario->id,
-        		"projeto_id" => $projeto->id
-        	));
-
-        	if ( $i < 20 ) {
-        		Historico::create( array(
-	        		"tipo"       => Historico::TipoRollBack, 
-	        		"descricao"  => "Rollback novo $i",
-	        		"user_id"    => $usuario->id,
-	        		"projeto_id" => $projeto->id
-	        	));
-        	}
-        }
+		DB::table('historicos')->delete(); 
 
         $this->command->info('Tabela de historicos preenchida');
         

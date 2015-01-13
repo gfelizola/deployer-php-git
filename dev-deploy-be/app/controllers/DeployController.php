@@ -106,8 +106,6 @@ class DeployController extends \BaseController {
 			{
 				try {
 					sh::$cwd = $this->servidor->pivot->root;
-					echo sh::pwd();
-					echo "<br>";
 					sh::git("fetch", $remote, "--tags", "--verbose");
 				} catch (ShellWrapException $e) {
 					$this->cmd_retorno = $e->getMessage();
@@ -294,7 +292,7 @@ class DeployController extends \BaseController {
 		else
 		{
 			$tag        = Input::get("tag");
-			$tag_existe = Deploy::where("servidor_id","=",$server_id)->where("tag","=",$tag)->first();
+			$tag_existe = false;//Deploy::where("servidor_id","=",$server_id)->where("tag","=",$tag)->first();
 
 			if( $tag_existe )
 			{
@@ -330,7 +328,7 @@ class DeployController extends \BaseController {
 						{
 						    $retorno .= $line;
 						});
-						sh::git("checkout", $tag, function($line) use(&$retorno)
+						sh::git("checkout", "tags/$tag", function($line) use(&$retorno)
 						{
 						    $retorno .= $line;
 						});
@@ -361,6 +359,7 @@ class DeployController extends \BaseController {
 
 				if( $this->cmd_saida !== 0 ){
 					$mensagem = "Houveram erros durante o deploy, por favor valide a mensagem.";
+					die($mensagem);
 				} else {
 					$mensagem = "Deploy realizado com sucesso";
 					$infos    = array(
@@ -386,10 +385,9 @@ class DeployController extends \BaseController {
 					));
 
 					$projeto->servidores()->updateExistingPivot($server_id, array("tag_atual" => $tag));
-				}
 
-				// die($mensagem);
-				return Redirect::to("projeto/{$projeto->id}/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
+					return Redirect::to("projeto/{$projeto->id}/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
+				}
 			}
 		}
 	}
@@ -408,30 +406,68 @@ class DeployController extends \BaseController {
 		$this->projeto  = $deploy->projeto;
 		$this->servidor = $this->projeto->servidores->find($deploy->servidor->id);
 		$remote         = $this->get_repo_url();
-		$ssh            = $this->get_ssh();
 		$tag            = $deploy->tag;
+		$retorno        = "";
 
-		$retorno  = "";
-		$ssh->run( array(
-			"cd " . $this->servidor->pivot->root,
-			"git checkout $tag",
-		), 
-		function($line) use(&$retorno)
+		if( $this->is_local() )
 		{
-		    $retorno .= $line;
-		});
+			try {
+				sh::$displayStdout = false;
+				sh::$displayStderr = false;
 
-		Historico::create( array(
-			"tipo"       => Historico::TipoRollBack,
-			"descricao"  => "Rollback realizado.",
-			"projeto_id" => $projeto->id,
-			"deploy_id"  => $deploy->id,
-			"user_id"    => Auth::user()->id
-		));
+				flush();
+				ob_flush();
+				
+				sh::$cwd = $this->servidor->pivot->root;
+				sh::git("checkout", "tags/$tag", function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
 
-		$projeto->servidores()->updateExistingPivot($servidor->id, array("tag_atual" => $tag));
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh->run( array(
+				"cd " . $this->servidor->pivot->root,
+				"git checkout $tag",
+			), 
+			function($line) use(&$retorno)
+			{
+			    $retorno .= $line;
+			});
 
-		return Redirect::to("projeto/{$projeto->id}/deploys")->with("message","Rollback realizado com sucesso<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
+			$this->cmd_saida = $ssh->status();
+		}
+
+		if( $this->cmd_saida !== 0 && ! is_null( $this->cmd_saida ) ){
+			$mensagem = "Houveram erros durante o rollback, por favor valide o retorno.";
+			echo "$mensagem<br>";
+			echo "<br>";
+			echo htmlentities($retorno);
+			echo "<br>";
+			echo "<br>";
+
+			dd($this->cmd_saida);
+		} else {
+			$mensagem = "Rollback realizado com sucesso";
+
+			Historico::create( array(
+				"tipo"       => Historico::TipoRollBack,
+				"descricao"  => "Rollback realizado.",
+				"projeto_id" => $this->projeto->id,
+				"deploy_id"  => $deploy->id,
+				"user_id"    => Auth::user()->id
+			));
+
+			$this->projeto->servidores()->updateExistingPivot($this->projeto->id, array("tag_atual" => $tag));
+
+		}
+
+		return Redirect::to("projeto/{$this->projeto->id}/deploys")->with("message","$mensagem<br><br>Retorno: <bloquote><pre>$retorno</pre></bloquote>");
 	}
 
 
@@ -632,7 +668,7 @@ class DeployController extends \BaseController {
 	 */
 	public function get_repo_url()
 	{
-		if( ! strstr("git@", $this->projeto->repo) ){ //usando usuario/senha (não usa chave SSH)
+		if( strpos( $this->projeto->repo, "git@" ) === FALSE ){ //usando usuario/senha (não usa chave SSH)
 			$purl = parse_url($this->projeto->repo);
 
 			if( isset( $this->projeto->repo_usuario ) && ! empty( $this->projeto->repo_usuario ) ){
