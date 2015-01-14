@@ -25,7 +25,7 @@
             </aside><!-- /.right-side -->
         </div><!-- ./wrapper -->
 
-    @include('layouts.footer')        
+    @include('layouts.footer')
 
     </body>
 </html>

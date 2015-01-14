@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('head-extra')
+    <link href="/css/select2/select2.min.css" rel="stylesheet" type="text/css" />
+@stop
+
 @section('content-header')
     <h1>Deploy<br>
         <small>{{{ $projeto->nome }}} em {{{ $servidor->nome }}}</small>
@@ -28,7 +32,6 @@
                             {{ Form::label("tag", "Escolha o rótulo de versão (tag)") }}
 
                             <div class="input-group">
-                                <span class="input-group-addon bg-olive"><i class="fa fa-tags"></i></span>
                                 {{ Form::select("tag", $tags, Input::old("tag"), array( "class" => "form-control input-lg" )) }}
                             </div>
                         </div>
@@ -50,4 +53,13 @@
             {{ Form::close() }}
         </div>
     </div>
+@stop
+
+@section('footer-extra')
+    <script src="/js/plugins/select2/select2.min.js" type="text/javascript"></script>
+    <script>
+        $(function() {
+            $("select").select2();
+        });
+    </script>
 @stop

@@ -294,6 +294,8 @@ class DeployController extends \BaseController {
 			$tag        = Input::get("tag");
 			$tag_existe = false;//Deploy::where("servidor_id","=",$server_id)->where("tag","=",$tag)->first();
 
+			dd($tag);
+
 			if( $tag_existe )
 			{
 				return Redirect::to("deploy/{$projeto->id}/$server_id/dados")

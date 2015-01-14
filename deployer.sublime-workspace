@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"is_n",
+				"is_null"
+			],
+			[
 				"get",
 				"getcwd"
 			],
@@ -199,60 +203,11 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "dev-deploy-be/app/controllers/DeployController.php",
-			"settings":
-			{
-				"buffer_size": 17165,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAstQP0awT48+stowh8uSDpFxWfhciDOydoF4KAa7JptqtFRmgIiI5AfLfTj6hn0GlUlMe1MiK5WFrpSN427QMLjAVME92Z40HyFmLt1LKdKzSvdhcP4FIFDH8v0KcGwJjL8PTEdVzDqsge/1WZCxrB+Oapc9xy6AWUePzf5DhiS4NaFXEKVnuRNO3daEWuxagMCf7HTkUZTOvOh4i1tafiH84JAjUDu4qEqsUyuV8P9AZ60MuzPRvwrXjbMSkmArov4giwLRjzgPlZFxz/U56NBf3dHNFsP2I5KhhfU3nZ6/K14OjYsfMpz1m5EKMGKK/ehScs8Ld4Jes76kQF0pORw== diego.camargo@oesp0930.estadao.com.br",
-			"settings":
-			{
-				"buffer_size": 418,
-				"line_ending": "Windows",
-				"name": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAstQP0awT48+sto"
-			}
-		},
-		{
-			"file": "dev-deploy-be/app/controllers/HelperController.php",
-			"settings":
-			{
-				"buffer_size": 4364,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "dev-deploy-be/app/routes.php",
-			"settings":
-			{
-				"buffer_size": 2763,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "dev-deploy-be/app/commands/MrRio/ShellWrap.php",
-			"settings":
-			{
-				"buffer_size": 6178,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "dev-deploy-be/app/models/Servidor.php",
-			"settings":
-			{
-				"buffer_size": 688,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 235.0,
+		"height": 160.0,
 		"selected_items":
 		[
 			[
@@ -333,44 +288,57 @@
 	"expanded_folders":
 	[
 		"/D/localhost/deployer",
+		"/D/localhost/deployer/dev-deploy",
 		"/D/localhost/deployer/dev-deploy-be",
 		"/D/localhost/deployer/dev-deploy-be/app",
-		"/D/localhost/deployer/dev-deploy-be/app/commands",
-		"/D/localhost/deployer/dev-deploy-be/app/config",
 		"/D/localhost/deployer/dev-deploy-be/app/config/local",
-		"/D/localhost/deployer/dev-deploy-be/app/models",
-		"/D/localhost/deployer/dev-deploy-be/app/views",
-		"/D/localhost/deployer/dev-deploy-be/vendor",
-		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr",
+		"/D/localhost/deployer/dev-deploy-be/app/database/seeds",
+		"/D/localhost/deployer/dev-deploy-be/app/views/deploy",
+		"/D/localhost/deployer/dev-deploy-be/app/views/projeto",
 		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr/Git.php"
 	],
 	"file_history":
 	[
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/DeployController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/UsuarioController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/User.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/index.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/ServidorController.php",
+		"/C/Users/tgf112836/Desktop/crossdomain.xml",
+		"/D/localhost/deployer/dev-deploy-be/app/routes.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/HelperController.php",
+		"/D/localhost/deployer/dev-deploy/css/AdminLTE.css",
+		"/D/localhost/deployer/dev-deploy/sftp-config.json",
+		"/D/localhost/estadao-2014/shared/estadao/css/base.css",
+		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio/ShellWrap.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Servidor.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/servidor/edit.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/database/seeds/DatabaseSeeder.php",
+		"/D/localhost/deployer/dev-deploy-be/sftp-config.json",
+		"/D/localhost/deployer/.gitignore",
+		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr/Git.php/Git.php",
+		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
+		"/D/localhost/deployer/dev-deploy-be/app/start/global.php",
 		"/D/localhost/deployer/dev-deploy-be/app/config/app.php",
 		"/D/localhost/deployer/dev-deploy-be/app/config/local/app.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp07265/var/www/vol1/dev-deploy-be/app/config/app.php",
 		"/D/wamp/logs/apache_error.log",
 		"/D/wamp/logs/php_error.log",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp27551/var/www/vol1/dev-deploy-be/app/config/app.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/servidor/edit.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/routes.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/lib/Predis/ResponseObjectInterface.php",
 		"/D/localhost/deployer/readme.md",
 		"/D/localhost/deployer/dev-deploy-be/phpunit.xml",
 		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/nikic/php-parser/lib/PHPParser/PrettyPrinterAbstract.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/examples/KeyPrefixes.php",
-		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr/Git.php/Git.php",
 		"/D/localhost/deployer/dev-deploy-be/composer.json",
 		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/edit.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/sftp-config.json",
 		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/sidebar.blade.php",
 		"/D/wamp/vhosts/deployer.conf",
 		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/create.blade.php",
 		"/D/localhost/deployer/ftpsync.settings",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp13574/var/www/vol1/dev-deploy-be/composer.json",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp22630/var/www/vol1/dev-deploy/index.php",
-		"/D/localhost/deployer/.gitignore",
 		"/D/localhost/deployer/app/controllers/DeployController.php",
 		"/D/localhost/deployer/public/index.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp45746/var/www/vol1/estadao-2014-tmp2/.gitignore",
@@ -458,22 +426,7 @@
 		"/D/localhost/deployer/app/config/remote.php",
 		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/ResponseObjectInterface.php",
 		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/Connection.php",
-		"/D/localhost/deployer/public/js/AdminLTE/AdminLTE.js",
-		"/D/localhost/deployer/app/views/layouts/footer.blade.php",
-		"/D/localhost/deployer/app/views/servidor/edit.blade.php",
-		"/D/localhost/deployer/public/less/sidebar.less",
-		"/D/localhost/deployer/vendor/symfony/process/Symfony/Component/Process/Tests/SigchildDisabledProcessTest.php",
-		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/swift_init.php",
-		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Events/SimpleEventDispatcher.php",
-		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Iterator/SizeRangeFilterIterator.php",
-		"/D/localhost/deployer/app/lang/pt/validation.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Hashing/HasherInterface.php",
-		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/D/localhost/deployer/app/views/layouts/master.blade.php",
-		"/D/_Arquivos/_Dev/portugues.html",
-		"/D/localhost/deployer/public/css/AdminLTE.css",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp03478/var/www/vol1/estadao-2014/m.estadao/include/noticias.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp03303/var/www/vol1/estadao-2014/m.estadao/include/ultimas.php"
+		"/D/localhost/deployer/public/js/AdminLTE/AdminLTE.js"
 	],
 	"find":
 	{
@@ -677,198 +630,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "dev-deploy-be/app/controllers/DeployController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 17165,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								8817,
-								8817
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2459.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 418,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								418,
-								0
-							]
-						],
-						"settings":
-						{
-							"auto_name": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAstQP0awT48+sto",
-							"incomplete_sync": null,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "dev-deploy-be/app/controllers/HelperController.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4364,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1099,
-								1099
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 140.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "dev-deploy-be/app/routes.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2763,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1799,
-								1799
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 98.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "dev-deploy-be/app/commands/MrRio/ShellWrap.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6178,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4639,
-								4653
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1609.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "dev-deploy-be/app/models/Servidor.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 688,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								199,
-								210
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				}
 			]
 		}
 	],
