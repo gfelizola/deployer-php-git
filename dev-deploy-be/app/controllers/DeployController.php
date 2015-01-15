@@ -294,8 +294,6 @@ class DeployController extends \BaseController {
 			$tag        = Input::get("tag");
 			$tag_existe = false;//Deploy::where("servidor_id","=",$server_id)->where("tag","=",$tag)->first();
 
-			dd($tag);
-
 			if( $tag_existe )
 			{
 				return Redirect::to("deploy/{$projeto->id}/$server_id/dados")
@@ -326,6 +324,7 @@ class DeployController extends \BaseController {
 						ob_flush();
 						
 						sh::$cwd = $this->servidor->pivot->root;
+						echo sh::pwd();
 						sh::git("reset", "--hard", "origin/{$this->projeto->repo_branch}", function($line) use(&$retorno)
 						{
 						    $retorno .= $line;
