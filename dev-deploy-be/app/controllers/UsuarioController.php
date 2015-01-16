@@ -2,6 +2,7 @@
 use OAuth\OAuth1\Service\BitBucket;
 use OAuth\Common\Storage\Session as OauthSession;
 use OAuth\Common\Consumer\Credentials;
+use Carbon\Carbon;
 
 class UsuarioController extends \BaseController {
 
@@ -181,8 +182,6 @@ class UsuarioController extends \BaseController {
 		    $avatar = $result->user->avatar;
 		    $avatar = preg_replace("/s=(\d+)/i", "s=120", $avatar);
 
-		    // dd($avatar);
-
 			$usuario = User::where('username', '=', $result->user->username)->first();
 
 		    if( $usuario ){
@@ -190,6 +189,9 @@ class UsuarioController extends \BaseController {
 		    	$usuario->avatar = $avatar;
 
 		    	$usuario->save();
+
+		    	//verifica e realiza bkp do banco de dados
+		    	$this->db_backup();
 
 		    	Auth::login($usuario);
 		    	return Redirect::to("/");
@@ -217,5 +219,26 @@ class UsuarioController extends \BaseController {
 	{
 		Auth::logout();
 		return Redirect::to("login")->with('mensagem', 'Você foi desconectado do sistema com sucesso.');
+	}
+
+
+
+	
+
+	/**
+	 * Realiza backup do banco de dados
+	 */
+	public function db_backup()
+	{
+		$hoje   = Carbon::now()->format("Ymd");
+		$path   = app_path() . "/database";
+		$dbfile = "production.sqlite";
+		$bkfile = "production_$hoje.sqlite";
+		$bkdir  = "bkp_db";
+
+
+		if( ! file_exists("$path/$bkdir") ) mkdir("$path/$bkdir");
+		if( ! file_exists("$path/$bkdir/$bkfile") ) @copy("$path/$dbfile", "$path/$bkdir/$bkfile");
+
 	}
 }

@@ -1,5 +1,10 @@
 @extends('layouts.master')
 
+@section('head-extra')
+    <!-- Morris charts -->
+    <link href="/css/morris/morris.css" rel="stylesheet" type="text/css" />
+@stop
+
 @section('content-header')
     <h1>Painel</h1>
 @stop
@@ -17,32 +22,19 @@
 
     <!-- Small boxes (Dados/Reports) -->
     <div class="row">
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-                <div class="inner">
-                    <h3>{{{ $deploys }}}</h3>
-                    <p>Deploys realizados</p>
+        <div class="col-md-9 col-xs-12">
+            <!-- AREA CHART -->
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">Gráfico de Deploys / Rollbacks</h3>
                 </div>
-                <div class="icon">
-                    <i class="fa fa-cloud-upload"></i>
-                </div>
-            </div>
-        </div><!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-                <div class="inner">
-                    <h3>{{{ $rollbacks }}}</h3>
-                    <p>Rollbacks realizados</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-level-down"></i>
-                </div>
-            </div>
-        </div><!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
+                <div class="box-body chart-responsive">
+                    <div class="chart" id="deploys-chart" style="height: 160px;"></div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+
+        </div><!-- /.col (LEFT) -->
+        <div class="col-lg-3 col-xs-12">
             <div class="small-box bg-green">
                 <div class="inner">
                     <h3>{{{ $media }}}<sup style="font-size: 20px">%</sup></h3>
@@ -52,9 +44,7 @@
                     <i class="ion ion-stats-bars"></i>
                 </div>
             </div>
-        </div><!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
+             <!-- small box -->
             <div class="small-box bg-aqua">
                 <div class="inner">
                     <h3>{{{ $usuarios }}}</h3>
@@ -94,29 +84,35 @@
                         <i class="fa fa-desktop bg-orange"></i>
                     @endif
 
-                    <div class="timeline-item">
-                        <span class="time"><i class="fa fa-clock-o"></i> {{ $historico->created_at->format('H:i') }}</span>
-                        <h3 class="timeline-header">
+                    <div class="timeline-item row">
+                        <h3 class="timeline-header col-md-3">
+                            
                             @if( $historico->user )
-                            <a href="usuario/{{ $historico->user->id }}">
-                                <img src="{{ $historico->user->avatar }}" width="25" height="25" class="img-circle" alt="{{{ $historico->user->nome }}}">
+                            <a href="usuario/{{ $historico->user->id }}" class="">
+                                <img src="{{ $historico->user->avatar }}" width="30" height="30" class="img-circle" alt="{{{ $historico->user->nome }}}">
                                     {{{ $historico->user->nome }}}
                             </a>
                             @endif
                         </h3>
-                        <div class="timeline-body">
+
+                        <div class="col-md-3">
                             <p>{{{ $historico->descricao }}}</p>
+                        </div>
+                        <div class="col-md-5">
                             <p>
                                 @if( $historico->projeto )
-                                    <b>Projeto:</b> {{ $historico->projeto->nome }}<br>
+                                    <i class="fa fa-code"></i> {{ $historico->projeto->nome }}<br>
                                 @endif
 
                                 @if( $historico->deploy )
-                                    <b>Servidor:</b> {{ $historico->deploy->servidor->nome }} <i>({{ preg_replace( '/\:.+\/?/', '', $historico->deploy->servidor->endereco )  }})</i><br>
-                                    <b>Tag:</b> {{ $historico->deploy->tag }}<br>
+                                    <i class="fa fa-desktop"></i> {{ $historico->deploy->servidor->nome }}<br>
+                                    <i class="fa fa-tags"></i> {{ $historico->deploy->tag }}<br>
                                 @endif
                             </p>
                         </div>
+
+                        <span class="time col-md-1 pull-right"><i class="fa fa-clock-o"></i> {{ $historico->created_at->format('H:i') }}</span>
+
                     </div>
                 </li>
                 <!-- END timeline item -->
@@ -130,4 +126,12 @@
             </ul>
         </div><!-- /.col -->
     </div><!-- /.row -->
+@stop
+
+@section('footer-extra')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="/js/plugins/morris/morris.min.js"></script>
+    <script>
+        var dadosGrafico = {{ $dados }};
+    </script>
 @stop

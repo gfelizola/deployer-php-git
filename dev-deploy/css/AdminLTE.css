@@ -1811,7 +1811,6 @@ Component: timeline
   clear: both;
 }
 .timeline > li > .timeline-item {
-  margin-top: 10px;
   border: 0px solid #dfdfdf;
   background: #fff;
   color: #555;
@@ -1820,6 +1819,7 @@ Component: timeline
   padding: 5px;
   position: relative;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
 }
 .timeline > li > .timeline-item > .time {
   color: #999;
@@ -1829,17 +1829,22 @@ Component: timeline
 .timeline > li > .timeline-item > .timeline-header {
   margin: 0;
   color: #555;
-  border-bottom: 1px solid #f4f4f4;
-  padding: 5px;
   font-size: 16px;
   line-height: 1.1;
+  padding: 0 0 0 10px;
 }
 .timeline > li > .timeline-item > .timeline-header > a {
   font-weight: 600;
 }
+.timeline > li > .timeline-item > .timeline-header > a img {
+  margin-right:10px;
+}
 .timeline > li > .timeline-item > .timeline-body,
 .timeline > li > .timeline-item > .timeline-footer {
   padding: 10px;
+}
+.timeline > li > .timeline-item p {
+  margin-bottom:0;
 }
 .timeline > li.time-label > span {
   font-weight: 600;
@@ -1865,7 +1870,7 @@ Component: timeline
   border-radius: 50%;
   text-align: center;
   left: 18px;
-  top: 0;
+  top: 4px;
 }
 /*
     Component: Buttons

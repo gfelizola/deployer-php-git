@@ -12,7 +12,7 @@ return array(
 	*/	
 
 	'paginacao_itens' => 20,
-	'historico_itens' => 50,
+	'historico_itens' => 100,
 
 	// no arquivo app/local/app.php você pode setar como TRUE se estiver trabalhando em ambiente WINDOWS
 	"WINDOWS"         => FALSE, 

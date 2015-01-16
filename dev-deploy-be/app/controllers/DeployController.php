@@ -268,6 +268,8 @@ class DeployController extends \BaseController {
 			throw new Exception("Não foi possível carregar as tags. " . $this->cmd_retorno, 1);
 		}
 
+		$tags = array_slice($tags, 0, 21, true);
+
 		return Response::view("deploy.dados", array(
 			"tags" => $tags,
 			"projeto" => $this->projeto,

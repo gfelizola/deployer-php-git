@@ -60,4 +60,20 @@ $(function() {
 		var botao = $(e.relatedTarget);
 	    $(this).find("form").attr("action", botao.attr("href"));
 	});
+
+	/* Morris.js Charts */
+    if( window.Morris ){
+    	var area = new Morris.Line({
+	        element    : 'deploys-chart',
+	        resize     : true,
+	        data       : window.dadosGrafico,
+	        xkey       : 'y',
+	        ykeys      : ['deploys', 'rollbacks'],
+	        labels     : ['Deploys', 'Rollbacks'],
+	        lineColors : ['#00cc5a', '#ff0000'],
+	        hideHover  : 'auto',
+	        smooth     : false,
+	        parseTime  : false
+	    });
+    }
 });
