@@ -6,5 +6,6 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-/dev-deploy-be/sftp-config.json
-/dev-deploy/sftp-config.json
+sftp-config.json
+deployer.sublime-project
+deployer.sublime-workspace
