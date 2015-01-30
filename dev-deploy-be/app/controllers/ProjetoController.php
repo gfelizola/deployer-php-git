@@ -45,7 +45,9 @@ class ProjetoController extends \BaseController {
 		if($servidores){
 			foreach ($servidores as $s){
 			    $rules["servidor_".$s."_root"] = "required";
+			    $rules["servidor_".$s."_branch"] = "required";
 			    $messages["servidor_".$s."_root.required"] = "O campo 'raiz' dos servidores selecionados é obrigatório.";
+			    $messages["servidor_".$s."_branch.required"] = "O campo 'branch' dos servidores selecionados é obrigatório.";
 			}
 		}
 
@@ -58,7 +60,10 @@ class ProjetoController extends \BaseController {
 			$servidores_salva = array();
 
 			foreach ($servidores as $s) {
-				$servidores_salva[$s] = array( "root" => Input::get("servidor_" . $s . "_root") );
+				$servidores_salva[$s] = array( 
+					"root"   => Input::get("servidor_" . $s . "_root"),
+					"branch" => Input::get("servidor_" . $s . "_branch"),
+				);
 			}
 
 			$projeto->servidores()->sync( $servidores_salva );
@@ -118,8 +123,10 @@ class ProjetoController extends \BaseController {
 
 		if($servidores){
 			foreach ($servidores as $s){
-			    $rules["servidor_".$s."_root"] = "required";
+				$rules["servidor_".$s."_root"] = "required";
+			    $rules["servidor_".$s."_branch"] = "required";
 			    $messages["servidor_".$s."_root.required"] = "O campo 'raiz' dos servidores selecionados é obrigatório.";
+			    $messages["servidor_".$s."_branch.required"] = "O campo 'branch' dos servidores selecionados é obrigatório.";
 			}
 		}
 
@@ -144,7 +151,10 @@ class ProjetoController extends \BaseController {
 			$servidores_salva = array();
 
 			foreach ($servidores as $s) {
-				$servidores_salva[$s] = array( "root" => Input::get("servidor_" . $s . "_root") );
+				$servidores_salva[$s] = array( 
+					"root"   => Input::get("servidor_" . $s . "_root"),
+					"branch" => Input::get("servidor_" . $s . "_branch"),
+				);
 			}
 
 			$projeto->servidores()->sync( $servidores_salva );

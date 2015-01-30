@@ -12,7 +12,8 @@
 		"laravel/framework": "4.2.*",
 		"artdarek/oauth-4-laravel": "dev-master",
 		"lusitanian/oauth": "~0.3",
-		"kbjr/Git.php": "dev-master"
+		"kbjr/Git.php": "dev-master",
+		"way/generators": "~2.0"
 	},
 	"autoload": {
 		"classmap": [

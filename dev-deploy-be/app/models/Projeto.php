@@ -5,7 +5,7 @@ class Projeto extends Eloquent {
 		'nome'        => 'required', 
 		// 'server_root' => 'required', 
 		'repo'        => 'required', 
-		'repo_branch' => 'required', 
+		// 'repo_branch' => 'required', 
 		'repo_senha'  => 'required_with:repo_usuario', 
 		'servidor'    => 'required|min:1', 
 		// 'repo_key'    => 'required_without_all:repo_usuario,repo_senha', 
@@ -29,6 +29,6 @@ class Projeto extends Eloquent {
 
     public function servidores()
     {
-        return $this->belongsToMany('Servidor', "servidores_projetos")->withPivot("root","tag_atual");
+        return $this->belongsToMany('Servidor', "servidores_projetos")->withPivot("root","tag_atual","branch");
     }
 }

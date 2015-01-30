@@ -137,7 +137,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
-		'Artdarek\OAuth\OAuthServiceProvider'
+		'Artdarek\OAuth\OAuthServiceProvider',
+		'Way\Generators\GeneratorsServiceProvider',
 
 	),
 
