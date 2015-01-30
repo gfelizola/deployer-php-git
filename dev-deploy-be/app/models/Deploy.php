@@ -6,7 +6,7 @@ class Deploy extends Eloquent {
     const reprovado = 2;
 
 	public static $rules = array(
-		'tag' => 'required'
+		'tag' => 'required|not_in:0'
 	);
 
 	protected $fillable = array(

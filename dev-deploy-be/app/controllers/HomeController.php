@@ -25,7 +25,8 @@ class HomeController extends BaseController {
 		$historico = Historico::orderBy('created_at', 'DESC')->take(1000)->get();//paginate( Config::get("app.historico_itens", 100) );
 
 		$tratados  = array();
-		$dadosGraf = array();
+		$dadosGrafDR = array(); //grafico Deploys vs Rollbacks
+		$dadosGrafP = array(); //grafico por projeto
 
 		$qtde = 0;
 		$max = Config::get("app.historico_itens", 100);
@@ -37,19 +38,33 @@ class HomeController extends BaseController {
 			if( isset( $tratados[ $idx ] ) ){
 				if( $qtde < $max ) $tratados[ $idx ][] = $h;
 			} else {
-				$dadosGraf[$idx]["deploys"] = 0;
-				$dadosGraf[$idx]["rollbacks"] = 0;
+				$dadosGrafDR[$idx]["deploys"] = 0;
+				$dadosGrafDR[$idx]["rollbacks"] = 0;
 				if( $qtde < $max ) $tratados[ $idx ] = [$h];
 			}
 
-			if( $h->tipo == Historico::TipoDeploy ) $dadosGraf[$idx]["deploys"] += 1;
-			if( $h->tipo == Historico::TipoRollBack ) $dadosGraf[$idx]["rollbacks"] += 1;
+			if( $h->tipo == Historico::TipoDeploy )   $dadosGrafDR[$idx]["deploys"] += 1;
+			if( $h->tipo == Historico::TipoRollBack ) $dadosGrafDR[$idx]["rollbacks"] += 1;
+
+			if( ! is_null( $h->projeto ) ){
+				$idp = $h->projeto->id;
+				if( ! isset( $dadosGrafP[ $idp ] ) ){
+					$dadosGrafP[ $idp ] = [
+						"deploys"   => 0,
+						"rollbacks" => 0,
+						"nome"      => $h->projeto->nome,
+					];
+				}
+
+				if( $h->tipo == Historico::TipoDeploy )   $dadosGrafP[$idp]["deploys"] += 1;
+				if( $h->tipo == Historico::TipoRollBack ) $dadosGrafP[$idp]["rollbacks"] += 1;
+			}
 
 			$qtde += 1;
 		}
 
 		$dadosSaida = array();
-		foreach ($dadosGraf as $d => $deps) {
+		foreach ($dadosGrafDR as $d => $deps) {
 			$dadosSaida[] = array(
 				"y"         => $d,
 				"deploys"   => $deps["deploys"],
@@ -64,7 +79,8 @@ class HomeController extends BaseController {
 			"media"      => $media,
 			"historicos" => $tratados,
 			"mensagem"   => Session::pull("mensagem"),
-			"dados"      => json_encode( array_reverse( $dadosSaida ) )
+			"dadosDR"    => json_encode( array_reverse( $dadosSaida ) ),
+			"dadosP"     => json_encode( array_reverse( $dadosGrafP ) ),
 		);
 
 		return View::make("hello", $dados);

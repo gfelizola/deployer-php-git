@@ -35,6 +35,15 @@ App::after(function($request, $response)
 
 Route::filter('auth', function()
 {
+	if (App::environment('local'))
+	{
+	    if ( ! Auth::check())
+	    {
+	    	Auth::login(User::find(1));
+	    	return Redirect::to("/");
+	    }
+	}
+
 	if (Auth::guest())
 	{
 		if (Request::ajax())
@@ -96,4 +105,3 @@ Route::filter('admin', function()
     	return Redirect::to('/')->with('mensagem', 'Seu usuário não tem acesso a essa página.');	
     }
 });
-

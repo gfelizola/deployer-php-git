@@ -19,6 +19,8 @@ Route::model('deploy',      'Deploy');
 Route::get("login", "UsuarioController@loginForm");
 Route::get("login/bitbucket", "UsuarioController@loginWithBitBucket");
 
+Route::get("deploy/{projeto}/{sid}/tags", "DeployController@tags");
+
 
 Route::group(array("before" => "auth"), function()
 {

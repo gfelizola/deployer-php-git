@@ -101,12 +101,14 @@ class DeployController extends \BaseController {
 		else
 		{
 			echo "Iniciar atualizações para Deploy<br>";
+			echo "<pre>";
 
 			if( $this->is_local() )
 			{
 				try {
 					sh::$cwd = $this->servidor->pivot->root;
 					sh::git("fetch", $remote, "--tags", "--verbose");
+
 				} catch (ShellWrapException $e) {
 					$this->cmd_retorno = $e->getMessage();
 					$this->cmd_saida   = $e->getCode();
@@ -122,6 +124,8 @@ class DeployController extends \BaseController {
 				    echo $this->line2html($line);
 				});
 			}
+
+			echo "</pre>";
 
 			if( $this->cmd_saida === 0 )
 			{
@@ -223,11 +227,10 @@ class DeployController extends \BaseController {
 		{
 			try {
 				sh::$cwd = $this->servidor->pivot->root;
-				sh::git("tag", "-l", function($line) use(&$retorno)
+				sh::git('log --tags --simplify-by-decoration --pretty="format:%d"', function($line) use(&$retorno)
 				{
 				    $retorno .= $line;
 				});
-
 			} catch (ShellWrapException $e) {
 				$this->cmd_retorno = $e->getMessage();
 				$this->cmd_saida   = $e->getCode();
@@ -238,7 +241,7 @@ class DeployController extends \BaseController {
 			$ssh = $this->get_ssh();
 			$ssh->run( array(
 				"cd " . $this->servidor->pivot->root,
-				"git tag -l"
+				'git log --tags --simplify-by-decoration --pretty="format:%d"'
 			), function($line) use(&$retorno)
 			{
 			    $retorno .= $line;
@@ -252,16 +255,109 @@ class DeployController extends \BaseController {
 		if( $this->cmd_saida === 0 )
 		{
 			$tagArray = explode("\n", $retorno);
-			$tags = array();
+			$tags     = array();
+
 			foreach ($tagArray as $i => &$tag) {
-				$tag = trim($tag);
-				if ($tag != '') {
-					$tags[$tag] = $tag;
+				$matchs = array();
+				$tag    = trim($tag);
+
+				preg_match_all("#[tag:]?\s?([\w\d-]+),?\)?#i", $tag, $matchs);
+
+				if(count($matchs) > 0){
+					$ltag = end($matchs);
+					while( is_array( $ltag ) ){
+						$ltag = end($ltag);
+					}
+				}
+
+				if ($ltag !== false && $ltag != "master") {
+					$tags[$ltag] = $ltag;
 				}
 			}
+			array_unshift($tags, "Selecione a tag");
+		}
+		else
+		{
+			throw new Exception("Não foi possível carregar as tags. " . $this->cmd_retorno, 1);
+		}
 
-			$tags[""] = "Selecione a tag";
-			arsort($tags);
+		// $tags = array_slice($tags, 0, 21, true);
+
+		return Response::view("deploy.dados", array(
+			"tags" => $tags,
+			"projeto" => $this->projeto,
+			"servidor" => $this->servidor,
+		));
+	}
+
+
+
+	/**
+	 * Clona o repositório no diretório de destino do servidor
+	 *
+	 * @return Response
+	 */
+	public function tags($projeto, $server_id)
+	{
+		$this->projeto  = $projeto;
+		$this->servidor = $projeto->servidores->find($server_id);
+
+		$this->cmd_retorno = NULL;
+		$this->cmd_saida   = 0;
+		$retorno  = "";
+
+		if( $this->is_local() )
+		{
+			try {
+				sh::$cwd = $this->servidor->pivot->root;
+				sh::git('log --tags --simplify-by-decoration --pretty="format:%d"', function($line) use(&$retorno)
+				{
+				    $retorno .= $line;
+				});
+			} catch (ShellWrapException $e) {
+				$this->cmd_retorno = $e->getMessage();
+				$this->cmd_saida   = $e->getCode();
+			}
+		}
+		else
+		{
+			$ssh = $this->get_ssh();
+			$ssh->run( array(
+				"cd " . $this->servidor->pivot->root,
+				'git log --tags --simplify-by-decoration --pretty="format:%d"'
+			), function($line) use(&$retorno)
+			{
+			    $retorno .= $line;
+			});
+
+			$this->cmd_saida = $ssh->status();
+		}
+
+		$this->cmd_retorno = $retorno;
+
+		if( $this->cmd_saida === 0 )
+		{
+			$tagArray = explode("\n", $retorno);
+			$tags     = array();
+
+			foreach ($tagArray as $i => &$tag) {
+				$matchs = array();
+				$tag    = trim($tag);
+
+				preg_match_all("#[tag:]?\s?([\w\d-]+),?\)?#i", $tag, $matchs);
+
+				if(count($matchs) > 0){
+					$ltag = end($matchs);
+					while( is_array( $ltag ) ){
+						$ltag = end($ltag);
+					}
+				}
+
+				if ($ltag !== false && $ltag != "master") {
+					$tags[$ltag] = $ltag;
+				}
+			}
+			array_unshift($tags, "Selecione a tag");
 		}
 		else
 		{
@@ -269,6 +365,7 @@ class DeployController extends \BaseController {
 		}
 
 		$tags = array_slice($tags, 0, 21, true);
+		dd($tags);
 
 		return Response::view("deploy.dados", array(
 			"tags" => $tags,

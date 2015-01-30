@@ -3549,3 +3549,9 @@ fieldset[disabled] .btn-vk.active {
   color: #587ea3;
   background-color: #ffffff;
 }
+
+.console pre {
+  color:#f9f9f9;
+  background-color:#222222;
+  border:none;
+}

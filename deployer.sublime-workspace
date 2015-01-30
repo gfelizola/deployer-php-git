@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"have_",
+				"have_posts"
+			],
+			[
+				"dad",
+				"dadosGrafP"
+			],
+			[
+				"array_r",
+				"array_reverse"
+			],
+			[
 				"read",
 				"ready	document.ready - $(function(){})"
 			],
@@ -292,41 +304,76 @@
 	"expanded_folders":
 	[
 		"/D/localhost/deployer",
-		"/D/localhost/deployer/dev-deploy",
+		"/D/localhost/deployer/dev-deploy/css",
 		"/D/localhost/deployer/dev-deploy-be",
 		"/D/localhost/deployer/dev-deploy-be/app",
+		"/D/localhost/deployer/dev-deploy-be/app/commands",
+		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers",
+		"/D/localhost/deployer/dev-deploy-be/app/models",
 		"/D/localhost/deployer/dev-deploy-be/app/views",
-		"/D/localhost/deployer/dev-deploy-be/app/views/deploy",
 		"/D/localhost/deployer/dev-deploy-be/app/views/layouts"
 	],
 	"file_history":
 	[
+		"/D/localhost/pacaembu/archive-publicacoes.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp46064/www/wp-content/themes/pacaembu/stylesheets/app.css",
+		"/D/localhost/pacaembu/footer.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp46720/www/wp-content/themes/pacaembu/style.css",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/DeployController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio/ShellWrap.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/HomeController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Role.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/User.php",
+		"/D/localhost/deployer/dev-deploy/js/app.js",
+		"/D/localhost/deployer/dev-deploy-be/app/views/hello.blade.php",
+		"/D/wamp/www/AdminLTE/index.html",
+		"/D/localhost/deployer/dev-deploy-be/app/filters.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/sidebar.blade.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp44582/www/wp-config.php",
+		"/D/localhost/deployer/dev-deploy/css/AdminLTE.css",
+		"/D/wamp/www/AdminLTE/js/AdminLTE/dashboard.js",
+		"/D/wamp/www/AdminLTE/js/AdminLTE/app.js",
+		"/D/localhost/deployer/dev-deploy-be/vendor/composer/autoload_psr4.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Historico.php",
+		"/D/wamp/vhosts/ebase.conf",
+		"/D/CONTRIBUTING.md",
+		"/D/readme.md",
+		"/D/localhost/mongo/data/local.ns",
+		"/D/localhost/mongo/data/local.0",
+		"/C/Program Files/MongoDB 2.6 Standard/README",
+		"/D/wamp/www/echo_url.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp02808/var/www/html/testes/noticia.html",
+		"/D/localhost/deployer/noticia.html",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp04041/var/www/vol1-producao/estadao-2014/shared/noticias/templates/noticia/estadao.php",
+		"/D/localhost/deployer/noticia.txt",
+		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Console/Application.php",
+		"/C/Users/tgf112836/.bashrc",
+		"/D/localhost/deployer/.gitignore",
+		"/D/wamp/www/AdminLTE/pages/charts/morris.html",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/UsuarioController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/database/seeds/DatabaseSeeder.php",
+		"/D/localhost/deployer/dev-deploy-be/app/config/app.php",
+		"/D/localhost/deployer/public/css/AdminLTE.css",
+		"/D/localhost/deployer/dev-deploy-be/vendor/nikic/php-parser/test/code/parser/expr/arrayDef.test",
+		"/D/localhost/deployer/dev-deploy-be/artisan",
 		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/footer.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/head.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/master.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/dados.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/controllers/UsuarioController.php",
-		"/D/localhost/deployer/dev-deploy-be/app/models/User.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/index.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/ServidorController.php",
 		"/C/Users/tgf112836/Desktop/crossdomain.xml",
 		"/D/localhost/deployer/dev-deploy-be/app/routes.php",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/HelperController.php",
-		"/D/localhost/deployer/dev-deploy/css/AdminLTE.css",
 		"/D/localhost/deployer/dev-deploy/sftp-config.json",
 		"/D/localhost/estadao-2014/shared/estadao/css/base.css",
-		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio/ShellWrap.php",
 		"/D/localhost/deployer/dev-deploy-be/app/models/Servidor.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/servidor/edit.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/database/seeds/DatabaseSeeder.php",
 		"/D/localhost/deployer/dev-deploy-be/sftp-config.json",
-		"/D/localhost/deployer/.gitignore",
 		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr/Git.php/Git.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php",
 		"/D/localhost/deployer/dev-deploy-be/app/start/global.php",
-		"/D/localhost/deployer/dev-deploy-be/app/config/app.php",
 		"/D/localhost/deployer/dev-deploy-be/app/config/local/app.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp07265/var/www/vol1/dev-deploy-be/app/config/app.php",
 		"/D/wamp/logs/apache_error.log",
@@ -340,7 +387,6 @@
 		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/examples/KeyPrefixes.php",
 		"/D/localhost/deployer/dev-deploy-be/composer.json",
 		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/edit.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/sidebar.blade.php",
 		"/D/wamp/vhosts/deployer.conf",
 		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/create.blade.php",
 		"/D/localhost/deployer/ftpsync.settings",
@@ -397,39 +443,7 @@
 		"/D/localhost/deployer/vendor/phpseclib/phpseclib/AUTHORS",
 		"/D/localhost/deployer/app/config/auth.php",
 		"/D/localhost/deployer/bootstrap/autoload.php",
-		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/ApacheUrlMatcher.php",
-		"/C/Users/tgf112836/AppData/Local/Temp/scp53993/var/www/vol1/estadao-2014-tmp2/add_ignore",
-		"/D/localhost/estadao-2014/.gitignore",
-		"/D/localhost/deployer/vendor/kbjr/Git.php/Git.php",
-		"/D/localhost/deployer/app/storage/views/b70839780c4f99d00cedb3d8e6cf1ece",
-		"/D/localhost/deployer/app/controllers/ProjetoController.php",
-		"/D/localhost/deployer/app/config/app.php",
-		"/D/localhost/deployer/vendor/composer/autoload_psr4.php",
-		"/D/localhost/deployer/artisan",
-		"/D/localhost/deployer/app/controllers/ServidorController.php",
-		"/D/localhost/deploy/classes/git-estadao.php",
-		"/D/localhost/deployer/app/models/Projeto.php",
-		"/D/localhost/deployer/app/database/migrations/2014_12_10_143519_create_deploys_table.php",
-		"/D/localhost/deployer/app/views/deploy/create.blade.php",
-		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/RedirectableUrlMatcher.php",
-		"/D/localhost/deployer/public/empty.html",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/View/Engines/EngineResolver.php",
-		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/Command/ServerObject.php",
-		"/D/localhost/deployer/vendor/symfony/http-kernel/Symfony/Component/HttpKernel/EventListener/RouterListener.php",
-		"/D/localhost/deployer/app/database/production.sqlite",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php",
-		"/D/localhost/deployer/phpunit.xml",
-		"/C/Users/tgf112836/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
-		"/D/localhost/deployer/vendor/symfony/finder/Symfony/Component/Finder/Adapter/PhpAdapter.php",
-		"/D/localhost/deployer/composer.json",
-		"/D/localhost/deployer/vendor/composer/ClassLoader.php",
-		"/D/localhost/deployer/app/views/servidor/index.blade.php",
-		"/D/localhost/deployer/app/views/projeto/create.blade.php",
-		"/D/localhost/deployer/app/views/projeto/edit.blade.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/SecLibGateway.php",
-		"/D/localhost/deployer/vendor/phpseclib/phpseclib/phpseclib/Net/SFTP.php",
-		"/C/Users/tgf112836/.ssh/known_hosts",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Remote/GatewayInterface.php"
+		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/ApacheUrlMatcher.php"
 	],
 	"find":
 	{
@@ -452,6 +466,11 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"deploys-chart",
+			"chart",
+			"tab",
+			"\"",
+			"tag",
 			"putString",
 			"verifica_status",
 			"chdir($this->servidor->pivot->root);",
@@ -574,19 +593,15 @@
 			"$classe",
 			"sftp",
 			"URL_MIDLEWARE",
-			"urlSeoRoot",
-			"arte",
-			"nacional",
-			"dev.politica",
-			"DIR_",
-			"alias"
+			"urlSeoRoot"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"",
 			"sh::$cwd = $this->servidor->pivot->root;",
 			"\"",
 			"servidor",
@@ -688,6 +703,18 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"app.",
+				"dev-deploy\\js\\app.js"
+			],
+			[
+				"illuminate/console/application",
+				"dev-deploy-be\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php"
+			],
+			[
+				"admin",
+				"dev-deploy\\css\\AdminLTE.css"
+			],
 			[
 				"route",
 				"dev-deploy-be\\app\\routes.php"
