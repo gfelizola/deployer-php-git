@@ -7,6 +7,7 @@ class DeployController extends \BaseController {
 
 	private $projeto;
 	private $servidor;
+	// private $servidor;
 
 	private $cmd_retorno;
 	private $cmd_saida;
@@ -424,7 +425,7 @@ class DeployController extends \BaseController {
 						
 						sh::$cwd = $this->servidor->pivot->root;
 						echo sh::pwd();
-						sh::git("reset", "--hard", "origin/{$this->projeto->repo_branch}", function($line) use(&$retorno)
+						sh::git("reset", "--hard", "origin/{$this->servidor->pivot->branch}", function($line) use(&$retorno)
 						{
 						    $retorno .= $line;
 						});
@@ -443,7 +444,7 @@ class DeployController extends \BaseController {
 					$ssh = $this->get_ssh();
 					$ssh->run( array(
 						"cd " . $this->servidor->pivot->root,
-						"git reset --hard $remote {$this->projeto->repo_branch}",
+						"git reset --hard $remote {$this->servidor->pivot->branch}",
 						"git checkout " . $tag,
 					), 
 					function($line) use(&$retorno)
@@ -596,7 +597,7 @@ class DeployController extends \BaseController {
 				$remote = $this->get_repo_url($this->projeto);
 
 				$repo->set_remote( $remote );
-				$repo->set_branch( $this->projeto->repo_branch );
+				$repo->set_branch( $this->servidor->pivot->branch );
 			}
 		}
 
@@ -725,7 +726,7 @@ class DeployController extends \BaseController {
 
 						sh::git("add", $gitignore);
 						sh::git("commit", "-m", "'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'");
-						sh::git("push", $remote, $this->projeto->repo_branch);
+						sh::git("push", $remote, $this->servidor->pivot->branch);
 
 					} catch (ShellWrapException $e) {
 						$this->cmd_retorno = $e->getMessage();
@@ -744,7 +745,7 @@ class DeployController extends \BaseController {
 
 					$comandos[] = "git add " . $this->servidor->pivot->root . "/.gitignore";
 					$comandos[] = "git commit -m 'adicionando arquivos ao gitignore pela ferramenta de deploy (" . date('Y/m/d H:i') . ")'";
-					$comandos[] = "git push $remote " . $this->projeto->repo_branch;
+					$comandos[] = "git push $remote " . $this->servidor->pivot->branch;
 
 					$ssh->run( $comandos, function($line) use(&$retorno)
 					{
