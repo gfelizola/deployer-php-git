@@ -17,6 +17,8 @@ class HomeController extends BaseController {
 
 	public function showWelcome()
 	{
+		// dd( Auth::user() );
+		
 		$usuarios  = User::all()->count();
 		$deploys   = Historico::deploys()->count();
 		$rollbacks = Historico::rollbacks()->count();

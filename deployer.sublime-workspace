@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"rem",
+				"removeAttr	.removeAttr()"
+			],
+			[
+				"jira",
+				"jira_id"
+			],
+			[
+				"c",
+				"class	Attr"
+			],
+			[
+				"para",
+				"parameters"
+			],
+			[
+				"array_un",
+				"array_unshift"
+			],
+			[
+				"l",
+				"ltag"
+			],
+			[
 				"have_",
 				"have_posts"
 			],
@@ -304,34 +328,64 @@
 	"expanded_folders":
 	[
 		"/D/localhost/deployer",
-		"/D/localhost/deployer/dev-deploy/css",
+		"/D/localhost/deployer/dev-deploy",
+		"/D/localhost/deployer/dev-deploy/js",
+		"/D/localhost/deployer/dev-deploy/js/plugins/zeroclipboard",
 		"/D/localhost/deployer/dev-deploy-be",
 		"/D/localhost/deployer/dev-deploy-be/app",
-		"/D/localhost/deployer/dev-deploy-be/app/commands",
 		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers",
-		"/D/localhost/deployer/dev-deploy-be/app/models",
-		"/D/localhost/deployer/dev-deploy-be/app/views",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts"
+		"/D/localhost/deployer/dev-deploy-be/app/lang/pt",
+		"/D/localhost/deployer/dev-deploy-be/app/views"
 	],
 	"file_history":
 	[
+		"/D/localhost/deployer/dev-deploy-be/app/views/tags.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/sidebar.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/routes.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/HomeController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/hello.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/dados.blade.php",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp51874/var/www/vol1/dev-deploy/js/app.js",
+		"/D/localhost/deployer/dev-deploy/js/app.js",
+		"/D/localhost/deployer/dev-deploy/js/plugins/zeroclipboard/ZeroClipboard.swf",
+		"/D/localhost/deployer/dev-deploy/js/plugins/zeroclipboard/ZeroClipboard.js",
+		"/C/Users/tgf112836/AppData/Local/Temp/scp50121/var/www/vol1/dev-deploy-be/app/views/hello.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio/ShellInspector.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Servidor.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/ProjetoController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/create.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/header.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/master.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/head.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/footer.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/edit.blade.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Projeto.php",
+		"/D/localhost/deployer/dev-deploy-be/app/controllers/DeployController.php",
+		"/D/localhost/deployer/dev-deploy-be/app/database/production.sqlite",
+		"/D/_Programas/cmder/config/aliases",
+		"/D/localhost/estadao-2014/tags.txt",
+		"/D/localhost/deployer/dev-deploy-be/app/lang/pt/validation.php",
+		"/D/localhost/deployer/dev-deploy-be/app/models/Deploy.php",
+		"/D/localhost/deployer/dev-deploy-be/app/filters.php",
+		"/D/localhost/deployer/dev-deploy-be/app/config/app.php",
+		"/D/localhost/deployer/dev-deploy-be/app/config/services.php",
+		"/D/localhost/deployer/dev-deploy-be/server.php",
+		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/lib/Predis/ServerException.php",
+		"/D/localhost/deployer/dev-deploy-be/app/database/migrations/2015_01_30_121141_add_branch_to_projeto_servidor_table.php",
+		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php",
+		"/D/localhost/deployer/dev-deploy-be/phpunit.xml",
+		"/D/localhost/deployer/dev-deploy-be/app/config/packages/artdarek/oauth-4-laravel/config.php",
+		"/D/localhost/deployer/dev-deploy/css/AdminLTE.css",
 		"/D/localhost/pacaembu/archive-publicacoes.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp46064/www/wp-content/themes/pacaembu/stylesheets/app.css",
 		"/D/localhost/pacaembu/footer.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp46720/www/wp-content/themes/pacaembu/style.css",
-		"/D/localhost/deployer/dev-deploy-be/app/controllers/DeployController.php",
 		"/D/localhost/deployer/dev-deploy-be/app/commands/MrRio/ShellWrap.php",
-		"/D/localhost/deployer/dev-deploy-be/app/controllers/HomeController.php",
 		"/D/localhost/deployer/dev-deploy-be/app/models/Role.php",
 		"/D/localhost/deployer/dev-deploy-be/app/models/User.php",
-		"/D/localhost/deployer/dev-deploy/js/app.js",
-		"/D/localhost/deployer/dev-deploy-be/app/views/hello.blade.php",
 		"/D/wamp/www/AdminLTE/index.html",
-		"/D/localhost/deployer/dev-deploy-be/app/filters.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/sidebar.blade.php",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp44582/www/wp-config.php",
-		"/D/localhost/deployer/dev-deploy/css/AdminLTE.css",
 		"/D/wamp/www/AdminLTE/js/AdminLTE/dashboard.js",
 		"/D/wamp/www/AdminLTE/js/AdminLTE/app.js",
 		"/D/localhost/deployer/dev-deploy-be/vendor/composer/autoload_psr4.php",
@@ -353,22 +407,15 @@
 		"/D/wamp/www/AdminLTE/pages/charts/morris.html",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/UsuarioController.php",
 		"/D/localhost/deployer/dev-deploy-be/app/database/seeds/DatabaseSeeder.php",
-		"/D/localhost/deployer/dev-deploy-be/app/config/app.php",
 		"/D/localhost/deployer/public/css/AdminLTE.css",
 		"/D/localhost/deployer/dev-deploy-be/vendor/nikic/php-parser/test/code/parser/expr/arrayDef.test",
 		"/D/localhost/deployer/dev-deploy-be/artisan",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/footer.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/head.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/layouts/master.blade.php",
-		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/dados.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/deploy/index.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/ServidorController.php",
 		"/C/Users/tgf112836/Desktop/crossdomain.xml",
-		"/D/localhost/deployer/dev-deploy-be/app/routes.php",
 		"/D/localhost/deployer/dev-deploy-be/app/controllers/HelperController.php",
 		"/D/localhost/deployer/dev-deploy/sftp-config.json",
 		"/D/localhost/estadao-2014/shared/estadao/css/base.css",
-		"/D/localhost/deployer/dev-deploy-be/app/models/Servidor.php",
 		"/D/localhost/deployer/dev-deploy-be/app/views/servidor/edit.blade.php",
 		"/D/localhost/deployer/dev-deploy-be/sftp-config.json",
 		"/D/localhost/deployer/dev-deploy-be/vendor/kbjr/Git.php/Git.php",
@@ -381,14 +428,10 @@
 		"/C/Users/tgf112836/AppData/Local/Temp/scp27551/var/www/vol1/dev-deploy-be/app/config/app.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/lib/Predis/ResponseObjectInterface.php",
 		"/D/localhost/deployer/readme.md",
-		"/D/localhost/deployer/dev-deploy-be/phpunit.xml",
-		"/D/localhost/deployer/dev-deploy-be/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/nikic/php-parser/lib/PHPParser/PrettyPrinterAbstract.php",
 		"/D/localhost/deployer/dev-deploy-be/vendor/predis/predis/examples/KeyPrefixes.php",
 		"/D/localhost/deployer/dev-deploy-be/composer.json",
-		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/edit.blade.php",
 		"/D/wamp/vhosts/deployer.conf",
-		"/D/localhost/deployer/dev-deploy-be/app/views/projeto/create.blade.php",
 		"/D/localhost/deployer/ftpsync.settings",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp13574/var/www/vol1/dev-deploy-be/composer.json",
 		"/C/Users/tgf112836/AppData/Local/Temp/scp22630/var/www/vol1/dev-deploy/index.php",
@@ -424,26 +467,7 @@
 		"/D/localhost/deployer/app/database/migrations/2014_12_29_102809_create_servidores_projetos_table.php",
 		"/D/localhost/deployer/app/database/migrations/2014_12_10_142844_create_roles_table.php",
 		"/D/localhost/teste-novo1.php",
-		"/D/localhost/deployer/app/database/migrations/2014_12_10_143011_create_role_user_table.php",
-		"/D/localhost/deployer/app/models/Servidor.php",
-		"/D/localhost/deployer/app/config/services.php",
-		"/D/localhost/deployer/server.php",
-		"/D/localhost/deployer/vendor/predis/predis/lib/Predis/ServerException.php",
-		"/D/localhost/deployer/app/models/Deploy.php",
-		"/D/localhost/deployer/deployer.sublime-project",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Encryption/DecryptException.php",
-		"/D/localhost/deployer/vendor/symfony/http-kernel/Symfony/Component/HttpKernel/UriSigner.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Auth/AuthManager.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Support/Facades/Auth.php",
-		"/D/localhost/deployer/vendor/laravel/framework/src/Illuminate/Auth/AuthServiceProvider.php",
-		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Transport/Esmtp/Authenticator.php",
-		"/D/localhost/deployer/vendor/symfony/security-core/Symfony/Component/Security/Core/AuthenticationEvents.php",
-		"/D/localhost/deployer/vendor/swiftmailer/swiftmailer/lib/classes/Swift/Transport/Esmtp/AuthHandler.php",
-		"/D/localhost/deployer/vendor/symfony/security-core/Symfony/Component/Security/Core/Event/AuthenticationEvent.php",
-		"/D/localhost/deployer/vendor/phpseclib/phpseclib/AUTHORS",
-		"/D/localhost/deployer/app/config/auth.php",
-		"/D/localhost/deployer/bootstrap/autoload.php",
-		"/D/localhost/deployer/vendor/symfony/routing/Symfony/Component/Routing/Matcher/ApacheUrlMatcher.php"
+		"/D/localhost/deployer/app/database/migrations/2014_12_10_143011_create_role_user_table.php"
 	],
 	"find":
 	{
@@ -466,6 +490,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"dados",
+			"root",
+			"branch",
+			"console",
+			"fetch",
+			"tag",
 			"deploys-chart",
 			"chart",
 			"tab",
@@ -587,13 +617,7 @@
 			"nomeCampeonato",
 			"classificacao",
 			"dados",
-			"$VOLTAR",
-			"$voltar",
-			"shared/",
-			"$classe",
-			"sftp",
-			"URL_MIDLEWARE",
-			"urlSeoRoot"
+			"$VOLTAR"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -704,6 +728,26 @@
 		"selected_items":
 		[
 			[
+				"rout",
+				"dev-deploy-be\\app\\routes.php"
+			],
+			[
+				"sideb",
+				"dev-deploy-be\\app\\views\\layouts\\sidebar.blade.php"
+			],
+			[
+				"servido",
+				"dev-deploy-be\\app\\models\\Servidor.php"
+			],
+			[
+				"proje",
+				"dev-deploy-be\\app\\models\\Projeto.php"
+			],
+			[
+				"app/config/ap",
+				"dev-deploy-be\\app\\config\\app.php"
+			],
+			[
 				"app.",
 				"dev-deploy\\js\\app.js"
 			],
@@ -760,16 +804,8 @@
 				"app\\routes.php"
 			],
 			[
-				"proje",
-				"app\\models\\Projeto.php"
-			],
-			[
 				"projeto",
 				"app\\models\\Projeto.php"
-			],
-			[
-				"rout",
-				"app\\routes.php"
 			],
 			[
 				"reomte",

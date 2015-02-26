@@ -63,17 +63,36 @@ $(function() {
 
 	/* Morris.js Charts */
     if( window.Morris ){
-    	var area = new Morris.Line({
+    	var lineDR = new Morris.Line({
 	        element    : 'deploys-chart',
-	        resize     : true,
-	        data       : window.dadosGrafico,
+	        data       : window.dadosGraficoDR,
 	        xkey       : 'y',
 	        ykeys      : ['deploys', 'rollbacks'],
 	        labels     : ['Deploys', 'Rollbacks'],
 	        lineColors : ['#00cc5a', '#ff0000'],
 	        hideHover  : 'auto',
 	        smooth     : false,
+	        resize     : true,
 	        parseTime  : false
+	    });
+
+	    var barDR = new Morris.Bar({
+	        element   : 'projetos-chart',
+	        data      : window.dadosGraficoP,
+	        xkey      : 'nome',
+	        ykeys     : ['deploys', 'rollbacks'],
+	        labels    : ['Deploys', 'Rollbacks'],
+	        barColors : ['#00cc5a', '#ff0000'],
+	        stacked   : true,
+	        resize    : true,
+	        hideHover : 'auto'
+	    });
+
+	    $('ul.nav-tabs a').on('shown.bs.tab', function(e) {
+	    	lineDR.redraw();
+	        barDR.redraw();
+
+	        $(".nav-tabs-custom").resize();
 	    });
     }
 });

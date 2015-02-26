@@ -20,12 +20,14 @@ Route::get("login", "UsuarioController@loginForm");
 Route::get("login/bitbucket", "UsuarioController@loginWithBitBucket");
 
 Route::get("deploy/{projeto}/{sid}/tags", "DeployController@tags");
+Route::get("tags", ["as" => "tags", "uses" => function(){
+    return View::make("tags");
+}]);
 
 
 Route::group(array("before" => "auth"), function()
 {
-	Route::get("/",                                 "HomeController@showWelcome");
-	Route::get("home",                              "HomeController@showWelcome");
+	Route::get("/",                                 [ "as" => "home", "uses" => "HomeController@showWelcome"]);
 	Route::get("logout",                            "UsuarioController@logout");
 
     Route::get("projeto",                           "ProjetoController@index" );

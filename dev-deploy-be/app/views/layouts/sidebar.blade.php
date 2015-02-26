@@ -2,7 +2,7 @@
 <aside class="left-side sidebar-offcanvas">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-
+        @if( Auth::check() )
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
@@ -17,11 +17,18 @@
         
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
-            <li class="active">
-                <a href="{{{ URL::to('home') }}}">
+            <li class="{{{ strstr(Route::currentRouteName(), 'home') ? 'active' : '' }}}">
+                <a href="{{{ URL::route('home') }}}">
                     <i class="fa fa-dashboard"></i> <span>Painel</span>
                 </a>
             </li>
+
+            <li class="{{{ strstr(Route::currentRouteName(), 'tags') ? 'active' : '' }}}">
+                <a href="{{{ URL::route('tags') }}}">
+                    <i class="fa fa-tags"></i> <span>Criar tag</span>
+                </a>
+            </li>
+
             @if( Auth::user()->is_admin() )
             <li class="treeview {{{ strstr(Route::currentRouteName(), 'servidor') ? 'active' : '' }}}">
                 <a href="#">
@@ -61,6 +68,15 @@
                 </ul>
             </li>
         </ul>
+        @else
+        <ul class="sidebar-menu">
+            <li class="{{{ strstr(Route::currentRouteName(), 'tags') ? 'active' : '' }}}">
+                <a href="{{{ URL::route('tags') }}}">
+                    <i class="fa fa-tags"></i> <span>Criar tag</span>
+                </a>
+            </li>
+        </ul>
+        @endif
     </section>
     <!-- /.sidebar -->
 </aside>

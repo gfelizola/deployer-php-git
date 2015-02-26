@@ -23,15 +23,20 @@
     <!-- Small boxes (Dados/Reports) -->
     <div class="row">
         <div class="col-md-9 col-xs-12">
-            <!-- AREA CHART -->
-            <div class="box box-primary">
-                <div class="box-header">
-                    <h3 class="box-title">Gráfico de Deploys / Rollbacks</h3>
+            <!-- Custom tabs (Charts with tabs)-->
+            <div class="nav-tabs-custom">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs pull-right">
+                    <li><a href="#projetos-chart" data-toggle="tab">Projetos</a></li>
+                    <li class="active"><a href="#deploys-chart" data-toggle="tab">Geral</a></li>
+                    <li class="pull-left header"><i class="fa fa-cloud-upload"></i> Deploys e Rollbacks</li>
+                </ul>
+                <div class="tab-content">
+                    <!-- Morris chart - Sales -->
+                    <div class="chart tab-pane active" id="deploys-chart" style="position: relative; height: 170px;"></div>
+                    <div class="chart tab-pane" id="projetos-chart" style="position: relative; height: 170px;"></div>
                 </div>
-                <div class="box-body chart-responsive">
-                    <div class="chart" id="deploys-chart" style="height: 160px;"></div>
-                </div><!-- /.box-body -->
-            </div><!-- /.box -->
+            </div><!-- /.nav-tabs-custom -->
 
         </div><!-- /.col (LEFT) -->
         <div class="col-lg-3 col-xs-12">
@@ -132,6 +137,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
     <script src="/js/plugins/morris/morris.min.js"></script>
     <script>
-        var dadosGrafico = {{ $dados }};
+        var dadosGraficoDR = {{ $dadosDR }};
+        var dadosGraficoP  = {{ $dadosP }};
     </script>
 @stop
